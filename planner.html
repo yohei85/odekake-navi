@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#35b8f4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="おでかけナビ！">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>おでかけナビ！</title>
+<style>
+:root{--ink:#24352f;--muted:#718078;--paper:#f6f4ee;--white:#fffefa;--sage:#557c6d;--sage2:#e5eee8;--peach:#f4e5d9;--line:#e5e4dc;--gold:#c58b4b;--shadow:0 8px 26px rgba(38,54,46,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;line-height:1.55}
+main{max-width:720px;margin:auto;padding:18px 15px calc(108px + env(safe-area-inset-bottom))}
+.hero{position:relative;overflow:hidden;border-radius:25px;padding:25px 22px 23px;background:linear-gradient(135deg,#e3eee7,#f2e9dc);box-shadow:var(--shadow)}
+.eyebrow{font-size:11px;letter-spacing:.16em;color:#61776c;font-weight:700}.hero h1{font-size:25px;line-height:1.3;margin:9px 0 7px;letter-spacing:.02em}.hero p{font-size:13px;color:#68776e;margin:0}.hero .stamp{position:absolute;right:18px;top:18px;border:1px solid #9db4a5;color:#557c6d;border-radius:99px;padding:5px 10px;font-size:10px;letter-spacing:.08em}
+.progress-card{margin:14px 0;background:var(--white);border:1px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)}
+.progress-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700}.progress-num{color:var(--sage);font-variant-numeric:tabular-nums}.track{height:8px;background:#edf0eb;border-radius:99px;margin-top:9px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#6c9784,#b2c8a7);border-radius:99px;transition:width .2s}
+.card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:18px;margin:13px 0;box-shadow:var(--shadow)}
+.section-title{display:flex;align-items:center;gap:9px;margin:0 0 14px;font-size:16px}.num{display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:var(--sage2);color:var(--sage);font-size:12px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.field{min-width:0}.field label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin:0 0 5px}
+input,textarea,select{display:block;min-width:0;max-width:100%;width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;color:var(--ink);font:inherit;font-size:14px;min-height:46px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:#86a895;box-shadow:0 0 0 3px #e5eee8}textarea{min-height:88px;resize:vertical}
+.hint{font-size:11px;color:var(--muted);margin:8px 0 0}
+.category{margin:15px 0 6px;font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.04em}
+.item{display:flex;align-items:center;gap:11px;padding:11px 2px;border-bottom:1px solid #f0efe9;min-height:49px}
+.item:last-child{border-bottom:0}.item input[type=checkbox]{appearance:none;-webkit-appearance:none;width:23px;height:23px;min-height:23px;flex:0 0 23px;margin:0;padding:0;border:1.7px solid #bdc9bf;border-radius:7px;background:#fff;position:relative}
+.item input[type=checkbox]:checked{background:var(--sage);border-color:var(--sage)}
+.item input[type=checkbox]:checked:after{content:"✓";position:absolute;color:white;font-size:16px;font-weight:800;left:4px;top:-1px}
+.item .name{flex:1;font-size:14px}.item.done .name{color:#9aa39c;text-decoration:line-through}
+.del{border:0;background:#f7eee8;color:#9b7058;border-radius:9px;min-height:34px;padding:5px 10px;font-size:11px}
+.addrow{display:flex;gap:8px;margin-top:13px}.addrow input{flex:1;min-width:0}.btn{border:0;border-radius:12px;padding:12px 15px;background:var(--sage);color:white;font-weight:750;font-size:13px;min-height:46px}.btn.light{background:var(--sage2);color:var(--sage)}.btn.peach{background:var(--peach);color:#855e48}
+.budget-total{display:flex;justify-content:space-between;align-items:center;background:#f2f5ef;border-radius:13px;padding:13px 14px;margin-top:13px;font-weight:700}.budget-total strong{font-size:21px;color:var(--sage);font-variant-numeric:tabular-nums}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}.actions .wide{grid-column:1/-1}.note{font-size:11px;color:var(--muted);line-height:1.7;margin:9px 3px}
+.bottom{position:fixed;z-index:5;bottom:0;left:0;right:0;background:rgba(246,244,238,.94);backdrop-filter:blur(12px);padding:10px 15px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.bottom-inner{max-width:720px;margin:auto;display:flex;gap:9px}.bottom .btn{flex:1}
+.toast{position:fixed;z-index:10;left:50%;bottom:95px;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#293b32;color:white;padding:10px 16px;border-radius:99px;font-size:12px;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;color:#9aa39c;font-size:10px;padding:15px}
+
+.destination-tools{margin-top:16px;padding:14px;background:#f7f8f3;border:1px solid var(--line);border-radius:15px}
+.destination-label{font-size:13px;font-weight:800;margin-bottom:10px}.destination-label span{font-size:10px;color:var(--muted);font-weight:500;margin-left:5px}
+.chips{display:flex;gap:7px;overflow-x:auto;padding:1px 0 9px}
+.chip{white-space:nowrap;border:1px solid #d7e1d9;background:#fff;border-radius:99px;padding:8px 12px;color:#587568;font-size:11px;font-weight:700;min-height:34px}
+.chip.active{background:var(--sage);border-color:var(--sage);color:#fff}
+.destination-results{display:grid;gap:8px;margin-top:5px}
+.destination-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px;cursor:pointer;-webkit-tap-highlight-color:rgba(93,125,112,.18);touch-action:manipulation}
+.destination-card strong{display:block;font-size:13px;margin-bottom:3px}
+.destination-card p{font-size:11px;color:var(--muted);margin:0 0 8px}
+.destination-actions{display:flex;gap:7px;flex-wrap:wrap}
+.destination-actions button,.destination-actions a{border:0;border-radius:9px;background:var(--sage2);color:var(--sage);padding:8px 10px;font-size:11px;font-weight:750;text-decoration:none}
+.destination-actions a{display:inline-flex;align-items:center}
+.destination-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:11px}
+.destination-links a{font-size:11px;color:var(--sage);font-weight:700}
+.quick-picks{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}.quick-pick{border:1px solid #d7e1d9;background:#fff;color:#557c6d;border-radius:99px;padding:8px 11px;font-size:12px;font-weight:700;min-height:36px}.quick-pick:active{background:var(--sage2)}.field-hint{font-size:10px;color:var(--muted);margin:5px 0 0}
+@media(max-width:480px){.destination-tools{padding:12px}.destination-card{min-width:0}}
+@media(max-width:480px){main{padding-left:12px;padding-right:12px}.hero{padding:23px 18px}.hero h1{font-size:23px}.grid{grid-template-columns:1fr 1fr}.card{padding:16px}.field input{font-size:14px}}
+@media print{body{background:white}main{max-width:none;padding:0}.hero,.progress-card,.card{box-shadow:none;break-inside:avoid}.bottom,.actions,.del,.addrow,.note{display:none!important}.card{border:1px solid #ddd;margin:8px 0;padding:12px}.hero{padding:14px}.hero h1{font-size:20px}.item{min-height:30px;padding:5px}.item input[type=checkbox]{appearance:auto;-webkit-appearance:auto}.progress-card{padding:8px;margin:8px 0}}
+
+/* v4.5 premium visual refresh */
+:root{--ink:#202b35;--muted:#71808a;--paper:#f2f4f5;--white:#ffffff;--sage:#315f63;--sage2:#e4eeee;--peach:#f4eadb;--line:#e1e6e8;--gold:#bd9457;--shadow:0 12px 34px rgba(30,49,57,.09)}
+body{background:radial-gradient(ellipse at 8% 0%,#e8eff0 0,transparent 34%),linear-gradient(180deg,#f3f5f5 0%,#f7f6f2 100%);color:var(--ink)}
+main{max-width:760px;padding-top:20px}
+.hero{min-height:190px;border-radius:28px;padding:30px 25px 28px;background:linear-gradient(118deg,#203b46 0%,#315d60 58%,#718b7b 100%);color:#fff;box-shadow:0 18px 42px rgba(32,59,70,.22);isolation:isolate}
+.hero:before{content:"";position:absolute;width:230px;height:230px;border:1px solid rgba(255,255,255,.18);border-radius:50%;right:-52px;top:-84px;z-index:-1;box-shadow:0 0 0 22px rgba(255,255,255,.035),0 0 0 48px rgba(255,255,255,.025)}
+.hero:after{content:"✦";position:absolute;right:35px;bottom:22px;color:#e6d0a6;font-size:42px;opacity:.85}
+.hero .eyebrow{color:#d9e4df;font-size:10px;letter-spacing:.22em}
+.hero h1{font-size:29px;letter-spacing:.045em;margin:15px 0 9px;text-shadow:0 2px 12px rgba(0,0,0,.12)}
+.hero p{color:#e5eeeb;font-size:13px;max-width:80%}
+.hero .stamp{right:18px;top:18px;border:1px solid rgba(235,218,183,.65);background:rgba(255,255,255,.09);color:#f2dfbb;border-radius:99px;padding:6px 11px;font-size:9px;letter-spacing:.12em;backdrop-filter:blur(8px)}
+.progress-card,.card{border:1px solid rgba(210,220,222,.9);border-radius:21px;background:rgba(255,255,255,.94);box-shadow:0 10px 28px rgba(39,58,64,.065)}
+.progress-card{padding:16px 18px;margin:16px 0}
+.track{height:9px;background:#edf1f0}.bar{background:linear-gradient(90deg,#3d7777,#bda06b)}
+.card{padding:20px;margin:15px 0;position:relative;overflow:hidden}
+.section-title{font-size:16px;letter-spacing:.015em;margin-bottom:17px}
+.num{width:30px;height:30px;border-radius:10px;background:linear-gradient(145deg,#e8f0ee,#f4eadb);color:#315f63;border:1px solid #dce7e3}
+input,textarea,select{border-color:#dce3e5;background:#fbfcfc;border-radius:13px;transition:border-color .18s,box-shadow .18s}
+input:focus,textarea:focus,select:focus{border-color:#6c9691;box-shadow:0 0 0 3px rgba(108,150,145,.15)}
+.destination-tools{background:linear-gradient(135deg,#f1f6f4,#f8f4ec);border-color:#dce7e3;border-radius:17px;padding:15px}
+.destination-card{border-color:#e0e7e6;border-radius:14px;box-shadow:0 4px 12px rgba(39,58,64,.035)}
+.destination-card strong{color:#294d50}
+.destination-actions button,.destination-actions a,.quick-pick{background:#e6efec;color:#315f63;border:1px solid #d6e4df;border-radius:10px}
+.chip{border-color:#d7e3df;color:#426b67}.chip.active{background:#315f63;border-color:#315f63}
+.btn{background:linear-gradient(135deg,#315f63,#244b52);box-shadow:0 5px 13px rgba(49,95,99,.17);border-radius:13px}
+.btn.light{background:#e5efec;color:#315f63;box-shadow:none}.btn.peach{background:linear-gradient(135deg,#f3e8d7,#ead8bd);color:#735638;box-shadow:none}
+.budget-total{background:linear-gradient(110deg,#edf4f1,#f8f2e8);border:1px solid #e2e9e3}.budget-total strong{color:#315f63}
+.bottom{background:rgba(246,248,247,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(215,224,224,.8)}
+.toast{background:#203b46;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+footer{letter-spacing:.13em;color:#9aa9a7}
+@media(max-width:480px){.hero{min-height:180px;padding:27px 19px 25px;border-radius:24px}.hero h1{font-size:26px}.hero:after{right:22px;bottom:17px;font-size:34px}.card{padding:17px}.progress-card{padding:14px 15px}}
+
+
+/* おでかけナビ！ ポップテーマ */
+:root{--ink:#18345c;--muted:#64748b;--paper:#eaf8ff;--white:#ffffff;--sage:#1688e8;--sage2:#e0f2ff;--peach:#fff0d6;--line:#ccecff;--gold:#ff9d22;--shadow:0 7px 0 rgba(34,126,190,.12),0 12px 25px rgba(45,130,190,.12)}
+body{background:linear-gradient(180deg,#74d3ff 0,#eaf9ff 260px,#f7fcff 100%);color:var(--ink)}
+main{padding-top:12px}
+.hero{background:linear-gradient(135deg,#24b8f2 0%,#4fc9f5 48%,#8de7d0 100%);color:#fff;border:3px solid #fff;border-radius:28px;box-shadow:0 7px 0 #b6e9ff,0 12px 25px rgba(18,128,190,.18)}
+.hero:before{border:3px solid rgba(255,255,255,.28);box-shadow:0 0 0 18px rgba(255,255,255,.10),0 0 0 38px rgba(255,255,255,.07)}
+.hero:after{content:"🌈";font-size:48px;right:20px;bottom:15px}
+.hero .eyebrow,.hero p{color:#fff}.hero h1{font-size:30px;text-shadow:0 3px 0 rgba(20,92,160,.18)}
+.hero .stamp{background:#ffdf55;color:#694600;border:2px solid #fff;font-weight:900;box-shadow:0 3px 0 rgba(150,100,0,.12)}
+.progress-card,.card{border:2px solid #d5f0ff;border-radius:23px;box-shadow:var(--shadow)}
+.section-title{color:#183d72}.num{background:linear-gradient(145deg,#ffe17a,#ffb94f);color:#7a4300;border:2px solid #fff;border-radius:11px}
+.track{background:#e5f5ff}.bar{background:linear-gradient(90deg,#ff8cba,#ffca48,#62d5b2)}
+input,textarea,select{border:2px solid #cceaff;background:#fbfeff;border-radius:14px}
+input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4px rgba(53,169,237,.16)}
+.btn{background:linear-gradient(135deg,#ff9d26,#ff6b35);box-shadow:0 4px 0 #d95b25;color:#fff;border-radius:15px}.btn.light{background:linear-gradient(135deg,#e3f5ff,#ccecff);box-shadow:0 4px 0 #a8d8f5;color:#1765a0}.btn.peach{background:linear-gradient(135deg,#ffb9d3,#ff8db5);box-shadow:0 4px 0 #d86b95;color:#6f2344}
+.destination-tools{background:linear-gradient(135deg,#fff5d9,#e8fbff);border:2px solid #ffe2a1;border-radius:18px}
+.destination-card{border:2px solid #d5edff;border-radius:16px;box-shadow:0 4px 0 rgba(56,153,210,.10)}
+.destination-card strong{color:#174b82}.destination-actions button,.destination-actions a{background:#e5f5ff;color:#1268a7;border-radius:11px}
+.chip,.quick-pick{border:2px solid #cceaff;color:#1765a0}.chip.active{background:#ff9d26;border-color:#ff9d26;color:#fff}
+.budget-total{background:linear-gradient(90deg,#fff3cb,#e5faff);border:1px solid #ffe09a}.budget-total strong{color:#f07820}
+.bottom{background:rgba(255,255,255,.94);border-top:2px solid #ccecff}.toast{background:#174b82}
+@media(max-width:480px){.hero{padding:22px 18px}.hero h1{font-size:27px}}
+
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+ <div class="stamp">おでかけナビ！ · v5.0</div><div class="eyebrow">🌈 FAMILY FUN NAVIGATION</div>
+ <h1>🚗 おでかけナビ！</h1>
+ <p>家族の思い出を、もっと楽しく♪ 今日はどこに行こう？</p>
+</section>
+<section class="progress-card" aria-live="polite">
+ <div class="progress-head"><span>持ち物の準備状況</span><span class="progress-num" id="progressText">0 / 0 完了</span></div>
+ <div class="track"><div class="bar" id="progressBar"></div></div>
+</section>
+
+<section class="card">
+ <h2 class="section-title"><span class="num">01</span>おでかけの予定</h2>
+ <div class="grid">
+  <div class="field"><label for="place">行き先</label><input id="place" list="placeSuggestions" placeholder="施設名を入力・候補から選択" autocomplete="off"><datalist id="placeSuggestions"></datalist><p class="field-hint">入力すると施設候補が下に表示されます</p></div>
+  <div class="field"><label for="date">日にち</label><input id="date" type="date"></div>
+  <div class="field"><label for="depart">出発予定</label><input id="depart" type="time"></div>
+  <div class="field"><label for="return">帰宅予定</label><input id="return" type="time"></div>
+  <div class="field"><label>参加する人</label><div class="grid" style="gap:8px"><div class="field"><label for="adultCount">大人</label><select id="adultCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div><div class="field"><label for="childCount">子ども</label><select id="childCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div></div><input id="people" type="hidden" value="大人1人・子ども1人"><p class="field-hint">人数を選ぶと自動で保存されます</p></div>
+  <div class="field"><label for="weather">天気・気温メモ</label><input id="weather" list="weatherSuggestions" placeholder="天気を選ぶ・入力する"><datalist id="weatherSuggestions"><option value="晴れ"><option value="くもり"><option value="雨"><option value="晴れ・暑い"><option value="くもり・涼しい"><option value="雨のち晴れ"></datalist><div class="quick-picks"><button type="button" class="quick-pick" data-fill="weather" data-value="晴れ">☀ 晴れ</button><button type="button" class="quick-pick" data-fill="weather" data-value="くもり">☁ くもり</button><button type="button" class="quick-pick" data-fill="weather" data-value="雨">☂ 雨</button></div></div>
+ </div>
+ <div class="destination-tools">
+  <div class="destination-label">行き先を探す <span>県・ジャンル・施設名から探せます</span></div>
+  <div class="grid" style="margin-bottom:10px">
+   <div class="field"><label for="prefectureFilter">都県で絞り込む</label><select id="prefectureFilter"><option value="all">関東7都県すべて</option><option>東京都</option><option>埼玉県</option><option>千葉県</option><option>茨城県</option><option>栃木県</option><option>群馬県</option><option>神奈川県</option></select></div>
+   <div class="field"><label for="categoryFilter">ジャンルで絞り込む</label><select id="categoryFilter"><option value="all">すべてのジャンル</option><option>公園</option><option>遊園地</option><option>動物・ふれあい</option><option>水族館</option><option>屋内遊び場</option><option>道の駅・体験</option><option>自然・牧場</option></select></div>
+  </div>
+  <div class="chips" id="destinationChips">
+   <button type="button" class="chip active" data-kind="all">おすすめ</button>
+   <button type="button" class="chip" data-kind="公園">公園</button>
+   <button type="button" class="chip" data-kind="動物・ふれあい">動物・ふれあい</button>
+   <button type="button" class="chip" data-kind="遊園地">遊園地</button>
+   <button type="button" class="chip" data-kind="水族館">水族館</button>
+   <button type="button" class="chip" data-kind="屋内遊び場">屋内</button>
+   <button type="button" class="chip" data-kind="自然・牧場">自然・牧場</button>
+  </div>
+  <div id="destinationResults" class="destination-results"></div>
+  <div class="destination-links">
+   <a id="mapSearch" href="https://www.google.com/maps" target="_blank" rel="noopener">Googleマップでこの行き先を探す ↗</a>
+   <a id="webSearch" href="https://www.google.com/search" target="_blank" rel="noopener">ウェブで詳しく調べる ↗</a>
+  </div>
+  <p class="hint">収録スポットに一致すれば候補を表示します。未登録の場所も入力語で地図・ウェブ検索できます。最新の営業日・料金・利用条件はリンク先で確認してください。</p>
+ </div>
+</section>
+
+<section class="card">
+ <h2 class="section-title"><span class="num">02</span>持ち物チェック</h2>
+ <p class="hint">準備できたらチェック。必要な持ち物は自由に追加できます。</p>
+ <div id="items"></div>
+ <div class="addrow"><input id="newitem" placeholder="追加したい持ち物"><button class="btn" id="add">追加する</button></div>
+</section>
+
+<section class="card">
+ <h2 class="section-title"><span class="num">03</span>当日のスケジュール</h2>
+ <textarea id="schedule" placeholder="例：&#10;9:00 出発&#10;10:00 到着・遊ぶ&#10;12:00 お昼ごはん"></textarea>
+</section>
+
+<section class="card">
+ <h2 class="section-title"><span class="num">04</span>予算メモ</h2>
+ <div class="grid">
+  <div class="field"><label for="transport">交通費・駐車場（円）</label><input id="transport" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+  <div class="field"><label for="food">食事・飲み物（円）</label><input id="food" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+  <div class="field"><label for="play">入場料・遊び代（円）</label><input id="play" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+  <div class="field"><label for="other">その他（円）</label><input id="other" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+ </div>
+ <div class="budget-total"><span>予定予算の合計</span><strong><span id="total">0</span> 円</strong></div>
+</section>
+
+<section class="card">
+ <h2 class="section-title"><span class="num">05</span>帰宅後のひとことメモ</h2>
+ <div class="field"><label for="good">楽しかったこと・よかったこと</label><textarea id="good" placeholder="子どもが喜んだことなど"></textarea></div>
+ <div class="field" style="margin-top:12px"><label for="next">次回に向けて</label><textarea id="next" placeholder="次は持っていきたいもの・改善したいこと"></textarea></div>
+</section>
+
+<div class="actions">
+ <button class="btn wide" id="save">この端末に保存する</button>
+ <button class="btn light" id="export">バックアップ保存</button>
+ <button class="btn light" id="importBtn">バックアップ読込</button>
+ <button class="btn peach wide" id="print">印刷・PDF保存</button>
+ <input type="file" id="importFile" accept="application/json,.json" hidden>
+</div>
+<p class="note">入力内容は、この端末のブラウザ内に自動保存されます。機種変更やブラウザのデータ削除に備えて、ときどき「バックアップ保存」をしてください。バックアップ読込で保存データを戻せます。</p>
+<footer>🌈 おでかけナビ！ v5.0</footer>
+</main>
+<div class="bottom"><div class="bottom-inner"><button class="btn light" id="topBtn">ページ上部へ</button><button class="btn" id="bottomSave">保存する</button></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const groups=[
+ {title:"基本の持ち物",items:["財布・現金","スマートフォン","鍵","飲み物","おやつ","ハンカチ・ティッシュ","ウェットティッシュ","ごみ袋"]},
+ {title:"子ども用品",items:["着替え","おむつ・おしりふき","タオル","帽子","お気に入りのおもちゃ","食事用品・エプロン"]},
+ {title:"移動・天候",items:["チケット・予約情報","ベビーカー・抱っこひも","雨具","防寒具・暑さ対策","虫よけ・日焼け止め","充電器・モバイルバッテリー"]}
+];
+let items=groups.flatMap(g=>g.items.map(name=>({name,done:false,group:g.title})));
+const ids=["place","date","depart","return","people","weather","schedule","transport","food","play","other","good","next"];
+const $=id=>document.getElementById(id);
+const destinations=[
+ {name:"東武動物公園",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
+ {name:"むさしの村",pref:"埼玉県",area:"加須市",kind:["遊園地","動物・ふれあい"],desc:"遊園地や農業体験などを楽しめるファミリー向け施設。",official:"https://www.musashinomura.co.jp/",pack:["飲み物","帽子","着替え","タオル"]},
+ {name:"西武園ゆうえんち",pref:"埼玉県",area:"所沢市",kind:["遊園地"],desc:"アトラクションやショーを楽しめる遊園地。",official:"https://www.seibuen-amusement-park.jp/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
+ {name:"さいたま水族館",pref:"埼玉県",area:"羽生市",kind:["水族館","屋内遊び場"],desc:"淡水魚を中心に展示する水族館。",official:"https://www.parks.or.jp/suizokukan/",pack:["飲み物","タオル","着替え"]},
+ {name:"国営武蔵丘陵森林公園",pref:"埼玉県",area:"滑川町",kind:["公園","自然・牧場"],desc:"広い園内で自然散策や遊具遊びを楽しめる国営公園。",official:"https://www.shinrinkoen.jp/",pack:["飲み物","帽子","虫よけ","タオル","着替え"]},
+ {name:"内牧公園",pref:"埼玉県",area:"春日部市",kind:["公園"],desc:"アスレチックや広場で外遊びができる公園。",official:"https://www.city.kasukabe.lg.jp/",pack:["飲み物","帽子","虫よけ","レジャーシート","着替え"]},
+ {name:"清水公園",pref:"千葉県",area:"野田市",kind:["公園","自然・牧場"],desc:"自然散策やアスレチック、季節の遊びを楽しめる公園。",official:"https://www.shimizu-kouen.com/",pack:["飲み物","帽子","着替え","タオル","虫よけ"]},
+ {name:"ふなばしアンデルセン公園",pref:"千葉県",area:"船橋市",kind:["公園","自然・牧場"],desc:"大型遊具や体験施設がある総合公園。",official:"https://www.park-funabashi.or.jp/and/",pack:["飲み物","帽子","着替え","タオル","レジャーシート"]},
+ {name:"市原ぞうの国",pref:"千葉県",area:"市原市",kind:["動物・ふれあい"],desc:"ゾウをはじめ動物との出会いを楽しめる施設。",official:"https://www.zounokuni.com/",pack:["飲み物","帽子","ウェットティッシュ","着替え"]},
+ {name:"鴨川シーワールド",pref:"千葉県",area:"鴨川市",kind:["水族館"],desc:"海の生き物やパフォーマンスを楽しめる水族館。",official:"https://www.kamogawa-seaworld.jp/",pack:["飲み物","タオル","着替え","モバイルバッテリー"]},
+ {name:"東京ドイツ村",pref:"千葉県",area:"袖ケ浦市",kind:["遊園地","自然・牧場"],desc:"広い園内で季節の花やアトラクションを楽しめる施設。",official:"https://www.t-doitsumura.co.jp/",pack:["飲み物","帽子","歩きやすい靴","タオル"]},
+ {name:"マザー牧場",pref:"千葉県",area:"富津市",kind:["自然・牧場","動物・ふれあい"],desc:"牧場体験や動物とのふれあいを楽しめる施設。",official:"https://www.motherfarm.co.jp/",pack:["飲み物","帽子","ウェットティッシュ","着替え"]},
+ {name:"上野動物園",pref:"東京都",area:"台東区",kind:["動物・ふれあい"],desc:"多様な動物を観察できる動物園。",official:"https://www.tokyo-zoo.net/zoo/ueno/",pack:["飲み物","帽子","歩きやすい靴","タオル"]},
+ {name:"井の頭自然文化園",pref:"東京都",area:"武蔵野市",kind:["動物・ふれあい","公園"],desc:"動物園と水生物園がある自然文化施設。",official:"https://www.tokyo-zoo.net/zoo/ino/",pack:["飲み物","帽子","タオル"]},
+ {name:"よみうりランド",pref:"東京都",area:"稲城市",kind:["遊園地"],desc:"多彩なアトラクションがある遊園地。",official:"https://www.yomiuriland.com/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
+ {name:"サンシャイン水族館",pref:"東京都",area:"豊島区",kind:["水族館","屋内遊び場"],desc:"都市型の水族館。",official:"https://sunshinecity.jp/aquarium/",pack:["飲み物","タオル","着替え"]},
+ {name:"東京あそびマーレ",pref:"東京都",area:"八王子市",kind:["屋内遊び場"],desc:"天候に左右されにくい屋内型遊び場。",official:"https://asobimare.jp/tokyo/",pack:["飲み物","靴下","タオル","着替え"]},
+ {name:"国営ひたち海浜公園",pref:"茨城県",area:"ひたちなか市",kind:["公園","自然・牧場"],desc:"花や広大な園内の散策を楽しめる国営公園。",official:"https://hitachikaihin.jp/",pack:["飲み物","帽子","歩きやすい靴","レジャーシート"]},
+ {name:"アクアワールド茨城県大洗水族館",pref:"茨城県",area:"大洗町",kind:["水族館"],desc:"海の生き物を幅広く展示する水族館。",official:"https://www.aquaworld-oarai.com/",pack:["飲み物","タオル","着替え"]},
+ {name:"こもれび森のイバライド",pref:"茨城県",area:"稲敷市",kind:["自然・牧場","遊園地","動物・ふれあい"],desc:"自然の中で動物ふれあいや体験を楽しめる施設。",official:"https://www.ibaraido.co.jp/",pack:["飲み物","帽子","着替え","ウェットティッシュ"]},
+ {name:"ミュージアムパーク茨城県自然博物館",pref:"茨城県",area:"坂東市",kind:["屋内遊び場","自然・牧場"],desc:"自然や生き物について学べる博物館。",official:"https://www.nat.museum.ibk.ed.jp/",pack:["飲み物","歩きやすい靴"]},
+ {name:"那須ハイランドパーク",pref:"栃木県",area:"那須町",kind:["遊園地"],desc:"多彩なアトラクションがある遊園地。",official:"https://www.nasuhai.co.jp/",pack:["飲み物","帽子","歩きやすい靴","着替え"]},
+ {name:"那須どうぶつ王国",pref:"栃木県",area:"那須町",kind:["動物・ふれあい","自然・牧場"],desc:"動物の展示やふれあいを楽しめる施設。",official:"https://www.nasu-oukoku.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ"]},
+ {name:"とちのきファミリーランド",pref:"栃木県",area:"宇都宮市",kind:["遊園地","公園"],desc:"公園内にあるファミリー向け遊園地。",official:"https://www.park-tochigi.com/tochinoki/",pack:["飲み物","帽子","タオル"]},
+ {name:"栃木県子ども総合科学館",pref:"栃木県",area:"宇都宮市",kind:["屋内遊び場"],desc:"科学展示や体験を通じて学べる施設。",official:"https://www.tsm.utsunomiya.tochigi.jp/",pack:["飲み物","歩きやすい靴"]},
+ {name:"群馬サファリパーク",pref:"群馬県",area:"富岡市",kind:["動物・ふれあい"],desc:"車などから野生動物を観察できるサファリパーク。",official:"https://www.safari.co.jp/",pack:["飲み物","帽子","ウェットティッシュ"]},
+ {name:"るなぱあく",pref:"群馬県",area:"前橋市",kind:["遊園地"],desc:"小さな子どもも楽しみやすい遊園地。",official:"https://www.lunapark-maebashi.com/",pack:["飲み物","帽子","タオル"]},
+ {name:"こんにゃくパーク",pref:"群馬県",area:"甘楽町",kind:["道の駅・体験","屋内遊び場"],desc:"こんにゃくの工場見学や体験を楽しめる施設。",official:"https://konnyaku-park.com/",pack:["飲み物","ウェットティッシュ"]},
+ {name:"群馬県立ぐんまこどもの国",pref:"群馬県",area:"太田市",kind:["公園","屋内遊び場"],desc:"大型遊具や児童向け施設がある公園。",official:"https://gunma-kodomonokuni.jp/",pack:["飲み物","帽子","着替え","タオル"]},
+ {name:"よこはま動物園ズーラシア",pref:"神奈川県",area:"横浜市",kind:["動物・ふれあい","公園"],desc:"世界の地域ごとに動物を展示する動物園。",official:"https://www.hama-midorinokyokai.or.jp/zoo/zoorasia/",pack:["飲み物","帽子","歩きやすい靴","タオル"]},
+ {name:"新江ノ島水族館",pref:"神奈川県",area:"藤沢市",kind:["水族館"],desc:"相模湾や海の生き物を紹介する水族館。",official:"https://www.enosui.com/",pack:["飲み物","タオル","着替え"]},
+ {name:"こどもの国",pref:"神奈川県",area:"横浜市",kind:["公園","自然・牧場"],desc:"広い敷地で遊具や自然体験を楽しめる施設。",official:"https://www.kodomonokuni.org/",pack:["飲み物","帽子","着替え","レジャーシート"]},
+ {name:"さがみ湖MORIMORI",pref:"神奈川県",area:"相模原市",kind:["遊園地","自然・牧場"],desc:"アトラクションや自然の中のレジャーを楽しめる施設。",official:"https://www.sagamiko-resort.jp/",pack:["飲み物","帽子","歩きやすい靴","着替え"]},
+ {name:"東京ディズニーランド",pref:"千葉県",area:"浦安市",kind:["遊園地"],desc:"世界観豊かなテーマランドとアトラクションを楽しめるテーマパーク。",official:"https://www.tokyodisneyresort.jp/tdl/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
+ {name:"東京ディズニーシー",pref:"千葉県",area:"浦安市",kind:["遊園地"],desc:"海をテーマにしたテーマポートやアトラクションを楽しめるテーマパーク。",official:"https://www.tokyodisneyresort.jp/tds/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
+ {name:"東京ドームシティ アトラクションズ",pref:"東京都",area:"文京区",kind:["遊園地"],desc:"都心でアトラクションを楽しめるレジャー施設。",official:"https://www.tokyo-dome.co.jp/attractions/",pack:["飲み物","歩きやすい靴"]},
+ {name:"サンリオピューロランド",pref:"東京都",area:"多摩市",kind:["屋内遊び場"],desc:"サンリオキャラクターのショーやアトラクションを楽しめる屋内型テーマパーク。",official:"https://www.puroland.jp/",pack:["飲み物","モバイルバッテリー"]},
+ {name:"キッザニア東京",pref:"東京都",area:"江東区",kind:["屋内遊び場"],desc:"子どもがさまざまな仕事やサービスを体験できる施設。",official:"https://www.kidzania.jp/tokyo/",pack:["飲み物","予約情報"]},
+ {name:"レゴランド・ディスカバリー・センター東京",pref:"東京都",area:"港区",kind:["屋内遊び場"],desc:"レゴブロックを使った遊びやアトラクションを楽しめる屋内施設。",official:"https://www.legolanddiscoverycenter.com/tokyo/",pack:["飲み物"]},
+ {name:"東京スカイツリー",pref:"東京都",area:"墨田区",kind:["屋内遊び場"],desc:"展望台から東京の景色を楽しめる観光施設。",official:"https://www.tokyo-skytree.jp/",pack:["飲み物","カメラ"]},
+ {name:"横浜・八景島シーパラダイス",pref:"神奈川県",area:"横浜市",kind:["水族館","遊園地"],desc:"水族館やアトラクションが集まる複合型レジャー施設。",official:"https://www.seaparadise.co.jp/",pack:["飲み物","帽子","歩きやすい靴"]},
+ {name:"カップヌードルミュージアム 横浜",pref:"神奈川県",area:"横浜市",kind:["屋内遊び場","道の駅・体験"],desc:"インスタントラーメンの歴史や体験展示を楽しめるミュージアム。",official:"https://www.cupnoodles-museum.jp/ja/yokohama/",pack:["飲み物"]},
+ {name:"鉄道博物館",pref:"埼玉県",area:"さいたま市",kind:["屋内遊び場"],desc:"鉄道の歴史や車両展示、体験展示を楽しめる博物館。",official:"https://www.railway-museum.jp/",pack:["飲み物","歩きやすい靴"]},
+ {name:"ムーミンバレーパーク",pref:"埼玉県",area:"飯能市",kind:["自然・牧場","屋内遊び場"],desc:"ムーミンの物語の世界観や自然を楽しめるテーマパーク。",official:"https://metsa-hanno.com/",pack:["飲み物","帽子","歩きやすい靴"]},
+ {name:"カンドゥー",pref:"千葉県",area:"千葉市",kind:["屋内遊び場"],desc:"子どもが仕事体験を楽しめる屋内型施設。",official:"https://www.kandu.co.jp/",pack:["飲み物","予約情報"]}
+];
+let activeDestinationKind="all";
+function destinationSearchText(){return ($("place").value||"").trim().toLowerCase().replace(/\s+/g,"")}
+function drawDestinations(){
+ const root=$("destinationResults"); if(!root)return;
+ const raw=($("place").value||"").trim();
+ const q=destinationSearchText();
+ const synonyms={
+  "動物園":["動物","ふれあい"],"どうぶつえん":["動物","ふれあい"],
+  "遊園地":["遊園地"],"こうえん":["公園"],"室内":["屋内"],"室内遊び場":["屋内"],
+  "雨":["屋内"],"雨の日":["屋内"],"道の駅":["道の駅"]
+ };
+ const terms=[q,...Object.entries(synonyms).filter(([k])=>q.includes(k)).flatMap(([,v])=>v.map(x=>x.toLowerCase()))];
+ const pref=$("prefectureFilter")?.value||"all";
+ const cat=$("categoryFilter")?.value||"all";
+ const base=destinations.filter(d=>
+  (pref==="all"||d.pref===pref) &&
+  (cat==="all"||d.kind.includes(cat)) &&
+  (activeDestinationKind==="all"||d.kind.includes(activeDestinationKind))
+ );
+ let list=q ? base.filter(d=>terms.some(term=>(d.name+d.area+d.pref+d.kind.join("")).toLowerCase().replace(/\s+/g,"").includes(term))) : base;
+ root.innerHTML="";
+ if(!q && activeDestinationKind==="all" && pref==="all" && cat==="all") list=list.slice(0,6);
+ if(q && !list.length) list=base.slice(0,4);
+ list.slice(0,6).forEach(d=>{
+  const card=document.createElement("div");card.className="destination-card";card.setAttribute("role","button");card.setAttribute("tabindex","0");card.setAttribute("aria-label",d.name+"を行き先に選択");
+  card.onclick=()=>selectDestination(d);
+  card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectDestination(d)}});
+  // iPhoneのWebプレビューでもカード本体をタップで選択できるようにする
+  card.addEventListener("touchend",e=>{if(e.target.closest("a,button"))return;e.preventDefault();selectDestination(d)},{passive:false});
+  const title=document.createElement("strong");title.textContent=d.name;
+  const desc=document.createElement("p");desc.textContent=d.pref+"・"+d.area+"｜"+d.desc;
+  const actions=document.createElement("div");actions.className="destination-actions";
+  const choose=document.createElement("button");choose.type="button";choose.textContent="この行き先にする";choose.onclick=e=>{e.preventDefault();e.stopPropagation();selectDestination(d)};
+  const map=document.createElement("a");map.href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(d.name+" "+d.area);map.target="_blank";map.rel="noopener";map.textContent="地図で見る";
+  actions.append(choose,map);
+  const official=document.createElement("a");official.href=d.official||("https://www.google.com/search?q="+encodeURIComponent(d.name+" 公式サイト"));official.target="_blank";official.rel="noopener";official.textContent="公式サイト";actions.append(official)
+  card.append(title,desc,actions);root.append(card);
+ });
+ if(q){
+  const searchCard=document.createElement("div");searchCard.className="destination-card";
+  const st=document.createElement("strong");st.textContent="入力した言葉で施設を検索";
+  const sd=document.createElement("p");sd.textContent="候補が見つからない場合は、入力した「"+raw+"」で地図・ウェブ検索できます。下の候補から近い施設を選ぶこともできます。";
+  const actions=document.createElement("div");actions.className="destination-actions";
+  const mapLink=document.createElement("a");mapLink.href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(raw);mapLink.target="_blank";mapLink.rel="noopener";mapLink.textContent="この言葉で地図検索";
+  const webLink=document.createElement("a");webLink.href="https://www.google.com/search?q="+encodeURIComponent(raw+" 公式 営業時間 料金");webLink.target="_blank";webLink.rel="noopener";webLink.textContent="施設情報を検索";
+  actions.append(mapLink,webLink);searchCard.append(st,sd,actions);root.append(searchCard);
+ } else if(!list.length){
+  const empty=document.createElement("div");empty.className="destination-card";
+  const msg=document.createElement("p");msg.textContent="カテゴリを選ぶか、行き先の名前・キーワードを入力してください。";
+  empty.append(msg);root.append(empty);
+ }
+ const searchTerm=raw||"親子 おでかけ";
+ $("mapSearch").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(searchTerm);
+ $("webSearch").href="https://www.google.com/search?q="+encodeURIComponent(searchTerm+" 公式 営業時間 料金");
+}
+function selectDestination(d){
+ const placeField=$("place");
+ placeField.value=d.name;
+ placeField.dispatchEvent(new Event("input",{bubbles:true}));
+ placeField.dispatchEvent(new Event("change",{bubbles:true}));
+ placeField.blur();
+ const extra=[...new Set(d.pack||["飲み物","帽子","タオル","着替え"])];
+ extra.forEach(name=>{if(!items.some(it=>it.name===name))items.push({name,done:false,group:"追加した持ち物"})});
+ render();persist();drawDestinations();toast(d.name+"を行き先に設定しました");
+}
+
+let toastTimer;
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),1800)}
+function render(){
+ const root=$("items");root.innerHTML="";
+ groups.forEach(g=>{
+  const subset=items.filter(it=>it.group===g.title);
+  if(!subset.length)return;
+  const h=document.createElement("div");h.className="category";h.textContent=g.title;root.append(h);
+  subset.forEach(it=>{
+   const idx=items.indexOf(it),row=document.createElement("div");row.className="item"+(it.done?" done":"");
+   const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!it.done;cb.setAttribute("aria-label",it.name+"を準備済みにする");
+   cb.addEventListener("change",()=>{items[idx].done=cb.checked;render();persist()});
+   const name=document.createElement("span");name.className="name";name.textContent=it.name;
+   const del=document.createElement("button");del.className="del";del.textContent="削除";del.setAttribute("aria-label",it.name+"を削除");
+   del.addEventListener("click",()=>{items.splice(idx,1);render();persist();toast("持ち物を削除しました")});
+   row.append(cb,name,del);root.append(row);
+  });
+ });
+ updateProgress();
+}
+function updateProgress(){const done=items.filter(x=>x.done).length,total=items.length;$("progressText").textContent=`${done} / ${total} 完了`;$("progressBar").style.width=(total?done/total*100:0)+"%"}
+function getData(){const d={items};ids.forEach(id=>d[id]=$(id).value);return d}
+function persist(){try{localStorage.setItem("oyako-note-data-v2",JSON.stringify(getData()))}catch(e){}}
+function calc(){const n=["transport","food","play","other"].reduce((s,id)=>s+(Number($(id).value)||0),0);$("total").textContent=n.toLocaleString("ja-JP")}
+function load(){try{const d=JSON.parse(localStorage.getItem("oyako-note-data-v2")||"null");if(d){if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]})}}catch(e){}render();calc()}
+function applyData(d){if(!d||typeof d!=="object")throw new Error("invalid");if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]});render();calc();persist()}
+$("add").addEventListener("click",()=>{const v=$("newitem").value.trim();if(!v)return;items.push({name:v,done:false,group:"追加した持ち物"});const root=$("items");const h=document.createElement("div");h.className="category";h.textContent="追加した持ち物";root.append(h);render();$("newitem").value="";persist();toast("持ち物を追加しました")});
+const originalRender=render;
+render=function(){const root=$("items");root.innerHTML="";const known=groups.map(g=>g.title);[...known,"追加した持ち物"].forEach(title=>{const subset=items.filter(it=>it.group===title);if(!subset.length)return;const h=document.createElement("div");h.className="category";h.textContent=title;root.append(h);subset.forEach(it=>{const idx=items.indexOf(it),row=document.createElement("div");row.className="item"+(it.done?" done":"");const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!it.done;cb.addEventListener("change",()=>{items[idx].done=cb.checked;render();persist()});const name=document.createElement("span");name.className="name";name.textContent=it.name;const del=document.createElement("button");del.className="del";del.textContent="削除";del.addEventListener("click",()=>{items.splice(idx,1);render();persist();toast("持ち物を削除しました")});row.append(cb,name,del);root.append(row)})});updateProgress()};
+$("save").onclick=$("bottomSave").onclick=()=>{persist();toast("この端末に保存しました")};
+$("export").onclick=()=>{persist();const blob=new Blob([JSON.stringify(getData(),null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="親子のおでかけノート_backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("バックアップを保存しました")};
+$("importBtn").onclick=()=>$("importFile").click();
+$("importFile").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{applyData(JSON.parse(await f.text()));toast("バックアップを読み込みました")}catch(err){toast("読み込めないファイルです")}e.target.value=""});
+$("print").onclick=()=>window.print();
+$("topBtn").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+ids.forEach(id=>$(id).addEventListener("input",()=>{calc();persist()}));
+$("place").addEventListener("input",drawDestinations);
+$("destinationChips").addEventListener("click",e=>{const b=e.target.closest("button[data-kind]");if(!b)return;activeDestinationKind=b.dataset.kind;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===b));drawDestinations()});
+$("prefectureFilter").addEventListener("change",drawDestinations);
+$("categoryFilter").addEventListener("change",drawDestinations);
+const placeList=$("placeSuggestions");destinations.forEach(d=>{const o=document.createElement("option");o.value=d.name;placeList.append(o)});
+document.querySelectorAll(".quick-pick[data-fill]").forEach(b=>b.addEventListener("click",()=>{const field=$(b.dataset.fill);field.value=b.dataset.value;field.dispatchEvent(new Event("input",{bubbles:true}));persist();toast(field.value+"を選択しました")}));
+function syncPeople(){const a=Number($("adultCount").value),c=Number($("childCount").value);$("people").value=`大人${a}人・子ども${c}人`;persist()}
+$("adultCount").addEventListener("change",syncPeople);$("childCount").addEventListener("change",syncPeople);
+load();
+{const m=($("people").value||"").match(/大人(\d+)人・子ども(\d+)人/);if(m){$("adultCount").value=m[1];$("childCount").value=m[2]}else syncPeople()}
+drawDestinations();
+</script>
+<script>
+/* v6: Service Workerを使わず、既存登録と旧キャッシュを解除する */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(reg => reg.unregister()));
+      const keys = await caches.keys();
+      await Promise.all(keys.filter(key => key.startsWith("odekake-navi-")).map(key => caches.delete(key)));
+    } catch (e) {
+      console.warn("Service Worker cleanup:", e);
+    }
+  });
+}
+</script>
+</body></html>
