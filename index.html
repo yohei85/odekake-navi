@@ -17,6 +17,7 @@
 .share-button{display:block;margin-top:8px;border:1px solid #cfe1f4;border-radius:12px;background:#f6faff;color:#0754a8;padding:8px 10px;font-size:12px;font-weight:800;min-height:44px}.share-url{width:100%;margin-top:6px;font-size:14px}
 .reset-filters{display:block;width:100%;min-height:44px;margin-top:10px;border:1px solid #cfdfef;border-radius:16px;background:#fff;color:#0754a8;font-weight:800}
 .cat[data-kind="動物"]::after,.cat[data-kind="水族館"]::after{content:'';position:absolute;top:50%;left:50%;width:max(100%,160px);aspect-ratio:1;transform:translate(-50%,-50%);background-image:var(--category-scene);background-size:300% 200%;background-position:0 0;pointer-events:none}.cat::before{z-index:1}.spot-scene.zoo-scene{background-image:url('./assets/zoo-scenery.webp')}.spot-scene.aquarium-scene{background-image:url('./assets/aquarium-scenery.webp')}
+.visit-info{margin:8px 0;color:#19314d;font-size:12px;overflow-wrap:anywhere}.visit-info summary{min-height:44px;display:list-item;align-content:center;cursor:pointer;font-weight:800;color:#0754a8}.visit-info dl{margin:0;padding:8px;background:#f3f8ff;border-radius:10px}.visit-info dt{font-weight:800}.visit-info dd{margin:2px 0 8px;line-height:1.45}.visit-info dd:last-child{margin-bottom:0}
 </style></head><body><header class="hero"><small>家族で楽しむおでかけアプリ</small><h1>おでかけナビ！</h1><p>行きたい場所が、すぐ見つかる。</p><div class="search"><input id="keyword" placeholder="施設名・エリアをサクッと検索" aria-label="施設名・エリアを検索"></div></header><main class="wrap"><section class="panel"><h2 class="title">どこに行きたい？</h2><div class="categories" id="cats"><button class="cat active" data-kind="all"><span class="cat-label">おまかせ</span></button><button class="cat" data-kind="遊園地"><span class="cat-label">遊園地・テーマパーク</span></button><button class="cat" data-kind="動物"><span class="cat-label">動物園</span></button><button class="cat" data-kind="水族館"><span class="cat-label">水族館</span></button><button class="cat" data-kind="屋内"><span class="cat-label">室内・博物館</span></button><button class="cat" data-kind="公園"><span class="cat-label">公園・自然</span></button></div></section><section class="panel"><h2 class="title">かんたん条件で探す</h2><div class="gps"><span id="gpsStatus">📍 現在地：未取得</span><button id="gpsBtn">現在地を使う</button></div><div class="filters"><label>だれと行く？<select id="party"><option>子どもと</option><option>家族で</option><option>大人だけ</option></select></label><label>移動時間の目安<select id="time"><option>指定なし</option><option>30分以内</option><option selected>1時間以内</option><option>2時間以内</option></select></label><label>都道府県<select id="area"><option value="all">全国</option></select></label><label>天気<select id="weather"><option>どんな天気でも</option><option>雨の日</option><option>晴れの日</option></select></label><label>市区町村（任意）<input id="municipality" type="search" placeholder="例：大阪市、横浜市中区"></label></div><div class="quick-filters" role="group" aria-label="料金と対象年齢"><label><input type="checkbox" id="freeOnly"> 入場・基本利用無料</label><label><input type="checkbox" id="preschoolOnly"> 幼児向け</label></div><button class="primary" id="go">この条件で探す！</button><button type="button" id="resetFilters" class="reset-filters">条件をリセット</button><div class="status" id="status">登録済みスポットを表示中。全国の追加検索は地図からできます。</div></section><section class="panel" id="results"><h2 class="title">おすすめのおでかけスポット</h2><button type="button" class="favorites-toggle" id="favoritesToggle" aria-pressed="false">お気に入りだけ表示</button><p class="notice" id="favoritesStatus" role="status" hidden></p><div class="cards" id="cards"></div><button class="primary" id="more">もっと見る ＋</button><div class="actions"><a id="mapSearch" target="_blank" rel="noopener">全国のスポットを地図で探す</a><a id="webSearch" target="_blank" rel="noopener">最新の施設情報を検索</a></div><p class="notice">「施設写真」は撮影者と出典をカードに表示しています。「イメージ画像」と表記した画像や表記のない画像は、施設やジャンルのイメージです。表示される施設は登録済みの一部です。全国検索はGoogleマップで行います。無料は入場・基本利用が対象です。駐車場やイベントには別料金がかかる場合があります。料金・営業時間・混雑・移動時間は変わるため、各施設の公式サイトや地図で確認してください。各施設の「車での所要時間」からGoogleマップで出発地とルートを確認できます。</p></section><section class="panel"><h2 class="title">おでかけ準備もかんたん</h2><p>持ち物チェック・予算管理・おでかけメモは従来の機能を使えるよ。</p><div class="actions"><a href="./planner.html">おでかけ準備を開く</a></div></section></main><nav class="nav"><a href="#"><b>⌂</b>ホーム</a><a href="#results"><b>◎</b>スポット</a><a id="navMap" target="_blank" rel="noopener"><b>▤</b>地図</a><a href="./planner.html"><b>✓</b>準備</a></nav><script>
 const destinations=[
  {name:"東武動物公園",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
@@ -82,6 +83,34 @@ for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-sc
   }
  }
 }
+const facilityVisitInfo={
+  "グーかすかべ（春日部第2児童センター）": {
+    "対象": "0歳〜高校生とその保護者。市外からも利用可。",
+    "開館": "10:00〜20:00。12月29日〜1月3日休館。",
+    "駐車場": "共同立体駐車場。館内で駐車券を認証すると入庫から3時間まで無料。"
+  },
+  "とだがわこどもランド": {
+    "料金": "入園無料。一部の乗物は有料。",
+    "駐車場": "通常無料。おまつり期間中は1台500円。",
+    "屋内設備": "乳幼児室・こども図書室・プレイハウス。",
+    "開園": "4〜9月は9:00〜18:00、10〜3月は9:00〜17:00。月曜休園（祝日なら翌平日）。"
+  },
+  "浪速区子ども・子育てプラザ つどいの広場": {
+    "料金": "基本利用無料。講座により材料費がかかる場合あり。",
+    "対象": "0歳〜小学校入学前のお子さんと保護者。"
+  },
+  "あいくる 子どもプラザ のびのび": {
+    "料金": "基本利用無料。講演会やイベントは別料金の場合あり。",
+    "対象": "0歳〜おおむね6歳の乳幼児と保護者。",
+    "利用時間": "9:00〜18:00。",
+    "受付": "5階の総合受付で利用票を記入。"
+  },
+  "のびすく仙台": {
+    "料金": "ひろばは無料。一時預かりは別サービス。",
+    "対象": "乳幼児と家族。仙台市外からも利用可。",
+    "設備": "遊び場・飲食スペース・授乳室。"
+  }
+};
 const facilityImages={
  "上野動物園":{"file":"Entrance_of_Ueno_Zoo.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Entrance_of_Ueno_Zoo.jpg/500px-Entrance_of_Ueno_Zoo.jpg","author":"Sahaib","license":"CC BY 4.0","terms":"https://creativecommons.org/licenses/by/4.0/","sceneClass":"zoo-scene","cell":2},
  "西武園ゆうえんち":{"file":"Seibuen_Ferris_wheels_2.jpg","photo":"https://upload.wikimedia.org/wikipedia/commons/2/25/Seibuen_Ferris_wheels_2.jpg","author":"ITA-ATU","license":"パブリックドメイン","terms":"https://commons.wikimedia.org/wiki/File:Seibuen_Ferris_wheels_2.jpg#Licensing","fallbackCategory":0},
@@ -247,7 +276,25 @@ share.onclick=async()=>{
   shareStatus.textContent='下のリンクをコピーできます。';
  }
 };
-content.append(desc,official,maps,driving,favorite,share,shareStatus,shareInput);
+content.append(desc);
+const visitInfo=facilityVisitInfo[d.name];
+if(visitInfo){
+ const details=document.createElement('details');
+ details.className='visit-info';
+ const summary=document.createElement('summary');
+ summary.textContent='行く前に確認';
+ const list=document.createElement('dl');
+ for(const [label,value] of Object.entries(visitInfo)){
+  const term=document.createElement('dt');
+  term.textContent=label;
+  const description=document.createElement('dd');
+  description.textContent=value;
+  list.append(term,description);
+ }
+ details.append(summary,list);
+ content.append(details);
+}
+content.append(official,maps,driving,favorite,share,shareStatus,shareInput);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
 $('mapSearch').parentElement.hidden=favoritesOnly;
 $('mapSearch').parentElement.style.display=favoritesOnly?'none':'';
