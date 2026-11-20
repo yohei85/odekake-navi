@@ -19,6 +19,7 @@
 .cat[data-kind="動物"]::after,.cat[data-kind="水族館"]::after{content:'';position:absolute;top:50%;left:50%;width:max(100%,160px);aspect-ratio:1;transform:translate(-50%,-50%);background-image:var(--category-scene);background-size:300% 200%;background-position:0 0;pointer-events:none}.cat::before{z-index:1}.spot-scene.zoo-scene{background-image:url('./assets/zoo-scenery.webp')}.spot-scene.aquarium-scene{background-image:url('./assets/aquarium-scenery.webp')}
 .visit-info{margin:8px 0;color:#19314d;font-size:12px;overflow-wrap:anywhere}.visit-info summary{min-height:44px;display:list-item;align-content:center;cursor:pointer;font-weight:800;color:#0754a8}.visit-info dl{margin:0;padding:8px;background:#f3f8ff;border-radius:10px}.visit-info dt{font-weight:800}.visit-info dd{margin:2px 0 8px;line-height:1.45}.visit-info dd:last-child{margin-bottom:0}
 .gps button{min-height:44px}.filters{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}.quick-filters{gap:6px;margin-top:12px}.quick-filters label{min-height:44px;padding:0 7px;border:1px solid #dbe8f3;border-radius:12px;background:#f6faff;font-size:12px}.quick-filters label:has(input:checked){border-color:#3085cd;background:#e5f3ff;color:#0754a8}.quick-filters input{margin:0}.genre-title{margin:14px 0 6px;font-size:13px}.categories{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.cat{height:60px;padding:4px 3px;align-items:end;border-width:2px;border-radius:11px}.cat .cat-label{font-size:11px}.cat::before{inset:25% 0 0}.result-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px}.result-tools .status{margin:0;line-height:1.35}.result-tools .reset-filters{width:auto;margin:0;padding:4px 10px;white-space:nowrap;font-size:12px}.selected-filters{margin:0 0 6px;font-size:14px;font-weight:800;color:#173a68;overflow-wrap:anywhere}.empty-search-actions a:first-child{display:block;width:100%;text-align:center;background:#0754a8;color:white;min-height:44px}.empty-search-actions a:focus-visible{outline:2px solid #173a68;outline-offset:2px}@media(min-width:600px){.categories{grid-template-columns:repeat(6,minmax(0,1fr))}.cat{height:76px}.cat .cat-label{font-size:13px}}
+.spot a.ticket-link{display:flex;align-items:center;justify-content:center;min-height:44px;margin:8px 0 2px;padding:5px 7px;border-radius:10px;background:#e7f2ff;color:#0754a8;text-align:center}
 </style></head><body><header class="hero"><small>家族で楽しむおでかけアプリ</small><h1>おでかけナビ！</h1><p>行きたい場所が、すぐ見つかる。</p><div class="search"><input id="keyword" placeholder="施設名・エリアをサクッと検索" aria-label="施設名・エリアを検索"></div></header><main class="wrap"><section class="panel"><h2 class="title">どこで探す？</h2><div class="gps"><span id="gpsStatus">📍 現在地：未取得</span><button id="gpsBtn">現在地を使う</button></div><div class="filters"><label>都道府県<select id="area"><option value="all">全国</option></select></label><label>市区町村（任意）<input id="municipality" type="search" placeholder="例：大阪市、横浜市中区"></label></div><div class="quick-filters" role="group" aria-label="よく使う条件"><label><input type="checkbox" id="weather"> 雨の日</label><label><input type="checkbox" id="freeOnly"> 入場・基本利用無料</label><label><input type="checkbox" id="preschoolOnly"> 幼児向け</label></div><h3 class="genre-title">ジャンルで探す</h3><div class="categories" id="cats"><button class="cat active" data-kind="all"><span class="cat-label">おまかせ</span></button><button class="cat" data-kind="遊園地"><span class="cat-label">遊園地・テーマパーク</span></button><button class="cat" data-kind="動物"><span class="cat-label">動物園</span></button><button class="cat" data-kind="水族館"><span class="cat-label">水族館</span></button><button class="cat" data-kind="屋内"><span class="cat-label">室内・博物館</span></button><button class="cat" data-kind="公園"><span class="cat-label">公園・自然</span></button></div><button class="primary" id="go">この条件で探す！</button><div class="actions"><a href="./guide-kanto">関東の定番スポット10選</a></div></section><section class="panel" id="results"><h2 class="title">検索結果</h2><p class="selected-filters" id="selectedFilters"></p><div class="result-tools"><div class="status" id="status" role="status"></div><button type="button" id="resetFilters" class="reset-filters">条件をリセット</button></div><button type="button" class="favorites-toggle" id="favoritesToggle" aria-pressed="false">お気に入りだけ表示</button><p class="notice" id="favoritesStatus" role="status" hidden></p><div class="cards" id="cards"></div><button class="primary" id="more">もっと見る ＋</button><div class="actions"><a id="mapSearch" target="_blank" rel="noopener">全国のスポットを地図で探す</a><a id="webSearch" target="_blank" rel="noopener">最新の施設情報を検索</a></div><p class="notice" id="resultsNotice">「施設写真」は撮影者と出典をカードに表示しています。「イメージ画像」と表記した画像や表記のない画像は、施設やジャンルのイメージです。表示される施設は登録済みの一部です。全国検索はGoogleマップで行います。無料は入場・基本利用が対象です。駐車場やイベントには別料金がかかる場合があります。料金・営業時間・混雑・移動時間は変わるため、各施設の公式サイトや地図で確認してください。各施設の「車での所要時間」からGoogleマップで出発地とルートを確認できます。</p></section><section class="panel" id="regional-guides"><h2 class="title">地域別のおでかけガイド</h2><div class="actions"><a href="./guide-kanto">関東の遊園地・水族館・動物園</a><a href="./guide-kasukabe.html">春日部市の無料室内スポット</a><a href="./guide-osaka.html">大阪市の無料室内スポット</a><a href="./guide-nagoya">名古屋市の無料室内スポット</a><a href="./guide-fukuoka">福岡市の無料室内スポット</a><a href="./guide-sendai">仙台市の無料室内スポット</a></div></section><section class="panel"><h2 class="title">おでかけ準備もかんたん</h2><p>持ち物チェック・予算管理・おでかけメモは従来の機能を使えるよ。</p><div class="actions"><a href="./planner.html">おでかけ準備を開く</a></div></section></main><nav class="nav"><a href="#"><b>⌂</b>ホーム</a><a href="#results"><b>◎</b>スポット</a><a id="navMap" target="_blank" rel="noopener"><b>▤</b>地図</a><a href="./planner.html"><b>✓</b>準備</a></nav><script>
 const destinations=[
  {name:"東武動物公園",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
@@ -84,6 +85,48 @@ for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-sc
   }
  }
 }
+const facilityTickets=new Map([
+  [
+    "東京ディズニーランド",
+    "https://www.tokyodisneyresort.jp/ticket/index.html"
+  ],
+  [
+    "東京ディズニーシー",
+    "https://www.tokyodisneyresort.jp/ticket/index.html"
+  ],
+  [
+    "よみうりランド",
+    "https://www.yomiuriland.com/charge/"
+  ],
+  [
+    "西武園ゆうえんち",
+    "https://www.seibuen-amusement-park.jp/ticket/"
+  ],
+  [
+    "サンシャイン水族館",
+    "https://sunshinecity.jp/aquarium/ticket/"
+  ],
+  [
+    "横浜・八景島シーパラダイス",
+    "https://www.seaparadise.co.jp/price/"
+  ],
+  [
+    "鴨川シーワールド",
+    "https://www.kamogawa-seaworld.jp/price_ticket/admission/"
+  ],
+  [
+    "上野動物園",
+    "https://www.tokyo-zoo.net/ueno/visitor-info/tickets/"
+  ],
+  [
+    "東武動物公園",
+    "https://www.tobuzoo.com/ticket/chargelist/"
+  ],
+  [
+    "よこはま動物園ズーラシア",
+    "https://www.hama-midorinokyokai.or.jp/zoo/zoorasia/fee.php"
+  ]
+]);
 const facilityVisitInfo={
   "グーかすかべ（春日部第2児童センター）": {
     "対象": "0歳〜高校生とその保護者。市外からも利用可。",
@@ -294,6 +337,16 @@ if(visitInfo){
  }
  details.append(summary,list);
  content.append(details);
+}
+const ticketUrl=facilityTickets.get(d.name);
+if(ticketUrl){
+ const ticket=document.createElement('a');
+ ticket.className='ticket-link';
+ ticket.href=ticketUrl;
+ ticket.target='_blank';
+ ticket.rel='noopener';
+ ticket.textContent='公式の料金・チケット';
+ content.append(ticket);
 }
 content.append(official,maps,driving,favorite,share,shareStatus,shareInput);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
