@@ -2,6 +2,19 @@
   "name": "odekake-navi",
   "compatibility_date": "2026-11-20",
   "assets": {
-    "directory": "./"
+    "directory": "./",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/ticket-click"
+    ]
+  },
+  "main": "./ticket-metrics.mjs",
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": false,
+      "head_sampling_rate": 1
+    }
   }
 }
