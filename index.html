@@ -83,6 +83,8 @@ for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-sc
  }
 }
 const facilityImages={
+ "むさしの村":{"fallbackCategory":0,"file":"Musashino-mura.JPG","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Musashino-mura.JPG/960px-Musashino-mura.JPG","author":"Abasaa","license":"パブリックドメイン","terms":"https://commons.wikimedia.org/wiki/File:Musashino-mura.JPG#Licensing"},
+ "こもれび森のイバライド":{"fallbackCategory":4,"file":"こもれび森のイバライド.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/%E3%81%93%E3%82%82%E3%82%8C%E3%81%B3%E6%A3%AE%E3%81%AE%E3%82%A4%E3%83%90%E3%83%A9%E3%82%A4%E3%83%89.jpg/330px-%E3%81%93%E3%82%82%E3%82%8C%E3%81%B3%E6%A3%AE%E3%81%AE%E3%82%A4%E3%83%90%E3%83%A9%E3%82%A4%E3%83%89.jpg","author":"こもれび森のイバライド","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
  '東武動物公園':{cell:0,file:'Ferris_wheel_in_Tobu_Zoo_Park_001.jpg',photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Ferris_wheel_in_Tobu_Zoo_Park_001.jpg/330px-Ferris_wheel_in_Tobu_Zoo_Park_001.jpg',author:'Ocdp',license:'CC0 1.0',terms:'https://creativecommons.org/publicdomain/zero/1.0/'},
  '東京ディズニーランド':{cell:1,file:'Tokyo_Disneyland_Cinderella_Castle_(53440904042).jpg',photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Tokyo_Disneyland_Cinderella_Castle_%2853440904042%29.jpg/330px-Tokyo_Disneyland_Cinderella_Castle_%2853440904042%29.jpg',author:'Dick Thomas Johnson',license:'CC BY 2.0',terms:'https://creativecommons.org/licenses/by/2.0/'},
  '東京ディズニーシー':{cell:2,file:'JTTCOTE_-_DisneySea.jpg',photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/JTTCOTE_-_DisneySea.jpg/500px-JTTCOTE_-_DisneySea.jpg',author:'Sxkcb',license:'CC BY-SA 4.0',terms:'https://creativecommons.org/licenses/by-sa/4.0/'},
@@ -143,7 +145,13 @@ let photoCredit;
 if(scene){
  const illustration=document.createElement('div');
  illustration.className=scene.sceneClass?'spot-scene '+scene.sceneClass:'spot-scene';
- illustration.style.backgroundPosition=(scene.cell%3*50)+'% '+(Math.floor(scene.cell/3)*100)+'%';
+ if(scene.fallbackCategory===undefined){
+  illustration.style.backgroundPosition=(scene.cell%3*50)+'% '+(Math.floor(scene.cell/3)*100)+'%';
+ }else{
+  illustration.style.backgroundImage=`url('./assets/category${scene.fallbackCategory}.webp')`;
+  illustration.style.backgroundSize='cover';
+  illustration.style.backgroundPosition='center';
+ }
  art.append(illustration);
  const imageLabel=document.createElement('div');
  imageLabel.className='spot-photo-label';
