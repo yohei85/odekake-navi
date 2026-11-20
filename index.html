@@ -12,10 +12,11 @@
 @media(max-width:390px){.hero .search{margin-top:155px}.cat .cat-label{font-size:14px}}
 .quick-filters{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:14px}.quick-filters label{display:inline-flex;align-items:center;gap:5px;min-height:36px;font-size:14px}.quick-filters input{width:18px;height:18px;accent-color:#0754a8}.spot .features{font-weight:800;color:#14624b}
 .favorites-toggle,.favorite-button{border:1px solid #cfe1f4;border-radius:12px;background:#f6faff;color:#0754a8;padding:8px 10px;font-weight:800;min-height:44px}.favorites-toggle{margin-bottom:12px}.favorite-button{display:block;margin-top:8px;font-size:12px}.favorites-toggle[aria-pressed="true"],.favorite-button[aria-pressed="true"]{background:#fff1b8;border-color:#e9c852;color:#684c00}
-.spot .art{position:relative}.spot-icon{position:absolute;top:8px;left:8px;display:grid;place-items:center;min-height:44px;max-width:calc(100% - 16px);padding:3px 8px;border:1px solid #ffffffb3;border-radius:15px;background:#fff9;font-size:25px;line-height:1.2;white-space:nowrap;box-shadow:0 2px 8px #102b4933}
-</style></head><body><header class="hero"><small>家族で楽しむおでかけアプリ</small><h1>おでかけナビ！</h1><p>行きたい場所が、すぐ見つかる。</p><div class="search"><input id="keyword" placeholder="施設名・エリアをサクッと検索" aria-label="施設名・エリアを検索"></div></header><main class="wrap"><section class="panel"><h2 class="title">どこに行きたい？</h2><div class="categories" id="cats"><button class="cat active" data-kind="all"><span class="cat-label">おまかせ</span></button><button class="cat" data-kind="遊園地"><span class="cat-label">遊園地・テーマパーク</span></button><button class="cat" data-kind="動物"><span class="cat-label">動物園</span></button><button class="cat" data-kind="水族館"><span class="cat-label">水族館</span></button><button class="cat" data-kind="屋内"><span class="cat-label">室内・博物館</span></button><button class="cat" data-kind="公園"><span class="cat-label">公園・自然</span></button></div></section><section class="panel"><h2 class="title">かんたん条件で探す</h2><div class="gps"><span id="gpsStatus">📍 現在地：未取得</span><button id="gpsBtn">現在地を使う</button></div><div class="filters"><label>だれと行く？<select id="party"><option>子どもと</option><option>家族で</option><option>大人だけ</option></select></label><label>移動時間の目安<select id="time"><option>指定なし</option><option>30分以内</option><option selected>1時間以内</option><option>2時間以内</option></select></label><label>都道府県<select id="area"><option value="all">全国</option></select></label><label>天気<select id="weather"><option>どんな天気でも</option><option>雨の日</option><option>晴れの日</option></select></label><label>市区町村（任意）<input id="municipality" type="search" placeholder="例：大阪市、横浜市中区"></label></div><div class="quick-filters" role="group" aria-label="料金と対象年齢"><label><input type="checkbox" id="freeOnly"> 入場・基本利用無料</label><label><input type="checkbox" id="preschoolOnly"> 幼児向け</label></div><button class="primary" id="go">この条件で探す！</button><div class="status" id="status">登録済みスポットを表示中。全国の追加検索は地図からできます。</div></section><section class="panel" id="results"><h2 class="title">おすすめのおでかけスポット</h2><button type="button" class="favorites-toggle" id="favoritesToggle" aria-pressed="false">お気に入りだけ表示</button><p class="notice" id="favoritesStatus" role="status" hidden></p><div class="cards" id="cards"></div><button class="primary" id="more">もっと見る ＋</button><div class="actions"><a id="mapSearch" target="_blank" rel="noopener">全国のスポットを地図で探す</a><a id="webSearch" target="_blank" rel="noopener">最新の施設情報を検索</a></div><p class="notice">※写真はジャンルを表すイメージ画像で、個別施設の実際の写真ではありません。表示される施設は登録済みの一部です。全国検索はGoogleマップで行います。無料は入場・基本利用が対象です。駐車場やイベントには別料金がかかる場合があります。料金・営業時間・混雑・移動時間は変わるため、各施設の公式サイトや地図で確認してください。各施設の「車での所要時間」からGoogleマップで出発地とルートを確認できます。</p></section><section class="panel"><h2 class="title">おでかけ準備もかんたん</h2><p>持ち物チェック・予算管理・おでかけメモは従来の機能を使えるよ。</p><div class="actions"><a href="./planner.html">おでかけ準備を開く</a></div></section></main><nav class="nav"><a href="#"><b>⌂</b>ホーム</a><a href="#results"><b>◎</b>スポット</a><a id="navMap" target="_blank" rel="noopener"><b>▤</b>地図</a><a href="./planner.html"><b>✓</b>準備</a></nav><script>
+.spot .art{position:relative}
+.spot .art{overflow:hidden;background-position:center;background-size:cover}.spot-scene{position:absolute;top:50%;left:50%;width:max(110px,100%);aspect-ratio:1;transform:translate(-50%,-50%);background:url('./assets/facility-scenes.webp') no-repeat;background-size:300% 200%}.spot-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.spot-photo-label{position:absolute;left:8px;bottom:8px;border-radius:8px;padding:4px 7px;background:#fff;color:#19314d;font-size:11px;font-weight:800}.spot .photo-credit{font-size:11px}.spot .photo-credit a{font-size:11px;margin-top:0}
+</style></head><body><header class="hero"><small>家族で楽しむおでかけアプリ</small><h1>おでかけナビ！</h1><p>行きたい場所が、すぐ見つかる。</p><div class="search"><input id="keyword" placeholder="施設名・エリアをサクッと検索" aria-label="施設名・エリアを検索"></div></header><main class="wrap"><section class="panel"><h2 class="title">どこに行きたい？</h2><div class="categories" id="cats"><button class="cat active" data-kind="all"><span class="cat-label">おまかせ</span></button><button class="cat" data-kind="遊園地"><span class="cat-label">遊園地・テーマパーク</span></button><button class="cat" data-kind="動物"><span class="cat-label">動物園</span></button><button class="cat" data-kind="水族館"><span class="cat-label">水族館</span></button><button class="cat" data-kind="屋内"><span class="cat-label">室内・博物館</span></button><button class="cat" data-kind="公園"><span class="cat-label">公園・自然</span></button></div></section><section class="panel"><h2 class="title">かんたん条件で探す</h2><div class="gps"><span id="gpsStatus">📍 現在地：未取得</span><button id="gpsBtn">現在地を使う</button></div><div class="filters"><label>だれと行く？<select id="party"><option>子どもと</option><option>家族で</option><option>大人だけ</option></select></label><label>移動時間の目安<select id="time"><option>指定なし</option><option>30分以内</option><option selected>1時間以内</option><option>2時間以内</option></select></label><label>都道府県<select id="area"><option value="all">全国</option></select></label><label>天気<select id="weather"><option>どんな天気でも</option><option>雨の日</option><option>晴れの日</option></select></label><label>市区町村（任意）<input id="municipality" type="search" placeholder="例：大阪市、横浜市中区"></label></div><div class="quick-filters" role="group" aria-label="料金と対象年齢"><label><input type="checkbox" id="freeOnly"> 入場・基本利用無料</label><label><input type="checkbox" id="preschoolOnly"> 幼児向け</label></div><button class="primary" id="go">この条件で探す！</button><div class="status" id="status">登録済みスポットを表示中。全国の追加検索は地図からできます。</div></section><section class="panel" id="results"><h2 class="title">おすすめのおでかけスポット</h2><button type="button" class="favorites-toggle" id="favoritesToggle" aria-pressed="false">お気に入りだけ表示</button><p class="notice" id="favoritesStatus" role="status" hidden></p><div class="cards" id="cards"></div><button class="primary" id="more">もっと見る ＋</button><div class="actions"><a id="mapSearch" target="_blank" rel="noopener">全国のスポットを地図で探す</a><a id="webSearch" target="_blank" rel="noopener">最新の施設情報を検索</a></div><p class="notice">「施設写真」は撮影者と出典をカードに表示しています。「イメージ画像」と表記した画像や表記のない画像は、施設やジャンルのイメージです。表示される施設は登録済みの一部です。全国検索はGoogleマップで行います。無料は入場・基本利用が対象です。駐車場やイベントには別料金がかかる場合があります。料金・営業時間・混雑・移動時間は変わるため、各施設の公式サイトや地図で確認してください。各施設の「車での所要時間」からGoogleマップで出発地とルートを確認できます。</p></section><section class="panel"><h2 class="title">おでかけ準備もかんたん</h2><p>持ち物チェック・予算管理・おでかけメモは従来の機能を使えるよ。</p><div class="actions"><a href="./planner.html">おでかけ準備を開く</a></div></section></main><nav class="nav"><a href="#"><b>⌂</b>ホーム</a><a href="#results"><b>◎</b>スポット</a><a id="navMap" target="_blank" rel="noopener"><b>▤</b>地図</a><a href="./planner.html"><b>✓</b>準備</a></nav><script>
 const destinations=[
- {name:"東武動物公園","icon":"🐘🎡",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
+ {name:"東武動物公園",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
  {name:"むさしの村",pref:"埼玉県",area:"加須市",kind:["遊園地","動物・ふれあい"],desc:"遊園地や農業体験などを楽しめるファミリー向け施設。",official:"https://www.musashinomura.co.jp/",pack:["飲み物","帽子","着替え","タオル"]},
  {name:"西武園ゆうえんち",pref:"埼玉県",area:"所沢市",kind:["遊園地"],desc:"アトラクションやショーを楽しめる遊園地。",official:"https://www.seibuen-amusement-park.jp/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
  {name:"さいたま水族館",pref:"埼玉県",area:"羽生市",kind:["水族館","屋内遊び場"],desc:"淡水魚を中心に展示する水族館。",official:"https://www.parks.or.jp/suizokukan/",pack:["飲み物","タオル","着替え"]},
@@ -48,8 +49,8 @@ const destinations=[
  {name:"新江ノ島水族館",pref:"神奈川県",area:"藤沢市",kind:["水族館"],desc:"相模湾や海の生き物を紹介する水族館。",official:"https://www.enosui.com/",pack:["飲み物","タオル","着替え"]},
  {name:"こどもの国",pref:"神奈川県",area:"横浜市",kind:["公園","自然・牧場"],desc:"広い敷地で遊具や自然体験を楽しめる施設。",official:"https://www.kodomonokuni.org/",pack:["飲み物","帽子","着替え","レジャーシート"]},
  {name:"さがみ湖MORIMORI",pref:"神奈川県",area:"相模原市",kind:["遊園地","自然・牧場"],desc:"アトラクションや自然の中のレジャーを楽しめる施設。",official:"https://www.sagamiko-resort.jp/",pack:["飲み物","帽子","歩きやすい靴","着替え"]},
- {name:"東京ディズニーランド","icon":"🏰✨",pref:"千葉県",area:"浦安市",kind:["遊園地"],desc:"世界観豊かなテーマランドとアトラクションを楽しめるテーマパーク。",official:"https://www.tokyodisneyresort.jp/tdl/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
- {name:"東京ディズニーシー","icon":"🚢🌊",pref:"千葉県",area:"浦安市",kind:["遊園地"],desc:"海をテーマにしたテーマポートやアトラクションを楽しめるテーマパーク。",official:"https://www.tokyodisneyresort.jp/tds/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
+ {name:"東京ディズニーランド",pref:"千葉県",area:"浦安市",kind:["遊園地"],desc:"世界観豊かなテーマランドとアトラクションを楽しめるテーマパーク。",official:"https://www.tokyodisneyresort.jp/tdl/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
+ {name:"東京ディズニーシー",pref:"千葉県",area:"浦安市",kind:["遊園地"],desc:"海をテーマにしたテーマポートやアトラクションを楽しめるテーマパーク。",official:"https://www.tokyodisneyresort.jp/tds/",pack:["飲み物","帽子","歩きやすい靴","モバイルバッテリー"]},
  {name:"東京ドームシティ アトラクションズ",pref:"東京都",area:"文京区",kind:["遊園地"],desc:"都心でアトラクションを楽しめるレジャー施設。",official:"https://www.tokyo-dome.co.jp/attractions/",pack:["飲み物","歩きやすい靴"]},
  {name:"サンリオピューロランド",pref:"東京都",area:"多摩市",kind:["屋内遊び場"],desc:"サンリオキャラクターのショーやアトラクションを楽しめる屋内型テーマパーク。",official:"https://www.puroland.jp/",pack:["飲み物","モバイルバッテリー"]},
  {name:"キッザニア東京",pref:"東京都",area:"江東区",kind:["屋内遊び場"],desc:"子どもがさまざまな仕事やサービスを体験できる施設。",official:"https://www.kidzania.jp/tokyo/",pack:["飲み物","予約情報"]},
@@ -61,14 +62,22 @@ const destinations=[
  {name:"ムーミンバレーパーク",pref:"埼玉県",area:"飯能市",kind:["自然・牧場","屋内遊び場"],desc:"ムーミンの物語の世界観や自然を楽しめるテーマパーク。",official:"https://metsa-hanno.com/",pack:["飲み物","帽子","歩きやすい靴"]},
  {name:"カンドゥー",pref:"千葉県",area:"千葉市",kind:["屋内遊び場"],desc:"子どもが仕事体験を楽しめる屋内型施設。",official:"https://www.kandu.co.jp/",pack:["飲み物","予約情報"]},
  {"name":"スマイルしょうわ（庄和児童センター）","pref":"埼玉県","area":"春日部市","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"館内に乳幼児向けの遊び場。初回来館時に入退館の登録が必要です。","official":"https://www.city.kasukabe.lg.jp/benrinavi/shisetsuannai/categorykarasagasu/4/4/11028.html"},
- {"name":"エンゼル・ドーム（春日部第1児童センター）","icon":"🛝🌈","pref":"埼玉県","area":"春日部市","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"雨の日も館内で体を動かして遊べる児童センター。","official":"https://www.city.kasukabe.lg.jp/kosodate_kyoiku_bunka/kasukabecosodateoensite/oyakodeodekake/14656.html"},
+ {"name":"エンゼル・ドーム（春日部第1児童センター）","pref":"埼玉県","area":"春日部市","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"雨の日も館内で体を動かして遊べる児童センター。","official":"https://www.city.kasukabe.lg.jp/kosodate_kyoiku_bunka/kasukabecosodateoensite/oyakodeodekake/14656.html"},
  {"name":"グーかすかべ（春日部第2児童センター）","pref":"埼玉県","area":"春日部市","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"0歳から保護者同伴で利用できる児童センター。駐車場は館内で認証すると入庫から3時間まで無料。","official":"https://2nd-kasukabe.jp/top/faq/"},
  {"name":"ちあふる・ちゅうおう ぺんぎんルーム","pref":"北海道","area":"札幌市中央区","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"0歳から就学前までの子どもと保護者が過ごせる子育てサロン。","official":"https://kosodate.city.sapporo.jp/salon/chuou/list/center_5/12214.html"},
  {"name":"のびすく仙台","pref":"宮城県","area":"仙台市青葉区","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"乳幼児と家族が遊べる無料のひろば。仙台市外からも利用できます。一時預かりは別サービスです。","official":"https://www.city.sendai.jp/kodomo-chiiki/kurashi/kenkotofukushi/kosodate/azukari/joho/fureai.html"},
- {"name":"とだがわこどもランド","icon":"🪵🛝","pref":"愛知県","area":"名古屋市港区","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"乳幼児室や屋内のプレイハウスがあります。入園無料で、一部の乗物は有料です。","official":"https://www.todagawa.jp/guide.html"},
+ {"name":"とだがわこどもランド","pref":"愛知県","area":"名古屋市港区","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"乳幼児室や屋内のプレイハウスがあります。入園無料で、一部の乗物は有料です。","official":"https://www.todagawa.jp/guide.html"},
  {"name":"浪速区子ども・子育てプラザ つどいの広場","pref":"大阪府","area":"大阪市浪速区","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"0歳から就学前までの子どもと保護者の屋内遊び場。講座によって材料費がかかります。","official":"https://miokoko-net.miotsukushi.or.jp/naniwa/tsudoi"},
- {"name":"あいくる 子どもプラザ のびのび","icon":"🧸📚","pref":"福岡県","area":"福岡市中央区","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"乳幼児と保護者が自由に遊べる屋内スペース。基本利用は無料で、イベントなどは別料金の場合があります。","official":"https://jidoukaikan-aikuru.or.jp/cp_index/"}
+ {"name":"あいくる 子どもプラザ のびのび","pref":"福岡県","area":"福岡市中央区","kind":["屋内遊び場"],"free":true,"preschool":true,"desc":"乳幼児と保護者が自由に遊べる屋内スペース。基本利用は無料で、イベントなどは別料金の場合があります。","official":"https://jidoukaikan-aikuru.or.jp/cp_index/"}
 ];
+const facilityImages={
+ '東武動物公園':{cell:0,file:'Ferris_wheel_in_Tobu_Zoo_Park_001.jpg',photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Ferris_wheel_in_Tobu_Zoo_Park_001.jpg/330px-Ferris_wheel_in_Tobu_Zoo_Park_001.jpg',author:'Ocdp',license:'CC0 1.0',terms:'https://creativecommons.org/publicdomain/zero/1.0/'},
+ '東京ディズニーランド':{cell:1,file:'Tokyo_Disneyland_Cinderella_Castle_(53440904042).jpg',photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Tokyo_Disneyland_Cinderella_Castle_%2853440904042%29.jpg/330px-Tokyo_Disneyland_Cinderella_Castle_%2853440904042%29.jpg',author:'Dick Thomas Johnson',license:'CC BY 2.0',terms:'https://creativecommons.org/licenses/by/2.0/'},
+ '東京ディズニーシー':{cell:2,file:'JTTCOTE_-_DisneySea.jpg',photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/JTTCOTE_-_DisneySea.jpg/500px-JTTCOTE_-_DisneySea.jpg',author:'Sxkcb',license:'CC BY-SA 4.0',terms:'https://creativecommons.org/licenses/by-sa/4.0/'},
+ 'エンゼル・ドーム（春日部第1児童センター）':{cell:3},
+ 'とだがわこどもランド':{cell:4,file:"Todagawa_Children's_Land,_Harutano_Minato_Ward_Nagoya_2021.jpg",photo:'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Todagawa_Children%27s_Land%2C_Harutano_Minato_Ward_Nagoya_2021.jpg/330px-Todagawa_Children%27s_Land%2C_Harutano_Minato_Ward_Nagoya_2021.jpg',author:'Tomio344456',license:'CC BY-SA 4.0',terms:'https://creativecommons.org/licenses/by-sa/4.0/'},
+ 'あいくる 子どもプラザ のびのび':{cell:5}
+};
 const $=id=>document.getElementById(id);let kind='all',limit=8,coords=null;
 const favoritesKey='odekake-navi-favorites-v1';
 let favorites=new Set();
@@ -113,12 +122,39 @@ function matchesDestination(d,tokens){
  const fields=[d.name,d.pref,d.area,...d.kind,d.desc].map(field=>normalizeSearch(field).replace(/\s+/g,""));
  return tokens.every(token=>[token,...(searchSynonyms[token]||[]).map(normalizeSearch)].some(term=>fields.some(field=>field.includes(term))));
 }
-function render(){const tokens=normalizeSearch($('keyword').value).split(/\s+/).filter(Boolean),pref=$('area').value,rain=$('weather').value==='雨の日';const municipality=normalizeSearch($('municipality').value).replace(/\s+/g,'');let a=favoritesOnly?destinations.filter(isFavorite):destinations.filter(d=>(pref==='all'||d.pref===pref)&&normalizeSearch(d.area).includes(municipality)&&(kind==='all'||d.kind.some(k=>k.includes(kind)))&&matchesDestination(d,tokens)&&(!$('freeOnly').checked||d.free)&&(!$('preschoolOnly').checked||d.preschool)&&(!rain||d.kind.some(k=>k.includes('屋内')||k.includes('水族館'))));$('cards').replaceChildren();a.slice(0,limit).forEach(d=>{let el=document.createElement('article');el.className='spot';let art=document.createElement('div');art.className='art';art.style.backgroundImage="url('./assets/category"+(d.kind.some(k=>k.includes('水族館'))?1:d.kind.some(k=>k.includes('動物'))?2:d.kind.some(k=>k.includes('遊園地'))?0:d.kind.some(k=>k.includes('公園'))?4:5)+".webp')";if(d.icon){
- const icon=document.createElement('div');
- icon.className='spot-icon';
- icon.setAttribute('aria-hidden','true');
- icon.textContent=d.icon;
- art.append(icon);
+function render(){const tokens=normalizeSearch($('keyword').value).split(/\s+/).filter(Boolean),pref=$('area').value,rain=$('weather').value==='雨の日';const municipality=normalizeSearch($('municipality').value).replace(/\s+/g,'');let a=favoritesOnly?destinations.filter(isFavorite):destinations.filter(d=>(pref==='all'||d.pref===pref)&&normalizeSearch(d.area).includes(municipality)&&(kind==='all'||d.kind.some(k=>k.includes(kind)))&&matchesDestination(d,tokens)&&(!$('freeOnly').checked||d.free)&&(!$('preschoolOnly').checked||d.preschool)&&(!rain||d.kind.some(k=>k.includes('屋内')||k.includes('水族館'))));$('cards').replaceChildren();a.slice(0,limit).forEach(d=>{let el=document.createElement('article');el.className='spot';let art=document.createElement('div');art.className='art';art.style.backgroundImage="url('./assets/category"+(d.kind.some(k=>k.includes('水族館'))?1:d.kind.some(k=>k.includes('動物'))?2:d.kind.some(k=>k.includes('遊園地'))?0:d.kind.some(k=>k.includes('公園'))?4:5)+".webp')";const scene=facilityImages[d.name];
+let photoCredit;
+if(scene){
+ const illustration=document.createElement('div');
+ illustration.className='spot-scene';
+ illustration.style.backgroundPosition=(scene.cell%3*50)+'% '+(Math.floor(scene.cell/3)*100)+'%';
+ art.append(illustration);
+ const imageLabel=document.createElement('div');
+ imageLabel.className='spot-photo-label';
+ imageLabel.textContent='イメージ画像';
+ if(scene.photo){
+  photoCredit=document.createElement('p');
+  photoCredit.className='photo-credit';
+  photoCredit.hidden=true;
+  const source=document.createElement('a');
+  source.href='https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(scene.file);
+  source.textContent='写真：'+scene.author;
+  const terms=document.createElement('a');
+  terms.href=scene.terms;
+  terms.textContent=scene.license;
+  for(const link of [source,terms]){link.target='_blank';link.rel='noopener';}
+  photoCredit.append(source,terms,'（表示時にトリミング）');
+  const photo=document.createElement('img');
+  photo.className='spot-photo';
+  photo.alt='';
+  photo.loading='lazy';
+  photo.referrerPolicy='no-referrer';
+  photo.onload=()=>{imageLabel.textContent='施設写真';photoCredit.hidden=false;};
+  photo.onerror=()=>photo.remove();
+  photo.src=scene.photo;
+  art.append(photo);
+ }
+ art.append(imageLabel);
 }
 let content=document.createElement('div');content.className='content';let name=document.createElement('strong');name.textContent=d.name;let loc=document.createElement('p');loc.textContent=d.pref+' '+d.area;let desc=document.createElement('p');desc.textContent=d.desc;let official=document.createElement('a');official.href=d.official;official.target='_blank';official.rel='noopener';official.textContent='公式サイト';let maps=document.createElement('a');maps.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name+' '+d.pref);maps.target='_blank';maps.rel='noopener';maps.textContent='地図';content.append(name,loc);
 const features=[d.free?'基本利用無料':'',d.preschool?'幼児向け':''].filter(Boolean);
@@ -153,7 +189,8 @@ favorite.onclick=()=>{
  if(favoritesOnly){render();$('favoritesToggle').focus();}
  else updateFavorite();
 };
-content.append(desc,official,maps,driving,favorite);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
+content.append(desc,official,maps,driving,favorite);
+if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
 $('mapSearch').parentElement.hidden=favoritesOnly;
 $('mapSearch').parentElement.style.display=favoritesOnly?'none':'';
 if(favoritesOnly&&!a.length){
