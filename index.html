@@ -14,6 +14,7 @@
 .favorites-toggle,.favorite-button{border:1px solid #cfe1f4;border-radius:12px;background:#f6faff;color:#0754a8;padding:8px 10px;font-weight:800;min-height:44px}.favorites-toggle{margin-bottom:12px}.favorite-button{display:block;margin-top:8px;font-size:12px}.favorites-toggle[aria-pressed="true"],.favorite-button[aria-pressed="true"]{background:#fff1b8;border-color:#e9c852;color:#684c00}
 .spot .art{position:relative}
 .spot .art{overflow:hidden;background-position:center;background-size:cover}.spot-scene{position:absolute;top:50%;left:50%;width:max(110px,100%);aspect-ratio:1;transform:translate(-50%,-50%);background:url('./assets/facility-scenes.webp') no-repeat;background-size:300% 200%}.spot-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.spot-photo-label{position:absolute;left:8px;bottom:8px;border-radius:8px;padding:4px 7px;background:#fff;color:#19314d;font-size:11px;font-weight:800}.spot .photo-credit{font-size:11px}.spot .photo-credit a{font-size:11px;margin-top:0}
+.share-button{display:block;margin-top:8px;border:1px solid #cfe1f4;border-radius:12px;background:#f6faff;color:#0754a8;padding:8px 10px;font-size:12px;font-weight:800;min-height:44px}.share-url{width:100%;margin-top:6px;font-size:14px}
 </style></head><body><header class="hero"><small>家族で楽しむおでかけアプリ</small><h1>おでかけナビ！</h1><p>行きたい場所が、すぐ見つかる。</p><div class="search"><input id="keyword" placeholder="施設名・エリアをサクッと検索" aria-label="施設名・エリアを検索"></div></header><main class="wrap"><section class="panel"><h2 class="title">どこに行きたい？</h2><div class="categories" id="cats"><button class="cat active" data-kind="all"><span class="cat-label">おまかせ</span></button><button class="cat" data-kind="遊園地"><span class="cat-label">遊園地・テーマパーク</span></button><button class="cat" data-kind="動物"><span class="cat-label">動物園</span></button><button class="cat" data-kind="水族館"><span class="cat-label">水族館</span></button><button class="cat" data-kind="屋内"><span class="cat-label">室内・博物館</span></button><button class="cat" data-kind="公園"><span class="cat-label">公園・自然</span></button></div></section><section class="panel"><h2 class="title">かんたん条件で探す</h2><div class="gps"><span id="gpsStatus">📍 現在地：未取得</span><button id="gpsBtn">現在地を使う</button></div><div class="filters"><label>だれと行く？<select id="party"><option>子どもと</option><option>家族で</option><option>大人だけ</option></select></label><label>移動時間の目安<select id="time"><option>指定なし</option><option>30分以内</option><option selected>1時間以内</option><option>2時間以内</option></select></label><label>都道府県<select id="area"><option value="all">全国</option></select></label><label>天気<select id="weather"><option>どんな天気でも</option><option>雨の日</option><option>晴れの日</option></select></label><label>市区町村（任意）<input id="municipality" type="search" placeholder="例：大阪市、横浜市中区"></label></div><div class="quick-filters" role="group" aria-label="料金と対象年齢"><label><input type="checkbox" id="freeOnly"> 入場・基本利用無料</label><label><input type="checkbox" id="preschoolOnly"> 幼児向け</label></div><button class="primary" id="go">この条件で探す！</button><div class="status" id="status">登録済みスポットを表示中。全国の追加検索は地図からできます。</div></section><section class="panel" id="results"><h2 class="title">おすすめのおでかけスポット</h2><button type="button" class="favorites-toggle" id="favoritesToggle" aria-pressed="false">お気に入りだけ表示</button><p class="notice" id="favoritesStatus" role="status" hidden></p><div class="cards" id="cards"></div><button class="primary" id="more">もっと見る ＋</button><div class="actions"><a id="mapSearch" target="_blank" rel="noopener">全国のスポットを地図で探す</a><a id="webSearch" target="_blank" rel="noopener">最新の施設情報を検索</a></div><p class="notice">「施設写真」は撮影者と出典をカードに表示しています。「イメージ画像」と表記した画像や表記のない画像は、施設やジャンルのイメージです。表示される施設は登録済みの一部です。全国検索はGoogleマップで行います。無料は入場・基本利用が対象です。駐車場やイベントには別料金がかかる場合があります。料金・営業時間・混雑・移動時間は変わるため、各施設の公式サイトや地図で確認してください。各施設の「車での所要時間」からGoogleマップで出発地とルートを確認できます。</p></section><section class="panel"><h2 class="title">おでかけ準備もかんたん</h2><p>持ち物チェック・予算管理・おでかけメモは従来の機能を使えるよ。</p><div class="actions"><a href="./planner.html">おでかけ準備を開く</a></div></section></main><nav class="nav"><a href="#"><b>⌂</b>ホーム</a><a href="#results"><b>◎</b>スポット</a><a id="navMap" target="_blank" rel="noopener"><b>▤</b>地図</a><a href="./planner.html"><b>✓</b>準備</a></nav><script>
 const destinations=[
  {name:"東武動物公園",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
@@ -122,7 +123,7 @@ function matchesDestination(d,tokens){
  const fields=[d.name,d.pref,d.area,...d.kind,d.desc].map(field=>normalizeSearch(field).replace(/\s+/g,""));
  return tokens.every(token=>[token,...(searchSynonyms[token]||[]).map(normalizeSearch)].some(term=>fields.some(field=>field.includes(term))));
 }
-function render(){const tokens=normalizeSearch($('keyword').value).split(/\s+/).filter(Boolean),pref=$('area').value,rain=$('weather').value==='雨の日';const municipality=normalizeSearch($('municipality').value).replace(/\s+/g,'');let a=favoritesOnly?destinations.filter(isFavorite):destinations.filter(d=>(pref==='all'||d.pref===pref)&&normalizeSearch(d.area).includes(municipality)&&(kind==='all'||d.kind.some(k=>k.includes(kind)))&&matchesDestination(d,tokens)&&(!$('freeOnly').checked||d.free)&&(!$('preschoolOnly').checked||d.preschool)&&(!rain||d.kind.some(k=>k.includes('屋内')||k.includes('水族館'))));$('cards').replaceChildren();a.slice(0,limit).forEach(d=>{let el=document.createElement('article');el.className='spot';let art=document.createElement('div');art.className='art';art.style.backgroundImage="url('./assets/category"+(d.kind.some(k=>k.includes('水族館'))?1:d.kind.some(k=>k.includes('動物'))?2:d.kind.some(k=>k.includes('遊園地'))?0:d.kind.some(k=>k.includes('公園'))?4:5)+".webp')";const scene=facilityImages[d.name];
+function render(){const tokens=normalizeSearch($('keyword').value).split(/\s+/).filter(Boolean),pref=$('area').value,rain=$('weather').value==='雨の日';const municipality=normalizeSearch($('municipality').value).replace(/\s+/g,'');const sharedKey=new URLSearchParams(location.search).get('spot');const shared=destinations.find(d=>spotKey(d)===sharedKey);let a=favoritesOnly?destinations.filter(isFavorite):destinations.filter(d=>(pref==='all'||d.pref===pref)&&normalizeSearch(d.area).includes(municipality)&&(kind==='all'||d.kind.some(k=>k.includes(kind)))&&(shared&&$('keyword').value===shared.name?d===shared:matchesDestination(d,tokens))&&(!$('freeOnly').checked||d.free)&&(!$('preschoolOnly').checked||d.preschool)&&(!rain||d.kind.some(k=>k.includes('屋内')||k.includes('水族館'))));$('cards').replaceChildren();a.slice(0,limit).forEach(d=>{let el=document.createElement('article');el.className='spot';let art=document.createElement('div');art.className='art';art.style.backgroundImage="url('./assets/category"+(d.kind.some(k=>k.includes('水族館'))?1:d.kind.some(k=>k.includes('動物'))?2:d.kind.some(k=>k.includes('遊園地'))?0:d.kind.some(k=>k.includes('公園'))?4:5)+".webp')";const scene=facilityImages[d.name];
 let photoCredit;
 if(scene){
  const illustration=document.createElement('div');
@@ -189,7 +190,35 @@ favorite.onclick=()=>{
  if(favoritesOnly){render();$('favoritesToggle').focus();}
  else updateFavorite();
 };
-content.append(desc,official,maps,driving,favorite);
+const share=document.createElement('button');
+share.type='button';
+share.className='share-button';
+share.textContent='共有リンクをコピー';
+share.setAttribute('aria-label',d.name+'の共有リンクをコピー');
+const shareStatus=document.createElement('p');
+shareStatus.setAttribute('role','status');
+const shareInput=document.createElement('input');
+shareInput.className='share-url';
+shareInput.readOnly=true;
+shareInput.hidden=true;
+shareInput.setAttribute('aria-label','共有リンク');
+share.onclick=async()=>{
+ const url=new URL('.',location.href);
+ url.searchParams.set('spot',spotKey(d));
+ url.hash='results';
+ try{
+  await navigator.clipboard.writeText(url.href);
+  shareInput.hidden=true;
+  shareStatus.textContent='リンクをコピーしました。';
+ }catch{
+  shareInput.value=url.href;
+  shareInput.hidden=false;
+  shareInput.focus();
+  shareInput.select();
+  shareStatus.textContent='下のリンクをコピーできます。';
+ }
+};
+content.append(desc,official,maps,driving,favorite,share,shareStatus,shareInput);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
 $('mapSearch').parentElement.hidden=favoritesOnly;
 $('mapSearch').parentElement.style.display=favoritesOnly?'none':'';
@@ -199,5 +228,9 @@ if(favoritesOnly&&!a.length){
  $('cards').append(empty);
 }
 $('more').hidden=a.length<=limit;$('status').textContent=a.length?'登録済み '+a.length+'件のうち'+Math.min(a.length,limit)+'件を表示。登録外のスポットは地図から探せます。':'アプリに登録されたスポットに該当がありません。「この条件で地図を検索」で候補を探せます。';updateLinks()}
-document.querySelectorAll('.cat').forEach(b=>b.onclick=()=>{document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));b.classList.add('active');kind=b.dataset.kind;limit=8;render()});['keyword','municipality','area','weather','freeOnly','preschoolOnly'].forEach(id=>$(id).addEventListener(['keyword','municipality'].includes(id)?'input':'change',()=>{limit=8;render()}));$('go').onclick=()=>{if(favoritesOnly){favoritesOnly=false;limit=8;}$('results').scrollIntoView({behavior:'smooth'});render()};$('more').onclick=()=>{limit+=12;render()};$('gpsBtn').onclick=()=>{if(!navigator.geolocation){$('gpsStatus').textContent='位置情報に対応していません';return}$('gpsStatus').textContent='📍 現在地を取得中…';navigator.geolocation.getCurrentPosition(p=>{coords=[p.coords.latitude,p.coords.longitude];$('gpsStatus').textContent='📍 現在地を取得しました';$('area').value='all';$('municipality').value='';render();$('mapSearch').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(searchTerm()+' '+coords.join(','));$('navMap').href=$('mapSearch').href},()=>{$('gpsStatus').textContent='📍 取得できませんでした。設定を確認してください'}, {enableHighAccuracy:false,timeout:10000,maximumAge:300000})};render();
+document.querySelectorAll('.cat').forEach(b=>b.onclick=()=>{document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));b.classList.add('active');kind=b.dataset.kind;limit=8;render()});['keyword','municipality','area','weather','freeOnly','preschoolOnly'].forEach(id=>$(id).addEventListener(['keyword','municipality'].includes(id)?'input':'change',()=>{limit=8;render()}));$('go').onclick=()=>{if(favoritesOnly){favoritesOnly=false;limit=8;}$('results').scrollIntoView({behavior:'smooth'});render()};$('more').onclick=()=>{limit+=12;render()};$('gpsBtn').onclick=()=>{if(!navigator.geolocation){$('gpsStatus').textContent='位置情報に対応していません';return}$('gpsStatus').textContent='📍 現在地を取得中…';navigator.geolocation.getCurrentPosition(p=>{coords=[p.coords.latitude,p.coords.longitude];$('gpsStatus').textContent='📍 現在地を取得しました';$('area').value='all';$('municipality').value='';render();$('mapSearch').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(searchTerm()+' '+coords.join(','));$('navMap').href=$('mapSearch').href},()=>{$('gpsStatus').textContent='📍 取得できませんでした。設定を確認してください'}, {enableHighAccuracy:false,timeout:10000,maximumAge:300000})};
+const incomingSpot=new URLSearchParams(location.search).get('spot');
+const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
+if(incomingDestination)$('keyword').value=incomingDestination.name;
+render();
 </script></body></html>
