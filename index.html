@@ -82,7 +82,9 @@ const destinations=[
  {"name":"春日部温泉 湯楽の里","pref":"埼玉県","area":"春日部市","desc":"源泉の湯や岩風呂、壺湯などの露天風呂を楽しめる日帰り温泉。","official":"https://www.yurakirari.com/kasukabe/","kind":["温泉・スーパー銭湯"]},
  {"name":"かすかべ湯元温泉","pref":"埼玉県","area":"春日部市","desc":"アルカリ性単純温泉に入れる日帰り入浴施設。","official":"https://kasukabeonsen.com/","kind":["温泉・スーパー銭湯"]},
  {"name":"杉戸天然温泉 雅楽の湯","pref":"埼玉県","area":"杉戸町","desc":"源泉かけ流しの内湯・露天風呂や足湯がある日帰り温泉。","official":"https://utanoyu.com/","kind":["温泉・スーパー銭湯"]},
- {"name":"のだ温泉 ほのか","pref":"千葉県","area":"野田市","desc":"源泉かけ流しの「潮の湯」などを楽しめる日帰り温泉。","official":"https://yudokoro-honoka.jp/noda/","kind":["温泉・スーパー銭湯"]}
+ {"name":"のだ温泉 ほのか","pref":"千葉県","area":"野田市","desc":"源泉かけ流しの「潮の湯」などを楽しめる日帰り温泉。","official":"https://yudokoro-honoka.jp/noda/","kind":["温泉・スーパー銭湯"]},
+ {"name":"竜泉寺の湯 草加谷塚店","pref":"埼玉県","area":"草加市","desc":"炭酸泉や天然温泉、子ども専用の浴槽がある日帰り温浴施設。","official":"https://ryusenjinoyu.com/souka/","kind":["温泉・スーパー銭湯"]},
+ {"name":"スパメッツァおおたか 竜泉寺の湯","pref":"千葉県","area":"流山市","desc":"流山おおたかの森駅近く。炭酸泉や幼児専用の浴槽がある日帰り温浴施設。","official":"https://www.ryusenjinoyu.com/spametsaotaka/","kind":["温泉・スーパー銭湯"]}
 ];
 const categoryScenes=new Map();
 for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-scene'],['屋内遊び場','indoor-play-scene']]){
@@ -136,12 +138,16 @@ const facilityTickets=new Map([
   ]
 ]);
 const spaFees={
+ "竜泉寺の湯 草加谷塚店": "https://ryusenjinoyu.com/souka/information/",
+ "スパメッツァおおたか 竜泉寺の湯": "https://www.ryusenjinoyu.com/spametsaotaka/info/",
   "春日部温泉 湯楽の里": "https://www.yurakirari.com/kasukabe/fee/",
   "かすかべ湯元温泉": "https://kasukabeonsen.com/information/",
   "杉戸天然温泉 雅楽の湯": "https://utanoyu.com/about/businesshours_fee/",
   "のだ温泉 ほのか": "https://yudokoro-honoka.jp/noda/fee/"
 };
 const facilityVisitInfo={
+ "竜泉寺の湯 草加谷塚店":{"子どもの入浴":"小学生以下は保護者同伴。おむつが外れていない場合は「ちびっ子の湯」のみ利用できます。","通常入浴料":"大人は平日950円／土日祝1,100円。小学生300円、幼児無料。特定日は別料金。","駐車場":"無料（400台）。高さ制限2.2m。"},
+ "スパメッツァおおたか 竜泉寺の湯":{"子どもの入浴":"おむつが外れていない子ども専用の「ちびっこ温泉」があります。","入浴料":"利用日・時間帯ごとの料金は公式料金表で確認。","駐車場":"430台。施設利用時間分は100円。"},
  "春日部温泉 湯楽の里":{"子どもの入浴":"小学生以下は保護者同伴。おむつが外れていない乳幼児の利用方法は店舗に確認。","通常入館料":"平日 大人1,050円・子ども430円／土・休日 大人1,150円・子ども530円。子どもは4歳〜小学生、3歳以下無料。","駐車場":"あり（168台）。"},
  "かすかべ湯元温泉":{"子どもの入浴":"小学生以下は保護者同伴。おむつが外れていない場合、浴室を利用する前にトイレへ。子ども風呂・ベビーバスあり。テルメ・プールは水遊び用おむつの上に水着を着用。","通常入館料":"平日 大人1,650円・子ども600円／土日祝 大人1,800円・子ども800円。子どもは3歳〜小学6年生。","駐車場":"無料（200台）。"},
  "杉戸天然温泉 雅楽の湯":{"子どもの入浴":"おむつ・トレーニングパンツが完全に外れていない場合は、脱衣所・洗い場・浴場を利用できません。","入館料":"利用日・コース別の金額は公式料金表で確認。","駐車場":"無料（約170台）。"},
@@ -438,6 +444,7 @@ const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
 if(incomingDestination)$('keyword').value=incomingDestination.name;
 render();
 </script></body></html>
+
 
 
 
