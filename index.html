@@ -95,7 +95,15 @@ const destinations=[
  {"name":"カワスイ 川崎水族館","pref":"神奈川県","area":"川崎市川崎区","kind":["水族館"],"desc":"川崎駅近くで世界の水辺の生きものを見られる屋内水族館。","official":"https://kawa-sui.com/"},
  {"name":"多摩動物公園","pref":"東京都","area":"日野市","kind":["動物園"],"desc":"日野市にある動物園。動物の展示や当日の開園情報は公式案内から確認できます。","official":"https://www.tokyo-zoo.net/tama/visitor-info/tickets/index.html"},
  {"name":"キドキド コクーンシティさいたま新都心店","pref":"埼玉県","area":"さいたま市大宮区","kind":["屋内遊び場"],"desc":"さいたま新都心の屋内遊び場。授乳室やおむつ替えスペースがあります。","official":"https://kidokid.bornelund.co.jp/saitamashintoshin/","preschool":true},
- {"name":"温泉バルコニー キング＆クイーン","pref":"埼玉県","area":"所沢市","kind":["温泉・スーパー銭湯"],"aliases":["キングアンドクイーン","King & Queen","キングクイーン","キンクイ"],"desc":"所沢市の温浴施設。天然温泉の内湯・露天風呂や岩盤浴があります。","official":"https://king-and-queen.site/"}
+ {"name":"温泉バルコニー キング＆クイーン","pref":"埼玉県","area":"所沢市","kind":["温泉・スーパー銭湯"],"aliases":["キングアンドクイーン","King & Queen","キングクイーン","キンクイ"],"desc":"所沢市の温浴施設。天然温泉の内湯・露天風呂や岩盤浴があります。","official":"https://king-and-queen.site/"},
+ {"name":"よこはまコスモワールド","pref":"神奈川県","area":"横浜市中区","kind":["遊園地"],"desc":"みなとみらいの大観覧車が目印の遊園地。","official":"https://cosmoworld.jp/about/","aliases":["横浜コスモワールド","コスモクロック21"],"free":true},
+ {"name":"野毛山動物園","pref":"神奈川県","area":"横浜市西区","kind":["動物園"],"desc":"桜木町駅から徒歩でアクセスできる横浜の動物園。","official":"https://www.welcome.city.yokohama.jp/spot/details.php?bbid=112","aliases":["野毛山","のげやま動物園"],"free":true},
+ {"name":"大宮公園小動物園","pref":"埼玉県","area":"さいたま市大宮区","kind":["動物園"],"desc":"大宮公園内にある小動物園。","official":"https://www.parks.or.jp/omiyazoo/","aliases":["大宮動物園","大宮公園動物園"]},
+ {"name":"マクセル アクアパーク品川","pref":"東京都","area":"港区","kind":["水族館"],"desc":"品川駅近くの屋内水族館。","official":"https://www.aqua-park.jp/aqua/info/index.html","aliases":["アクアパーク品川","品川アクアパーク"]},
+ {"name":"すみだ水族館","pref":"東京都","area":"墨田区","kind":["水族館"],"desc":"東京スカイツリータウンにある水族館。","official":"https://www.sumida-aquarium.com/about/price/","aliases":["墨田水族館","スカイツリー水族館","ソラマチ水族館"]},
+ {"name":"ファンタジーキッズリゾート イオン海老名店","pref":"神奈川県","area":"海老名市","kind":["屋内遊び場"],"desc":"イオン海老名の屋内遊び場。おむつ替え室があります。","official":"https://fantasyresort.jp/ebina/system/","aliases":["ファンタジーキッズリゾート海老名","海老名ファンタジーキッズ"],"preschool":true},
+ {"name":"彩湖・道満グリーンパーク","pref":"埼玉県","area":"戸田市","kind":["公園・自然"],"desc":"彩湖のそばにある公園。利用できる施設や駐車場は公式案内で確認できます。","official":"https://www.toda-kousha.com/park/saikodoman/","aliases":["道満グリーンパーク","彩湖道満","さいこどうまん"]},
+ {"name":"さいたま清河寺温泉","pref":"埼玉県","area":"さいたま市西区","kind":["温泉・スーパー銭湯"],"desc":"竹林を眺めながら天然温泉に入れる日帰り施設。","official":"https://www.seiganji-onsen.com/","aliases":["清河寺温泉","せいがんじ温泉"]}
 ];
 const categoryScenes=new Map();
 for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-scene'],['屋内遊び場','indoor-play-scene']]){
@@ -149,6 +157,7 @@ const facilityTickets=new Map([
   ]
 ]);
 const spaFees={
+ "さいたま清河寺温泉":"https://www.seiganji-onsen.com/howto/fee/",
  "温泉バルコニー キング＆クイーン":"https://king-and-queen.site/guide/",
  "おふろcafé utatane":"https://ofurocafe-utatane.com/information",
  "竜泉寺の湯 草加谷塚店": "https://ryusenjinoyu.com/souka/information/",
@@ -159,6 +168,14 @@ const spaFees={
   "のだ温泉 ほのか": "https://yudokoro-honoka.jp/noda/fee/"
 };
 const facilityVisitInfo={
+ "よこはまコスモワールド":{"料金":"入園無料。乗り物ごとに料金がかかります。","駐車場":"専用駐車場なし。"},
+ "野毛山動物園":{"入園料":"無料。"},
+ "大宮公園小動物園":{"利用案内":"開園日やイベントは公式案内で確認。"},
+ "マクセル アクアパーク品川":{"料金":"来館日の料金は公式案内で確認。"},
+ "すみだ水族館":{"料金":"年齢区分ごとの料金は公式料金表で確認。"},
+ "ファンタジーキッズリゾート イオン海老名店":{"料金":"利用日やプラン別の料金は公式案内で確認。"},
+ "彩湖・道満グリーンパーク":{"アクセス":"武蔵浦和駅からバス。「彩湖・道満グリーンパーク入口」下車。"},
+ "さいたま清河寺温泉":{"子どもの入浴":"おむつが外れていない場合は脱衣所・浴場を利用できません。","入館料":"平日 大人900円・子ども550円／土日祝 大人1,000円・子ども600円。子どもは3歳〜12歳未満。3歳未満無料。","アクセス":"車での来館は公式アクセス案内を確認。"},
  "温泉バルコニー キング＆クイーン":{"子どもの入浴":"小学生以下は大人同伴。7歳以上または身長120cm以上は異性の浴室を利用できません。おむつが外れていない場合は施設に確認。","通常入泉料":"大人は平日950円／土日祝1,100円。小学生350円、4歳〜未就学児100円、3歳以下無料。","駐車場":"無料（400台）。"},
  "カワスイ 川崎水族館":{"料金":"来館日の料金・チケットは公式サイトで確認。"},
  "多摩動物公園":{"入園料":"一般600円、中学生200円。小学生以下と都内在住・在学の中学生は無料。"},
@@ -479,6 +496,7 @@ const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
 if(incomingDestination)$('keyword').value=incomingDestination.name;
 render();
 </script></body></html>
+
 
 
 
