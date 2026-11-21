@@ -135,7 +135,17 @@ const facilityTickets=new Map([
     "https://www.hama-midorinokyokai.or.jp/zoo/zoorasia/fee.php"
   ]
 ]);
+const spaFees={
+  "春日部温泉 湯楽の里": "https://www.yurakirari.com/kasukabe/fee/",
+  "かすかべ湯元温泉": "https://kasukabeonsen.com/information/",
+  "杉戸天然温泉 雅楽の湯": "https://utanoyu.com/about/businesshours_fee/",
+  "のだ温泉 ほのか": "https://yudokoro-honoka.jp/noda/fee/"
+};
 const facilityVisitInfo={
+ "春日部温泉 湯楽の里":{"子どもの入浴":"小学生以下は保護者同伴。おむつが外れていない乳幼児の利用方法は店舗に確認。","通常入館料":"平日 大人1,050円・子ども430円／土・休日 大人1,150円・子ども530円。子どもは4歳〜小学生、3歳以下無料。","駐車場":"あり（168台）。"},
+ "かすかべ湯元温泉":{"子どもの入浴":"小学生以下は保護者同伴。おむつが外れていない場合、浴室を利用する前にトイレへ。子ども風呂・ベビーバスあり。テルメ・プールは水遊び用おむつの上に水着を着用。","通常入館料":"平日 大人1,650円・子ども600円／土日祝 大人1,800円・子ども800円。子どもは3歳〜小学6年生。","駐車場":"無料（200台）。"},
+ "杉戸天然温泉 雅楽の湯":{"子どもの入浴":"おむつ・トレーニングパンツが完全に外れていない場合は、脱衣所・洗い場・浴場を利用できません。","入館料":"利用日・コース別の金額は公式料金表で確認。","駐車場":"無料（約170台）。"},
+ "のだ温泉 ほのか":{"子どもの入浴":"おむつが外れていない場合の浴場利用は、来館前に施設へ確認。","通常入浴料":"平日 大人1,650円・小学生450円／土日祝・特別日 大人1,850円・小学生550円。未就学児無料。","駐車場":"無料（266台）。"},
  "わいわいぱーく イオンモール春日部":{"場所":"イオン春日部店3階、モーリーファンタジー内。","対象":"0歳〜小学2年生。保護者と一緒に利用。","料金":"年齢や利用時間で異なります。店頭または公式案内で確認。"},
  "スキッズガーデン イオンレイクタウンmori":{"場所":"イオンレイクタウンmori 3階。","対象":"0歳〜小学2年生。0〜2歳は16歳以上の保護者の付き添いが必要です。","料金":"有料。利用時間などによって異なるため、公式案内で確認。"},
  "ちきゅうのにわ イオンモール幕張新都心":{"対象":"0歳〜12歳のお子さまと家族。","料金":"利用エリア・時間などに応じた料金を公式案内で確認。"},
@@ -349,6 +359,8 @@ const visitInfo=facilityVisitInfo[d.name];
 if(visitInfo){
  const details=document.createElement('details');
  details.className='visit-info';
+ const spaFeeUrl=spaFees[d.name];
+ if(spaFeeUrl)details.open=true;
  const summary=document.createElement('summary');
  summary.textContent='行く前に確認';
  const list=document.createElement('dl');
@@ -360,6 +372,14 @@ if(visitInfo){
   list.append(term,description);
  }
  details.append(summary,list);
+ if(spaFeeUrl){
+  const feeLink=document.createElement('a');
+  feeLink.href=spaFeeUrl;
+  feeLink.target='_blank';
+  feeLink.rel='noopener';
+  feeLink.textContent='公式の入館料';
+  details.append(feeLink);
+ }
  content.append(details);
 }
 const ticketUrl=facilityTickets.get(d.name);
@@ -418,6 +438,7 @@ const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
 if(incomingDestination)$('keyword').value=incomingDestination.name;
 render();
 </script></body></html>
+
 
 
 
