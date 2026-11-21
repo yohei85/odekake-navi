@@ -393,9 +393,8 @@ if(visitInfo){
  const details=document.createElement('details');
  details.className='visit-info';
  const spaFeeUrl=spaFees[d.name];
- if(spaFeeUrl)details.open=true;
  const summary=document.createElement('summary');
- summary.textContent='行く前に確認';
+ summary.textContent=spaFeeUrl?'子どもの入浴・料金・駐車場':'行く前に確認';
  const list=document.createElement('dl');
  for(const [label,value] of Object.entries(visitInfo)){
   const term=document.createElement('dt');
@@ -471,6 +470,7 @@ const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
 if(incomingDestination)$('keyword').value=incomingDestination.name;
 render();
 </script></body></html>
+
 
 
 
