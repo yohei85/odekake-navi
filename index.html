@@ -84,7 +84,13 @@ const destinations=[
  {"name":"杉戸天然温泉 雅楽の湯","pref":"埼玉県","area":"杉戸町","desc":"源泉かけ流しの内湯・露天風呂や足湯がある日帰り温泉。","official":"https://utanoyu.com/","kind":["温泉・スーパー銭湯"]},
  {"name":"のだ温泉 ほのか","pref":"千葉県","area":"野田市","desc":"源泉かけ流しの「潮の湯」などを楽しめる日帰り温泉。","official":"https://yudokoro-honoka.jp/noda/","kind":["温泉・スーパー銭湯"]},
  {"name":"竜泉寺の湯 草加谷塚店","pref":"埼玉県","area":"草加市","desc":"炭酸泉や天然温泉、子ども専用の浴槽がある日帰り温浴施設。","official":"https://ryusenjinoyu.com/souka/","kind":["温泉・スーパー銭湯"]},
- {"name":"スパメッツァおおたか 竜泉寺の湯","pref":"千葉県","area":"流山市","desc":"流山おおたかの森駅近く。炭酸泉や幼児専用の浴槽がある日帰り温浴施設。","official":"https://www.ryusenjinoyu.com/spametsaotaka/","kind":["温泉・スーパー銭湯"]}
+ {"name":"スパメッツァおおたか 竜泉寺の湯","pref":"千葉県","area":"流山市","desc":"流山おおたかの森駅近く。炭酸泉や幼児専用の浴槽がある日帰り温浴施設。","official":"https://www.ryusenjinoyu.com/spametsaotaka/","kind":["温泉・スーパー銭湯"]},
+ {"name":"浅草花やしき","pref":"東京都","area":"台東区","kind":["遊園地"],"desc":"浅草の昔ながらの遊園地。乗り物ごとに年齢・身長条件があります。","official":"https://www.hanayashiki.net/access/index.html"},
+ {"name":"千葉市動物公園","pref":"千葉県","area":"千葉市若葉区","kind":["動物園"],"desc":"千葉都市モノレールの動物公園駅からアクセスできる動物園。","official":"https://www.city.chiba.jp/zoo/guide/index.html"},
+ {"name":"葛西臨海水族園","pref":"東京都","area":"江戸川区","kind":["水族館"],"desc":"マグロが泳ぐ大水槽や、ペンギンの展示を楽しめる水族園。","official":"https://www.tokyo-zoo.net/kasai/plan_your_visit/tickets/index.html"},
+ {"name":"ASOBono!（アソボーノ）","pref":"東京都","area":"文京区","kind":["屋内遊び場"],"desc":"東京ドームシティの屋内型キッズ施設。","official":"https://www.tokyo-dome.co.jp/asobono/information/","preschool":true},
+ {"name":"国営昭和記念公園","pref":"東京都","area":"立川市・昭島市","kind":["公園・自然"],"desc":"広場や遊具のある「こどもの森」を楽しめる国営公園。","official":"https://www.showakinen-koen.jp/park-information/price/"},
+ {"name":"おふろcafé utatane","pref":"埼玉県","area":"さいたま市北区","kind":["温泉・スーパー銭湯"],"desc":"鉄道博物館駅近くにある、おふろとカフェを備えた温浴施設。","official":"https://ofurocafe-utatane.com/information"}
 ];
 const categoryScenes=new Map();
 for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-scene'],['屋内遊び場','indoor-play-scene']]){
@@ -138,6 +144,7 @@ const facilityTickets=new Map([
   ]
 ]);
 const spaFees={
+ "おふろcafé utatane":"https://ofurocafe-utatane.com/information",
  "竜泉寺の湯 草加谷塚店": "https://ryusenjinoyu.com/souka/information/",
  "スパメッツァおおたか 竜泉寺の湯": "https://www.ryusenjinoyu.com/spametsaotaka/info/",
   "春日部温泉 湯楽の里": "https://www.yurakirari.com/kasukabe/fee/",
@@ -146,6 +153,12 @@ const spaFees={
   "のだ温泉 ほのか": "https://yudokoro-honoka.jp/noda/fee/"
 };
 const facilityVisitInfo={
+ "浅草花やしき":{"入園料":"0〜4歳は入園無料。乗り物料金・利用条件は公式案内で確認。","駐車場":"近隣の駐車場を利用。"},
+ "千葉市動物公園":{"入園料":"高校生以上800円、中学生以下無料。","駐車場":"普通車800円。"},
+ "葛西臨海水族園":{"入園料":"一般700円、小学生以下無料。中学生250円（都内在住・在学の中学生は証明書提示で無料）。"},
+ "ASOBono!（アソボーノ）":{"対象":"主な子ども料金の対象は生後6か月〜小学生。5か月以下は入館無料。","料金":"利用日によって異なります。公式カレンダーと料金表を確認。"},
+ "国営昭和記念公園":{"入園料":"通常の一般料金450円。中学生以下無料。","駐車場":"有料。車種別の料金は公式案内を確認。"},
+ "おふろcafé utatane":{"子どもの入浴":"おむつが外れていない場合の浴室利用は、来館前に施設へ確認。","入館料":"利用日やプランで変動します。公式料金表を確認。","駐車場":"車でのアクセスは施設の公式案内を確認。"},
  "竜泉寺の湯 草加谷塚店":{"子どもの入浴":"小学生以下は保護者同伴。おむつが外れていない場合は「ちびっ子の湯」のみ利用できます。","通常入浴料":"大人は平日950円／土日祝1,100円。小学生300円、幼児無料。特定日は別料金。","駐車場":"無料（400台）。高さ制限2.2m。"},
  "スパメッツァおおたか 竜泉寺の湯":{"子どもの入浴":"おむつが外れていない子ども専用の「ちびっこ温泉」があります。","入浴料":"利用日・時間帯ごとの料金は公式料金表で確認。","駐車場":"430台。施設利用時間分は100円。"},
  "春日部温泉 湯楽の里":{"子どもの入浴":"小学生以下は保護者同伴。おむつが外れていない乳幼児の利用方法は店舗に確認。","通常入館料":"平日 大人1,050円・子ども430円／土・休日 大人1,150円・子ども530円。子どもは4歳〜小学生、3歳以下無料。","駐車場":"あり（168台）。"},
@@ -444,6 +457,7 @@ const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
 if(incomingDestination)$('keyword').value=incomingDestination.name;
 render();
 </script></body></html>
+
 
 
 
