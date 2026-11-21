@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://odekake-navi.sjzyvky96m.workers.dev/sitemap.xml
