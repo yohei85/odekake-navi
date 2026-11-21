@@ -130,7 +130,7 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
 <section class="card">
  <h2 class="section-title"><span class="num">01</span>おでかけの予定</h2>
  <div class="grid">
-  <div class="field"><label for="place">行き先</label><input id="place" list="placeSuggestions" placeholder="施設名を入力・候補から選択" autocomplete="off"><datalist id="placeSuggestions"></datalist><p class="field-hint">入力すると施設候補が下に表示されます</p></div>
+  <div class="field"><label for="place">行き先</label><div id="incomingPlace" hidden><p id="incomingPlaceLabel"></p><button type="button" id="useIncomingPlace">この施設を行き先にする</button></div><input id="place" list="placeSuggestions" placeholder="施設名を入力・候補から選択" autocomplete="off"><datalist id="placeSuggestions"></datalist><p class="field-hint">入力すると施設候補が下に表示されます</p></div>
   <div class="field"><label for="date">日にち</label><input id="date" type="date"></div>
   <div class="field"><label for="depart">出発予定</label><input id="depart" type="time"></div>
   <div class="field"><label for="return">帰宅予定</label><input id="return" type="time"></div>
@@ -372,6 +372,28 @@ $("adultCount").addEventListener("change",syncPeople);$("childCount").addEventLi
 load();
 {const m=($("people").value||"").match(/大人(\d+)人・子ども(\d+)人/);if(m){$("adultCount").value=m[1];$("childCount").value=m[2]}else syncPeople()}
 drawDestinations();
+const plannerUrl=new URL(location.href);
+const incomingName=plannerUrl.searchParams.get("place")?.trim();
+if(incomingName&&incomingName.length<=150){
+ const found=destinations.find(destination=>destination.name===incomingName);
+ const isSpa=plannerUrl.searchParams.get("kind")==="温泉";
+ const incoming=found||{name:incomingName,...(isSpa?{pack:["タオル","着替え","替えのおむつ"]}:{})};
+ const applyIncoming=()=>{
+  selectDestination(incoming);
+  $("incomingPlace").hidden=true;
+  plannerUrl.searchParams.delete("place");
+  plannerUrl.searchParams.delete("kind");
+  history.replaceState(history.state,"",plannerUrl.href);
+ };
+ const savedPlace=$("place").value.trim();
+ if(savedPlace&&savedPlace!==incomingName){
+  $("incomingPlaceLabel").textContent="選んだ施設： "+incomingName;
+  $("incomingPlace").hidden=false;
+  $("useIncomingPlace").onclick=applyIncoming;
+ }else{
+  applyIncoming();
+ }
+}
 </script>
 <script>
 /* v6: Service Workerを使わず、既存登録と旧キャッシュを解除する */
