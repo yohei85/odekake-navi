@@ -114,16 +114,17 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
 @media(max-width:480px){.hero{padding:22px 18px}.hero h1{font-size:27px}}
 
 .back-to-search{display:inline-flex;align-items:center;min-height:44px;margin-bottom:8px;padding:0 12px;border:1px solid #c8dff2;border-radius:12px;background:#fff;color:#164776;font-weight:700;text-decoration:none}.back-to-search:focus-visible{outline:2px solid #0754a8;outline-offset:2px}
-</style>
+#incomingPlace:not([hidden]){display:block;border:2px solid #85baf0}#incomingPlace[hidden]{display:none}</style>
 </head>
 <body>
 <main>
 <a class="back-to-search" href="./">← スポット検索に戻る</a>
 <section class="hero">
  <div class="stamp">おでかけナビ！ · v5.0</div><div class="eyebrow">🌈 FAMILY FUN NAVIGATION</div>
- <h1>🚗 おでかけナビ！</h1>
- <p>家族の思い出を、もっと楽しく♪ 今日はどこに行こう？</p>
+ <h1>おでかけ準備</h1>
+ <p>行く日と出発時間を決めて、持ち物や予算をまとめましょう。</p>
 </section>
+<section class="card" id="incomingPlace" aria-labelledby="incomingPlaceLabel" hidden><h2 class="section-title" id="incomingPlaceLabel"></h2><p>前に保存した行き先があります。今回選んだ施設に切り替えるには、下のボタンを押してください。</p><button type="button" class="btn" id="useIncomingPlace">この施設で準備する</button></section>
 <section class="progress-card" aria-live="polite">
  <div class="progress-head"><span>持ち物の準備状況</span><span class="progress-num" id="progressText">0 / 0 完了</span></div>
  <div class="track"><div class="bar" id="progressBar"></div></div>
@@ -132,7 +133,7 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
 <section class="card">
  <h2 class="section-title"><span class="num">01</span>おでかけの予定</h2>
  <div class="grid">
-  <div class="field"><label for="place">行き先</label><div id="incomingPlace" hidden><p id="incomingPlaceLabel"></p><button type="button" id="useIncomingPlace">この施設を行き先にする</button></div><input id="place" list="placeSuggestions" placeholder="施設名を入力・候補から選択" autocomplete="off"><datalist id="placeSuggestions"></datalist><p class="field-hint">入力すると施設候補が下に表示されます</p></div>
+  <div class="field"><label for="place">行き先</label><input id="place" list="placeSuggestions" placeholder="施設名を入力・候補から選択" autocomplete="off"><datalist id="placeSuggestions"></datalist><p class="field-hint">入力すると施設候補が下に表示されます</p></div>
   <div class="field"><label for="date">日にち</label><input id="date" type="date"></div>
   <div class="field"><label for="depart">出発予定</label><input id="depart" type="time"></div>
   <div class="field"><label for="return">帰宅予定</label><input id="return" type="time"></div>
