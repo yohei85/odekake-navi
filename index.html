@@ -512,7 +512,11 @@ $('gpsBtn').onclick=()=>{if(!navigator.geolocation){$('gpsStatus').textContent='
 const incomingSpot=new URLSearchParams(location.search).get('spot');
 const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
 if(incomingDestination)$('keyword').value=incomingDestination.name;
-render();
+if(!incomingDestination && new URLSearchParams(location.search).get('category')==='onsen'){
+ document.querySelector('.cat[data-kind="温泉"]').click();
+}else{
+ render();
+}
 </script></body></html>
 
 
