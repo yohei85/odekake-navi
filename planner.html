@@ -381,11 +381,18 @@ if(incomingName&&incomingName.length<=150){
  const found=destinations.find(destination=>destination.name===incomingName);
  const isSpa=plannerUrl.searchParams.get("kind")==="温泉";
  const incoming=found||{name:incomingName,...(isSpa?{pack:["タオル","着替え","替えのおむつ"]}:{})};
+ const admissionTotal=plannerUrl.searchParams.get('admission');
+ const hasAdmission=admissionTotal!==null&&/^\d{1,9}$/.test(admissionTotal);
  const applyIncoming=()=>{
+  if(hasAdmission){
+   $('play').value=String(Number(admissionTotal));
+   calc();
+  }
   selectDestination(incoming);
   $("incomingPlace").hidden=true;
   plannerUrl.searchParams.delete("place");
   plannerUrl.searchParams.delete("kind");
+  plannerUrl.searchParams.delete("admission");
   history.replaceState(history.state,"",plannerUrl.href);
  };
  const savedPlace=$("place").value.trim();
