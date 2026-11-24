@@ -136,6 +136,7 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
   <div class="field"><label for="place">行き先</label><input id="place" list="placeSuggestions" placeholder="施設名を入力・候補から選択" autocomplete="off"><datalist id="placeSuggestions"></datalist><p class="field-hint">入力すると施設候補が下に表示されます</p></div>
   <div class="field"><label for="date">日にち</label><input id="date" type="date"></div>
   <div class="field"><label for="depart">出発予定</label><input id="depart" type="time"></div>
+  <div class="field"><label for="travelMinutes">片道の所要時間（分）</label><input id="travelMinutes" type="number" min="1" max="1440" inputmode="numeric"><p class="field-hint" id="arrivalEstimate" aria-live="polite"></p></div>
   <div class="field"><label for="return">帰宅予定</label><input id="return" type="time"></div>
   <div class="field"><label>参加する人</label><div class="grid" style="gap:8px"><div class="field"><label for="adultCount">大人</label><select id="adultCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div><div class="field"><label for="childCount">子ども</label><select id="childCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div></div><input id="people" type="hidden" value="大人1人・子ども1人"><p class="field-hint">人数を選ぶと自動で保存されます</p></div>
   <div class="field"><label for="weather">天気・気温メモ</label><input id="weather" list="weatherSuggestions" placeholder="天気を選ぶ・入力する"><datalist id="weatherSuggestions"><option value="晴れ"><option value="くもり"><option value="雨"><option value="晴れ・暑い"><option value="くもり・涼しい"><option value="雨のち晴れ"></datalist><div class="quick-picks"><button type="button" class="quick-pick" data-fill="weather" data-value="晴れ">☀ 晴れ</button><button type="button" class="quick-pick" data-fill="weather" data-value="くもり">☁ くもり</button><button type="button" class="quick-pick" data-fill="weather" data-value="雨">☂ 雨</button></div></div>
@@ -213,7 +214,7 @@ const groups=[
  {title:"移動・天候",items:["チケット・予約情報","ベビーカー・抱っこひも","雨具","防寒具・暑さ対策","虫よけ・日焼け止め","充電器・モバイルバッテリー"]}
 ];
 let items=groups.flatMap(g=>g.items.map(name=>({name,done:false,group:g.title})));
-const ids=["place","date","depart","return","people","weather","schedule","transport","food","play","other","good","next"];
+const ids=["place","date","depart","travelMinutes","return","people","weather","schedule","transport","food","play","other","good","next"];
 const $=id=>document.getElementById(id);
 const destinations=[
  {name:"東武動物公園",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
@@ -351,7 +352,17 @@ function render(){
 function updateProgress(){const done=items.filter(x=>x.done).length,total=items.length;$("progressText").textContent=`${done} / ${total} 完了`;$("progressBar").style.width=(total?done/total*100:0)+"%"}
 function getData(){const d={items};ids.forEach(id=>d[id]=$(id).value);return d}
 function persist(){try{localStorage.setItem("oyako-note-data-v2",JSON.stringify(getData()))}catch(e){}}
-function calc(){const n=["transport","food","play","other"].reduce((s,id)=>s+(Number($(id).value)||0),0);$("total").textContent=n.toLocaleString("ja-JP")}
+function calc(){
+ const [hour,minute]=$('depart').value.split(':').map(Number);
+ const travel=Number($('travelMinutes').value);
+ const arrival=$('arrivalEstimate');
+ arrival.textContent='';
+ if(Number.isFinite(minute)&&Number.isInteger(travel)&&travel>=1&&travel<=1440){
+  const total=hour*60+minute+travel;
+  const time=[Math.floor(total/60)%24,total%60].map(value=>String(value).padStart(2,'0')).join(':');
+  arrival.textContent='到着の目安 '+(total>=1440?'翌日 ':'')+time;
+ }
+const n=["transport","food","play","other"].reduce((s,id)=>s+(Number($(id).value)||0),0);$("total").textContent=n.toLocaleString("ja-JP")}
 function load(){try{const d=JSON.parse(localStorage.getItem("oyako-note-data-v2")||"null");if(d){if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]})}}catch(e){}render();calc()}
 function applyData(d){if(!d||typeof d!=="object")throw new Error("invalid");if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]});render();calc();persist()}
 $("add").addEventListener("click",()=>{const v=$("newitem").value.trim();if(!v)return;items.push({name:v,done:false,group:"追加した持ち物"});const root=$("items");const h=document.createElement("div");h.className="category";h.textContent="追加した持ち物";root.append(h);render();$("newitem").value="";persist();toast("持ち物を追加しました")});
@@ -383,7 +394,11 @@ if(incomingName&&incomingName.length<=150){
  const incoming=found||{name:incomingName,...(isSpa?{pack:["タオル","着替え","替えのおむつ"]}:{})};
  const admissionTotal=plannerUrl.searchParams.get('admission');
  const hasAdmission=admissionTotal!==null&&/^\d{1,9}$/.test(admissionTotal);
+ const incomingTravel=plannerUrl.searchParams.get('travel');
  const applyIncoming=()=>{
+  if(incomingTravel!==null&&/^\d{1,4}$/.test(incomingTravel)&&Number(incomingTravel)>=1&&Number(incomingTravel)<=1440){$('travelMinutes').value=String(Number(incomingTravel));}
+  else if($('place').value.trim()!==incomingName){$('travelMinutes').value='';}
+  calc();
   if(hasAdmission){
    $('play').value=String(Number(admissionTotal));
    calc();
@@ -393,6 +408,7 @@ if(incomingName&&incomingName.length<=150){
   plannerUrl.searchParams.delete("place");
   plannerUrl.searchParams.delete("kind");
   plannerUrl.searchParams.delete("admission");
+  plannerUrl.searchParams.delete("travel");
   history.replaceState(history.state,"",plannerUrl.href);
  };
  const savedPlace=$("place").value.trim();
