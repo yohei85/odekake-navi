@@ -144,8 +144,13 @@ const destinations=[
  {"name":"日立市かみね動物園","pref":"茨城県","area":"日立市","kind":["動物・ふれあい"],"preschool":true,"desc":"かみね公園にある動物園。開園時間と入園料は公式案内で確認できます。","official":"https://www.city.hitachi.lg.jp/zoo/annai/1004042.html"},
  {"name":"かみね遊園地","pref":"茨城県","area":"日立市","kind":["遊園地"],"preschool":true,"free":true,"desc":"かみね動物園の隣にある低年齢向けの遊園地。入園は無料で、観覧車などの乗り物には別料金がかかります。","official":"https://www.city.hitachi.lg.jp/citypromotion/1018000/1018003/1018016/1018026.html"},
  {"name":"もりのゆうえんち","pref":"千葉県","area":"野田市","kind":["遊園地"],"preschool":true,"free":true,"aliases":["森の遊園地","もりの遊園地","東部もりのゆうえんち"],"desc":"イオンノア店に隣接する入園無料の遊園地。大観覧車などの乗り物は別料金です。","official":"https://www.senyo.co.jp/morinoyuenchi/ticket%26coupon.html"},
- {"name":"道の駅べに花の郷おけがわ","pref":"埼玉県","area":"桶川市","kind":["道の駅"],"aliases":["道の駅おけがわ","道の駅桶川","べにばなの郷","紅花の郷"],"desc":"桶川の道の駅。地元の農産物や土産物の買い物と、食事・休憩に立ち寄れます。","official":"https://www.benibananosato-okegawa.com/floormap.php"}
+ {"name":"道の駅べに花の郷おけがわ","pref":"埼玉県","area":"桶川市","kind":["道の駅"],"aliases":["道の駅おけがわ","道の駅桶川","べにばなの郷","紅花の郷"],"desc":"桶川の道の駅。地元の農産物や土産物の買い物と、食事・休憩に立ち寄れます。","official":"https://www.benibananosato-okegawa.com/floormap.php"},
+ {"name":"ワーナー ブラザース スタジオツアー東京","pref":"東京都","area":"練馬区","kind":["屋内遊び場"],"aliases":["ハリーポッター","ハリー・ポッター","としまえん"],"desc":"映画『ハリー・ポッター』シリーズのセットや制作の裏側を見学できる施設。入場日と時間は公式チケットで確認できます。","official":"https://www.wbstudiotour.jp/"},
+ {"name":"三鷹の森ジブリ美術館","pref":"東京都","area":"三鷹市","kind":["屋内遊び場"],"preschool":true,"aliases":["ジブリ美術館"],"desc":"スタジオジブリのアニメーションをテーマにした美術館。入場は日時指定の予約制です。","official":"https://www.ghibli-museum.jp/"},
+ {"name":"チームラボプラネッツ TOKYO 豊洲","pref":"東京都","area":"江東区","kind":["屋内遊び場"],"aliases":["teamLab Planets","チームラボ豊洲"],"desc":"水に入る展示などがある体験型ミュージアム。服装やチケットは公式案内で確認できます。","official":"https://teamlabplanets.dmm.com/"},
+ {"name":"チームラボボーダレス 麻布台ヒルズ","pref":"東京都","area":"港区","kind":["屋内遊び場"],"aliases":["teamLab Borderless","チームラボ麻布台"],"desc":"麻布台ヒルズで、空間を移動するデジタルアートを巡るミュージアム。","official":"https://www.teamlab.art/jp/e/tokyo/"}
 ];
+const featuredOrder=new Map(["東京ディズニーランド","東京ディズニーシー","ワーナー ブラザース スタジオツアー東京","サンリオピューロランド","横浜・八景島シーパラダイス","東武動物公園","三鷹の森ジブリ美術館","キッザニア東京","チームラボプラネッツ TOKYO 豊洲","上野動物園"].map((name,index)=>[name,index]));
 const categoryScenes=new Map();
 for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-scene'],['屋内遊び場','indoor-play-scene']]){
  let index=0;
@@ -156,6 +161,10 @@ for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-sc
  }
 }
 const facilityTickets=new Map([
+ ["ワーナー ブラザース スタジオツアー東京","https://www.wbstudiotour.jp/tickets/"],
+ ["三鷹の森ジブリ美術館","https://www.ghibli-museum.jp/ticket/"],
+ ["チームラボプラネッツ TOKYO 豊洲","https://teamlabplanets.dmm.com/"],
+ ["チームラボボーダレス 麻布台ヒルズ","https://www.teamlab.art/jp/e/tokyo/"],
  ['かみね遊園地','https://kaminepark.or.jp/facility-map.data_/pamphlet2026.pdf'],
  ["もりのゆうえんち","https://www.senyo.co.jp/morinoyuenchi/ticket%26coupon.html"],
   [
@@ -275,6 +284,7 @@ const facilityVisitInfo={
   }
 };
 const facilityImages={
+ "ワーナー ブラザース スタジオツアー東京":{"fallbackCategory":5,"file":"Warner_Bros._Studio_Tour_Tokyo_entrance_(1)_2023-08-17.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Warner_Bros._Studio_Tour_Tokyo_entrance_%281%29_2023-08-17.jpg/330px-Warner_Bros._Studio_Tour_Tokyo_entrance_%281%29_2023-08-17.jpg","author":"Asanagi","license":"CC0 1.0","terms":"https://creativecommons.org/publicdomain/zero/1.0/"},
  "足立区生物園":{"fallbackCategory":4,"file":"里山をイメージした庭園.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/%E9%87%8C%E5%B1%B1%E3%82%92%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E3%81%97%E3%81%9F%E5%BA%AD%E5%9C%92.jpg/330px-%E9%87%8C%E5%B1%B1%E3%82%92%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E3%81%97%E3%81%9F%E5%BA%AD%E5%9C%92.jpg","author":"Souka Kinmei","license":"CC BY 4.0","terms":"https://creativecommons.org/licenses/by/4.0/","caption":"園内の庭園（2025年撮影）"},
  "東京おもちゃ美術館":{"fallbackCategory":5,"file":"Entrance_of_Tokyo_Toy_Museum.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Entrance_of_Tokyo_Toy_Museum.jpg/330px-Entrance_of_Tokyo_Toy_Museum.jpg","author":"Tzu-hsun Hsu","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
  "日立市かみね動物園":{"fallbackCategory":4,"file":"Penguinshakaminezoo.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Penguinshakaminezoo.jpg/330px-Penguinshakaminezoo.jpg","author":"Papakuro","license":"CC BY 3.0","terms":"https://creativecommons.org/licenses/by/3.0/","caption":"ペンギン舎（2012年撮影）"},
@@ -374,6 +384,7 @@ function distanceInKm([lat,lon],[targetLat,targetLon]){
  return 12742*Math.asin(Math.sqrt(Math.min(1,h)));
 }
 function render(){const tokens=normalizeSearch($('keyword').value).split(/\s+/).filter(Boolean),pref=$('area').value,rain=$('weather').checked;const municipality=normalizeSearch($('municipality').value).replace(/\s+/g,'');const sharedKey=new URLSearchParams(location.search).get('spot');const shared=destinations.find(d=>spotKey(d)===sharedKey);let a=favoritesOnly?destinations.filter(isFavorite):destinations.filter(d=>(pref==='all'||d.pref===pref)&&normalizeSearch(d.area).includes(municipality)&&(kind==='all'||d.kind.some(k=>k.includes(kind))&&(kind!=='屋内'||d.kind.includes('屋内遊び場')&&!d.kind.includes('水族館')))&&(shared&&$('keyword').value===shared.name?d===shared:matchesDestination(d,tokens))&&(!$('freeOnly').checked||d.free)&&(!$('preschoolOnly').checked||d.preschool)&&(!rain||d.kind.some(k=>k.includes('屋内')||k.includes('水族館')||k.includes('温泉'))));const distances=new Map();
+if(!favoritesOnly&&!tokens.length)a.sort((first,second)=>(featuredOrder.get(first.name)??Infinity)-(featuredOrder.get(second.name)??Infinity)||0);
 if(coords&&!favoritesOnly){
  for(const spot of a){const point=facilityCoordinates.get(spot.name);if(point)distances.set(spot,distanceInKm(coords,point));}
  a.sort((first,second)=>(distances.get(first)??Infinity)-(distances.get(second)??Infinity)||0);
@@ -558,6 +569,7 @@ estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
 const revisedOarai=Date.now()>=Date.parse('2027-03-08T00:00:00+09:00');
 const admission={
+ "三鷹の森ジブリ美術館":{rates:[["大人・大学生",1000],["中・高校生",700],["小学生",400],["4歳以上の未就学児",100],["4歳未満",0]],bands:[[0],[1,2],[3],[4],[5,6]],note:"日時指定の予約制です。4歳未満は無料で、チケットの予約も不要です。",url:"https://www.ghibli-museum.jp/ticket/"},
  "足立区生物園":{"rates":[["高校生以上",300],["小・中学生",150],["未就学児",0]],"bands":[[0,1],[2,3],[4,5,6]],"note":"通常の入園料。体験の料金や割引は公式案内をご確認ください。","url":"https://seibutuen.jp/index.html"},
  "あらかわ遊園":{"rates":[["一般",800],["中学生",400],["小学生",200],["未就学児",0]],"bands":[[0,1],[2],[3],[4,5,6]],"note":"通常の入園料。乗り物やフリーパスは別料金です。65歳以上の料金は公式案内をご確認ください。","url":"https://www.city.arakawa.tokyo.jp/a038/yuuen/ryokin.html"},
  "日立市かみね動物園":{"rates":[["高校生以上（64歳まで）",520],["4歳〜中学生",100],["3歳以下",0]],"bands":[[0,1],[2,3,4],[5,6]],"note":"通常の入園料。65歳以上は無料です。","url":"https://www.city.hitachi.lg.jp/zoo/annai/1004042.html"},
