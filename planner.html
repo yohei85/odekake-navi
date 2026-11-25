@@ -490,7 +490,7 @@ $("adultCount").addEventListener("change",syncPeople);$("childCount").addEventLi
 function setPeopleCounts(adults,children){
  for(const [id,count] of [["adultCount",adults],["childCount",children]]){
   const field=$(id);
-  if(!Array.from(field.options).some(option=>option.value===count))field.add(new Option(count+"人",count));
+  if(!Array.from(field.options).some(option=>option.value===String(count)))field.add(new Option(count+"人",count));
   field.value=count;
  }
  syncPeople();
@@ -556,7 +556,10 @@ if(incomingName&&incomingName.length<=150){
   $("incomingPlaceLabel").textContent="選んだ施設： "+incomingName;
   const fee=incomingNumber('admission',0,999999999);
   const minutes=incomingNumber('travel',1,1440);
-  $('incomingValues').textContent='入場料 '+(fee===null?'未入力':Number(fee).toLocaleString('ja-JP')+'円')+' ／ 片道 '+(minutes===null?'未入力':minutes+'分');
+  const adults=incomingNumber('adults',0,99);
+  const children=incomingNumber('children',0,396);
+  const party=adults!==null&&children!==null?'大人'+adults+'人・子ども'+children+'人 ／ ':'';
+  $('incomingValues').textContent=party+'入場料 '+(fee===null?'未入力（公式料金を確認）':Number(fee).toLocaleString('ja-JP')+'円')+' ／ 片道 '+(minutes===null?'未入力':minutes+'分');
   $("incomingPlace").hidden=false;
   $("useIncomingPlace").onclick=applyIncoming;
  }else{

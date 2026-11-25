@@ -692,7 +692,9 @@ function syncPlanLinks(){
  const params=plannerLink.searchParams;
  const admissionValue=params.get('admission');
  const travelValue=params.get('travel');
- transferPreview.textContent='入場料 '+(admissionValue===null?'未入力':Number(admissionValue).toLocaleString('ja-JP')+'円')+' ／ 片道 '+(travelValue===null?'未入力':travelValue+'分');
+ const party=params.has('adults')?'大人'+params.get('adults')+'人・子ども'+params.get('children')+'人 ／ ':'';
+ const admissionLabel=admissionValue===null?'未入力（公式料金を確認）':Number(admissionValue).toLocaleString('ja-JP')+'円';
+ transferPreview.textContent=party+'入場料 '+admissionLabel+' ／ 片道 '+(travelValue===null?'未入力':travelValue+'分');
 }
 function updateEstimate(){
  for(const key of ['admission','adults','children'])plannerLink.searchParams.delete(key);
@@ -754,7 +756,7 @@ plan.append(ratesLink,admissionNote);
 if(!totalField.hidden)plan.append(totalField);
 plan.append(fields,estimate);
 const routeTitle=document.createElement('strong');routeTitle.textContent='移動時間';
-const routeHint=document.createElement('p');routeHint.textContent='Googleマップで所要時間を確認し、下に入力すると準備画面に引き継げます。';
+const routeHint=document.createElement('p');routeHint.textContent='前回の片道時間がある場合は自動入力されます。当日の所要時間はGoogleマップで確認し、必要に応じて修正できます。';
 const transit=driving.cloneNode(true);const transitRoute=new URL(route);transitRoute.searchParams.set('travelmode','transit');transit.href=transitRoute.href;transit.textContent='公共交通の所要時間';
 const hotels=maps.cloneNode(true);const hotelQuery=new URL('https://www.google.com/maps/search/');hotelQuery.search=new URLSearchParams({api:'1',query:[d.name,d.area,d.pref,'近くのホテル'].join(' ')}).toString();hotels.href=hotelQuery.href;hotels.textContent='近くのホテルを探す';
 const modeField=document.createElement('label');
@@ -818,6 +820,15 @@ transportInput.addEventListener('input',()=>{
  else plannerLink.searchParams.delete('transport');
  syncPlanLinks();
 });
+if(reviewDraft?.key!==spotKey(d)&&savedOrigin&&!coords){
+ const previous=readTravelHistory().find(item=>item?.origin===savedOrigin&&item.spot===spotKey(d)&&
+  ['', 'driving', 'transit'].includes(item.mode)&&Number.isInteger(item.minutes)&&item.minutes>=1&&item.minutes<=1440);
+ if(previous){
+  travelMode.value=previous.mode;
+  travelMode.dispatchEvent(new Event('change'));
+  reuseTravel.click();
+ }
+}
 if(reviewDraft?.key===spotKey(d)){
  const restore=(input,value)=>{
   if(!input||typeof value!=='string'||!/^\d{0,9}$/.test(value))return;
