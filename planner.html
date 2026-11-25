@@ -70,6 +70,8 @@ textarea { resize: vertical; min-height: 100px; }
 #arrivalEstimate { color: var(--accent); font-weight: 700; }
 #incomingPlace { background: var(--soft); border-color: #9bc7ec; }
 #incomingPlace p { margin: 0 0 12px; }
+.facility-links { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 4px; }
+.facility-links a { display:inline-flex; align-items:center; min-height:44px; padding:5px 10px; border-radius:9px; background:var(--soft); font-size:.8125rem; font-weight:700; text-decoration:none; }
 .destination-tools { margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .destination-tools summary, .extra summary { cursor: pointer; padding: 10px 0; color: var(--accent); font-weight: 700; }
 .destination-tools .grid { margin-bottom: 10px; }
@@ -137,6 +139,12 @@ textarea { resize: vertical; min-height: 100px; }
 <section class="card" id="trip">
  <h2 class="section-title">おでかけの予定</h2>
  <div class="field"><label for="place">行き先</label><input id="place" list="placeSuggestions" placeholder="施設名を入力" autocomplete="off"><datalist id="placeSuggestions"></datalist></div>
+ <div class="facility-links" id="facilityLinks" hidden>
+  <a id="facilityOfficial" target="_blank" rel="noopener" hidden>公式サイト ↗</a>
+  <a id="facilityTickets" target="_blank" rel="noopener" hidden>公式の料金・チケット ↗</a>
+  <a id="facilityMap" target="_blank" rel="noopener">地図 ↗</a>
+  <a id="facilityRoute" target="_blank" rel="noopener">行き方・所要時間 ↗</a>
+ </div>
  <details class="destination-tools" id="destinationTools">
   <summary>施設候補から選ぶ</summary>
   <div class="grid">
@@ -316,7 +324,32 @@ function drawDestinations(){
  $("mapSearch").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(searchTerm);
  $("webSearch").href="https://www.google.com/search?q="+encodeURIComponent(searchTerm+" 公式 営業時間 料金");
 }
+let activeFacility=null;
+function safeFacilityLink(value){
+ if(typeof value!=='string'||value.length>2048)return '';
+ try{
+  const url=new URL(value);
+  return url.protocol==='https:'&&!url.username&&!url.password?url.href:'';
+ }catch{return '';}
+}
+function updateFacilityLinks(){
+ const name=$('place').value.trim();
+ const facility=(activeFacility?.name===name?activeFacility:null)||destinations.find(d=>d.name===name);
+ $('facilityLinks').hidden=!name;
+ if(!name)return;
+ for(const [id,value] of [['facilityOfficial',facility?.official],['facilityTickets',facility?.tickets]]){
+  const link=$(id);
+  const url=safeFacilityLink(value);
+  link.hidden=!url;
+  if(url)link.href=url;
+  else link.removeAttribute('href');
+ }
+ const query=[name,facility?.area,facility?.pref].filter(Boolean).join(' ');
+ $('facilityMap').href='https://www.google.com/maps/search/?'+new URLSearchParams({api:'1',query});
+ $('facilityRoute').href='https://www.google.com/maps/dir/?'+new URLSearchParams({api:'1',destination:query});
+}
 function selectDestination(d){
+ activeFacility={name:d.name,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets};
  const placeField=$("place");
  placeField.value=d.name;
  placeField.dispatchEvent(new Event("input",{bubbles:true}));
@@ -348,7 +381,7 @@ function render(){
  updateProgress();
 }
 function updateProgress(){const done=items.filter(x=>x.done).length,total=items.length;$("progressText").textContent=`${done} / ${total} 完了`;$("progressBar").style.width=(total?done/total*100:0)+"%"}
-function getData(){const d={items};ids.forEach(id=>d[id]=$(id).value);return d}
+function getData(){const d={items};if(activeFacility?.name===$("place").value.trim())d.facility=activeFacility;ids.forEach(id=>d[id]=$(id).value);return d}
 function persist(){try{localStorage.setItem("oyako-note-data-v2",JSON.stringify(getData()))}catch(e){}}
 function calc(){
  const [hour,minute]=$('depart').value.split(':').map(Number);
@@ -361,8 +394,8 @@ function calc(){
   arrival.textContent='到着の目安 '+(total>=1440?'翌日 ':'')+time;
  }
 const n=["transport","food","play","other"].reduce((s,id)=>s+(Number($(id).value)||0),0);$("total").textContent=n.toLocaleString("ja-JP")}
-function load(){try{const d=JSON.parse(localStorage.getItem("oyako-note-data-v2")||"null");if(d){if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]})}}catch(e){}render();calc()}
-function applyData(d){if(!d||typeof d!=="object")throw new Error("invalid");if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]});render();calc();persist()}
+function load(){try{const d=JSON.parse(localStorage.getItem("oyako-note-data-v2")||"null");if(d){activeFacility=d.facility??null;if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]})}}catch(e){}render();calc()}
+function applyData(d){if(!d||typeof d!=="object")throw new Error("invalid");activeFacility=d.facility??null;if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]});render();calc();updateFacilityLinks();persist()}
 $("add").addEventListener("click",()=>{const v=$("newitem").value.trim();if(!v)return;items.push({name:v,done:false,group:"追加した持ち物"});const root=$("items");const h=document.createElement("div");h.className="category";h.textContent="追加した持ち物";root.append(h);render();$("newitem").value="";persist();toast("持ち物を追加しました")});
 render=function(){const root=$("items");root.innerHTML="";const known=groups.map(g=>g.title);[...known,"追加した持ち物"].forEach(title=>{const subset=items.filter(it=>it.group===title);if(!subset.length)return;const h=document.createElement("div");h.className="category";h.textContent=title;root.append(h);subset.forEach(it=>{const idx=items.indexOf(it),row=document.createElement("div");row.className="item"+(it.done?" done":"");const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!it.done;cb.addEventListener("change",()=>{items[idx].done=cb.checked;render();persist()});const name=document.createElement("span");name.className="name";name.textContent=it.name;const del=document.createElement("button");del.className="del";del.textContent="削除";del.addEventListener("click",()=>{items.splice(idx,1);render();persist();toast("持ち物を削除しました")});row.append(cb,name,del);root.append(row)})});updateProgress()};
 $("save").onclick=()=>{persist();toast("この端末に保存しました")};
@@ -374,6 +407,7 @@ ids.forEach(id=>$(id).addEventListener("input",()=>{calc();persist()}));
 $("place").addEventListener("input",event=>{
  if(event.isTrusted&&event.currentTarget.value.trim())$("destinationTools").open=true;
  drawDestinations();
+ updateFacilityLinks();
 });
 $("prefectureFilter").addEventListener("change",drawDestinations);
 $("categoryFilter").addEventListener("change",drawDestinations);
@@ -393,12 +427,21 @@ load();
 const savedPeople=$("people").value.match(/^大人(\d+)人・子ども(\d+)人$/);
 if(savedPeople)setPeopleCounts(savedPeople[1],savedPeople[2]);
 drawDestinations();
+updateFacilityLinks();
 const plannerUrl=new URL(location.href);
 const incomingName=plannerUrl.searchParams.get("place")?.trim();
 if(incomingName&&incomingName.length<=150){
  const found=destinations.find(destination=>destination.name===incomingName);
  const isSpa=plannerUrl.searchParams.get("kind")==="温泉";
- const incoming=found||{name:incomingName,...(isSpa?{pack:["タオル","着替え","替えのおむつ"]}:{})};
+ let handoff=null;
+ try{
+  const data=JSON.parse(sessionStorage.getItem('odekake-facility-handoff'));
+  if(data?.name===incomingName){
+   handoff={area:typeof data.area==='string'?data.area.slice(0,150):'',pref:typeof data.pref==='string'?data.pref.slice(0,75):'',official:safeFacilityLink(data.official),tickets:safeFacilityLink(data.tickets)};
+   sessionStorage.removeItem('odekake-facility-handoff');
+  }
+ }catch{}
+ const incoming={...(found||{name:incomingName,...(isSpa?{pack:["タオル","着替え","替えのおむつ"]}:{})}),...handoff};
  const params=plannerUrl.searchParams;
  function incomingNumber(key,min,max){
   const value=params.get(key);
