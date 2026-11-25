@@ -210,6 +210,9 @@ const spaFees={
   "のだ温泉 ほのか": "https://yudokoro-honoka.jp/noda/fee/"
 };
 const facilityVisitInfo={
+ "東京おもちゃ美術館":{"子どもの利用":"赤ちゃん木育ひろばは2歳以下の子ども向け。3歳以上は館内のほかの部屋で遊べます。","入館料":"前売は大人1,200円、子ども900円。当日は大人1,500円、子ども1,100円。子ども料金は生後6か月〜小学生。"},
+ "あらかわ遊園":{"入園料":"大人800円、中学生400円、小学生200円、未就学児無料。","乗り物":"乗り物券やフリーパスは別料金。3歳以上の未就学児には専用のフリーパス料金があります。"},
+ "日立市かみね動物園":{"入園料":"高校生〜64歳520円、4歳〜中学生100円。3歳以下と65歳以上は無料。","開園日":"休園日や季節ごとの開園時間は公式案内をご確認ください。"},
  "もりのゆうえんち":{"料金":"入園無料。乗り物券やフリーパスは有料。","子どもの利用":"年齢や付き添いの条件は乗り物ごとに異なります。","駐車場":"無料。イオンノア店に隣接しています。"},
  "道の駅べに花の郷おけがわ":{"営業時間":"施設案内は9:00〜17:00。店舗・季節によって異なります。","車でのアクセス":"圏央道の桶川北本ICから約1分。普通車の駐車枠は約280台。"},
  "横浜アンパンマンこどもミュージアム":{"チケット":"2・3階のミュージアムは日時指定WEBチケットが必要。","料金":"1歳以上2,200〜2,800円。来館日によって変動。1階のショップ・飲食エリアは入場無料。"},
@@ -269,6 +272,8 @@ const facilityVisitInfo={
   }
 };
 const facilityImages={
+ "東京おもちゃ美術館":{"fallbackCategory":5,"file":"Entrance_of_Tokyo_Toy_Museum.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Entrance_of_Tokyo_Toy_Museum.jpg/330px-Entrance_of_Tokyo_Toy_Museum.jpg","author":"Tzu-hsun Hsu","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
+ "日立市かみね動物園":{"fallbackCategory":4,"file":"Penguinshakaminezoo.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Penguinshakaminezoo.jpg/330px-Penguinshakaminezoo.jpg","author":"Papakuro","license":"CC BY 3.0","terms":"https://creativecommons.org/licenses/by/3.0/","caption":"ペンギン舎（2012年撮影）"},
  "もりのゆうえんち":{"fallbackCategory":0,"file":"Morinoyuuenchi.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Morinoyuuenchi.jpg/330px-Morinoyuuenchi.jpg","author":"Xser21","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
  "道の駅べに花の郷おけがわ":{"fallbackCategory":5,"file":"Michinoeki_Benibananosato_Okegawa_202509.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Michinoeki_Benibananosato_Okegawa_202509.jpg/330px-Michinoeki_Benibananosato_Okegawa_202509.jpg","author":"Kaze315","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
  "横浜アンパンマンこどもミュージアム":{"fallbackCategory":5,"file":"Yokohama_Anpanman_Children's_Museum_2019_-_05.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Yokohama_Anpanman_Children%27s_Museum_2019_-_05.jpg/330px-Yokohama_Anpanman_Children%27s_Museum_2019_-_05.jpg","author":"Thirteen-fri","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
@@ -410,6 +415,7 @@ if(scene){
   terms.textContent=scene.license;
   for(const link of [source,terms]){link.target='_blank';link.rel='noopener';}
   photoCredit.append(source,terms,'（表示時にトリミング）');
+  if(scene.caption)photoCredit.append(' '+scene.caption);
   const photo=document.createElement('img');
   photo.className='spot-photo';
   photo.alt='';
@@ -548,6 +554,8 @@ estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
 const revisedOarai=Date.now()>=Date.parse('2027-03-08T00:00:00+09:00');
 const admission={
+ "あらかわ遊園":{"rates":[["一般",800],["中学生",400],["小学生",200],["未就学児",0]],"bands":[[0,1],[2],[3],[4,5,6]],"note":"通常の入園料。乗り物やフリーパスは別料金です。65歳以上の料金は公式案内をご確認ください。","url":"https://www.city.arakawa.tokyo.jp/a038/yuuen/ryokin.html"},
+ "日立市かみね動物園":{"rates":[["高校生以上（64歳まで）",520],["4歳〜中学生",100],["3歳以下",0]],"bands":[[0,1],[2,3,4],[5,6]],"note":"通常の入園料。65歳以上は無料です。","url":"https://www.city.hitachi.lg.jp/zoo/annai/1004042.html"},
  "国立科学博物館 上野本館":{"rates":[["一般・大学生",630],["高校生以下",0]],"bands":[[0],[1,2,3,4,5,6]],"note":"上野本館の常設展。65歳以上は無料ですが、この見積もりの大人欄は一般料金です。特別展は公式案内をご確認ください。","url":"https://www.kahaku.go.jp/riyou/nyukan-annai/e-ticket.html"},
  "東武動物公園":{"rates":[["大人",2300],["中・高校生",1800],["3歳〜小学生",1000],["2歳以下",0]],"bands":[[0],[1,2],[3,4,5],[6]],"note":"通常の入園料。乗り物・プール・60歳以上の割引は公式案内をご確認ください。","url":"https://www.tobuzoo.com/ticket/chargelist/"},
  "新江ノ島水族館":{"rates":[["大人",2800],["高校生",1800],["小・中学生",1300],["3歳以上の未就学児",900],["3歳未満",0]],"bands":[[0],[1],[2,3],[4,5],[6]],"note":"通常の入場料。高校生は入場時に学生証などの提示が必要です。","url":"https://www.enosui.com/basicinfo.php"},
