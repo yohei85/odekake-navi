@@ -156,6 +156,7 @@ for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-sc
  }
 }
 const facilityTickets=new Map([
+ ['かみね遊園地','https://kaminepark.or.jp/facility-map.data_/pamphlet2026.pdf'],
  ["もりのゆうえんち","https://www.senyo.co.jp/morinoyuenchi/ticket%26coupon.html"],
   [
     "東京ディズニーランド",
@@ -210,6 +211,8 @@ const spaFees={
   "のだ温泉 ほのか": "https://yudokoro-honoka.jp/noda/fee/"
 };
 const facilityVisitInfo={
+ "足立区生物園":{"入園料":"高校生以上300円、小・中学生150円、未就学児無料。","見どころ":"チョウが飛ぶ大温室や金魚の大水槽があります。ふれあい体験の実施日は公式案内をご確認ください。"},
+ "かみね遊園地":{"入園料":"無料。隣接するかみね動物園や、かみねレジャーランドの入園料は別です。","乗り物券":"3歳から乗り物料金がかかります。1枚120円で、必要枚数は乗り物ごとに異なります。"},
  "東京おもちゃ美術館":{"子どもの利用":"赤ちゃん木育ひろばは2歳以下の子ども向け。3歳以上は館内のほかの部屋で遊べます。","入館料":"前売は大人1,200円、子ども900円。当日は大人1,500円、子ども1,100円。子ども料金は生後6か月〜小学生。"},
  "あらかわ遊園":{"入園料":"大人800円、中学生400円、小学生200円、未就学児無料。","乗り物":"乗り物券やフリーパスは別料金。3歳以上の未就学児には専用のフリーパス料金があります。"},
  "日立市かみね動物園":{"入園料":"高校生〜64歳520円、4歳〜中学生100円。3歳以下と65歳以上は無料。","開園日":"休園日や季節ごとの開園時間は公式案内をご確認ください。"},
@@ -272,6 +275,7 @@ const facilityVisitInfo={
   }
 };
 const facilityImages={
+ "足立区生物園":{"fallbackCategory":4,"file":"里山をイメージした庭園.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/%E9%87%8C%E5%B1%B1%E3%82%92%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E3%81%97%E3%81%9F%E5%BA%AD%E5%9C%92.jpg/330px-%E9%87%8C%E5%B1%B1%E3%82%92%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E3%81%97%E3%81%9F%E5%BA%AD%E5%9C%92.jpg","author":"Souka Kinmei","license":"CC BY 4.0","terms":"https://creativecommons.org/licenses/by/4.0/","caption":"園内の庭園（2025年撮影）"},
  "東京おもちゃ美術館":{"fallbackCategory":5,"file":"Entrance_of_Tokyo_Toy_Museum.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Entrance_of_Tokyo_Toy_Museum.jpg/330px-Entrance_of_Tokyo_Toy_Museum.jpg","author":"Tzu-hsun Hsu","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
  "日立市かみね動物園":{"fallbackCategory":4,"file":"Penguinshakaminezoo.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Penguinshakaminezoo.jpg/330px-Penguinshakaminezoo.jpg","author":"Papakuro","license":"CC BY 3.0","terms":"https://creativecommons.org/licenses/by/3.0/","caption":"ペンギン舎（2012年撮影）"},
  "もりのゆうえんち":{"fallbackCategory":0,"file":"Morinoyuuenchi.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Morinoyuuenchi.jpg/330px-Morinoyuuenchi.jpg","author":"Xser21","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
@@ -554,6 +558,7 @@ estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
 const revisedOarai=Date.now()>=Date.parse('2027-03-08T00:00:00+09:00');
 const admission={
+ "足立区生物園":{"rates":[["高校生以上",300],["小・中学生",150],["未就学児",0]],"bands":[[0,1],[2,3],[4,5,6]],"note":"通常の入園料。体験の料金や割引は公式案内をご確認ください。","url":"https://seibutuen.jp/index.html"},
  "あらかわ遊園":{"rates":[["一般",800],["中学生",400],["小学生",200],["未就学児",0]],"bands":[[0,1],[2],[3],[4,5,6]],"note":"通常の入園料。乗り物やフリーパスは別料金です。65歳以上の料金は公式案内をご確認ください。","url":"https://www.city.arakawa.tokyo.jp/a038/yuuen/ryokin.html"},
  "日立市かみね動物園":{"rates":[["高校生以上（64歳まで）",520],["4歳〜中学生",100],["3歳以下",0]],"bands":[[0,1],[2,3,4],[5,6]],"note":"通常の入園料。65歳以上は無料です。","url":"https://www.city.hitachi.lg.jp/zoo/annai/1004042.html"},
  "国立科学博物館 上野本館":{"rates":[["一般・大学生",630],["高校生以下",0]],"bands":[[0],[1,2,3,4,5,6]],"note":"上野本館の常設展。65歳以上は無料ですが、この見積もりの大人欄は一般料金です。特別展は公式案内をご確認ください。","url":"https://www.kahaku.go.jp/riyou/nyukan-annai/e-ticket.html"},
