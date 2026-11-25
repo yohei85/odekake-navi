@@ -70,6 +70,9 @@ textarea { resize: vertical; min-height: 100px; }
 #arrivalEstimate { color: var(--accent); font-weight: 700; }
 #incomingPlace { background: var(--soft); border-color: #9bc7ec; }
 #incomingPlace p { margin: 0 0 12px; }
+.schedule-times { display:grid; grid-template-columns:max-content minmax(0,1fr); gap:6px 14px; margin:0 0 12px; padding:12px 14px; border-radius:12px; background:var(--soft); }
+.schedule-times dt { color:var(--muted); }
+.schedule-times dd { margin:0; font-weight:700; font-variant-numeric:tabular-nums; }
 .facility-links { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 4px; }
 .facility-links a { display:inline-flex; align-items:center; min-height:44px; padding:5px 10px; border-radius:9px; background:var(--soft); font-size:.8125rem; font-weight:700; text-decoration:none; }
 .destination-tools { margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
@@ -144,6 +147,7 @@ textarea { resize: vertical; min-height: 100px; }
   <a id="facilityTickets" target="_blank" rel="noopener" hidden>公式の料金・チケット ↗</a>
   <a id="facilityMap" target="_blank" rel="noopener">地図 ↗</a>
   <a id="facilityRoute" target="_blank" rel="noopener">行き方・所要時間 ↗</a>
+  <a id="reviewAdmission" hidden>料金を見直す</a>
  </div>
  <details class="destination-tools" id="destinationTools">
   <summary>施設候補から選ぶ</summary>
@@ -193,7 +197,8 @@ textarea { resize: vertical; min-height: 100px; }
 
 <section class="card">
  <h2 class="section-title">当日のスケジュール</h2>
- <textarea aria-label="当日のスケジュール" id="schedule" placeholder="例：&#10;9:00 出発&#10;10:00 到着・遊ぶ&#10;12:00 お昼ごはん"></textarea>
+ <dl class="schedule-times" id="scheduleTimes" hidden></dl>
+ <textarea aria-label="当日のスケジュールのメモ" id="schedule" placeholder="例：&#10;9:00 出発&#10;10:00 到着・遊ぶ&#10;12:00 お昼ごはん"></textarea>
 </section>
 
 <section class="card">
@@ -347,9 +352,14 @@ function updateFacilityLinks(){
  const query=[name,facility?.area,facility?.pref].filter(Boolean).join(' ');
  $('facilityMap').href='https://www.google.com/maps/search/?'+new URLSearchParams({api:'1',query});
  $('facilityRoute').href='https://www.google.com/maps/dir/?'+new URLSearchParams({api:'1',destination:query});
+ const spot=facility?.key||(facility?.pref&&facility?.area?[facility.pref,facility.area,name].join('|'):'');
+ const review=$('reviewAdmission');
+ review.hidden=!spot;
+ if(spot)review.href='./?'+new URLSearchParams({spot,review:'admission'});
+ else review.removeAttribute('href');
 }
 function selectDestination(d){
- activeFacility={name:d.name,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets};
+ activeFacility={name:d.name,key:d.key,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets};
  const placeField=$("place");
  placeField.value=d.name;
  placeField.dispatchEvent(new Event("input",{bubbles:true}));
@@ -384,16 +394,29 @@ function updateProgress(){const done=items.filter(x=>x.done).length,total=items.
 function getData(){const d={items};if(activeFacility?.name===$("place").value.trim())d.facility=activeFacility;ids.forEach(id=>d[id]=$(id).value);return d}
 function persist(){try{localStorage.setItem("oyako-note-data-v2",JSON.stringify(getData()))}catch(e){}}
 function calc(){
- const [hour,minute]=$('depart').value.split(':').map(Number);
+ const depart=$('depart').value;
+ const [hour,minute]=depart.split(':').map(Number);
  const travel=Number($('travelMinutes').value);
- const arrival=$('arrivalEstimate');
- arrival.textContent='';
+ let arrivalTime='';
  if(Number.isFinite(minute)&&Number.isInteger(travel)&&travel>=1&&travel<=1440){
   const total=hour*60+minute+travel;
   const time=[Math.floor(total/60)%24,total%60].map(value=>String(value).padStart(2,'0')).join(':');
-  arrival.textContent='到着の目安 '+(total>=1440?'翌日 ':'')+time;
+  arrivalTime=(total>=1440?'翌日 ':'')+time;
  }
-const n=["transport","food","play","other"].reduce((s,id)=>s+(Number($(id).value)||0),0);$("total").textContent=n.toLocaleString("ja-JP")}
+ $('arrivalEstimate').textContent=arrivalTime?'到着の目安 '+arrivalTime:'';
+ const times=$('scheduleTimes');
+ const entries=[['出発',depart],['到着の目安',arrivalTime],['帰宅予定',$('return').value]].filter(([,time])=>time);
+ times.hidden=!entries.length;
+ times.replaceChildren(...entries.flatMap(([label,time])=>{
+  const term=document.createElement('dt');
+  const value=document.createElement('dd');
+  term.textContent=label;
+  value.textContent=time;
+  return [term,value];
+ }));
+ const total=['transport','food','play','other'].reduce((sum,id)=>sum+(Number($(id).value)||0),0);
+ $('total').textContent=total.toLocaleString('ja-JP');
+}
 function load(){try{const d=JSON.parse(localStorage.getItem("oyako-note-data-v2")||"null");if(d){activeFacility=d.facility??null;if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]})}}catch(e){}render();calc()}
 function applyData(d){if(!d||typeof d!=="object")throw new Error("invalid");activeFacility=d.facility??null;if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]});render();calc();updateFacilityLinks();persist()}
 $("add").addEventListener("click",()=>{const v=$("newitem").value.trim();if(!v)return;items.push({name:v,done:false,group:"追加した持ち物"});const root=$("items");const h=document.createElement("div");h.className="category";h.textContent="追加した持ち物";root.append(h);render();$("newitem").value="";persist();toast("持ち物を追加しました")});
@@ -437,7 +460,7 @@ if(incomingName&&incomingName.length<=150){
  try{
   const data=JSON.parse(sessionStorage.getItem('odekake-facility-handoff'));
   if(data?.name===incomingName){
-   handoff={area:typeof data.area==='string'?data.area.slice(0,150):'',pref:typeof data.pref==='string'?data.pref.slice(0,75):'',official:safeFacilityLink(data.official),tickets:safeFacilityLink(data.tickets)};
+   handoff={key:typeof data.key==='string'?data.key.slice(0,300):'',area:typeof data.area==='string'?data.area.slice(0,150):'',pref:typeof data.pref==='string'?data.pref.slice(0,75):'',official:safeFacilityLink(data.official),tickets:safeFacilityLink(data.tickets)};
    sessionStorage.removeItem('odekake-facility-handoff');
   }
  }catch{}
