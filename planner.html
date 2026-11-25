@@ -8,153 +8,140 @@
 <meta name="apple-mobile-web-app-title" content="おでかけナビ！">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>おでかけナビ！</title>
+<title>おでかけ準備｜おでかけナビ！</title>
 <style>
-:root{--ink:#24352f;--muted:#718078;--paper:#f6f4ee;--white:#fffefa;--sage:#557c6d;--sage2:#e5eee8;--peach:#f4e5d9;--line:#e5e4dc;--gold:#c58b4b;--shadow:0 8px 26px rgba(38,54,46,.07)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;line-height:1.55}
-main{max-width:720px;margin:auto;padding:18px 15px calc(108px + env(safe-area-inset-bottom))}
-.hero{position:relative;overflow:hidden;border-radius:25px;padding:25px 22px 23px;background:linear-gradient(135deg,#e3eee7,#f2e9dc);box-shadow:var(--shadow)}
-.eyebrow{font-size:11px;letter-spacing:.16em;color:#61776c;font-weight:700}.hero h1{font-size:25px;line-height:1.3;margin:9px 0 7px;letter-spacing:.02em}.hero p{font-size:13px;color:#68776e;margin:0}.hero .stamp{position:absolute;right:18px;top:18px;border:1px solid #9db4a5;color:#557c6d;border-radius:99px;padding:5px 10px;font-size:10px;letter-spacing:.08em}
-.progress-card{margin:14px 0;background:var(--white);border:1px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)}
-.progress-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700}.progress-num{color:var(--sage);font-variant-numeric:tabular-nums}.track{height:8px;background:#edf0eb;border-radius:99px;margin-top:9px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#6c9784,#b2c8a7);border-radius:99px;transition:width .2s}
-.card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:18px;margin:13px 0;box-shadow:var(--shadow)}
-.section-title{display:flex;align-items:center;gap:9px;margin:0 0 14px;font-size:16px}.num{display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:var(--sage2);color:var(--sage);font-size:12px;font-weight:800}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.field{min-width:0}.field label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin:0 0 5px}
-input,textarea,select{display:block;min-width:0;max-width:100%;width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;color:var(--ink);font:inherit;font-size:14px;min-height:46px;outline:none}
-input:focus,textarea:focus,select:focus{border-color:#86a895;box-shadow:0 0 0 3px #e5eee8}textarea{min-height:88px;resize:vertical}
-.hint{font-size:11px;color:var(--muted);margin:8px 0 0}
-.category{margin:15px 0 6px;font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.04em}
-.item{display:flex;align-items:center;gap:11px;padding:11px 2px;border-bottom:1px solid #f0efe9;min-height:49px}
-.item:last-child{border-bottom:0}.item input[type=checkbox]{appearance:none;-webkit-appearance:none;width:23px;height:23px;min-height:23px;flex:0 0 23px;margin:0;padding:0;border:1.7px solid #bdc9bf;border-radius:7px;background:#fff;position:relative}
-.item input[type=checkbox]:checked{background:var(--sage);border-color:var(--sage)}
-.item input[type=checkbox]:checked:after{content:"✓";position:absolute;color:white;font-size:16px;font-weight:800;left:4px;top:-1px}
-.item .name{flex:1;font-size:14px}.item.done .name{color:#9aa39c;text-decoration:line-through}
-.del{border:0;background:#f7eee8;color:#9b7058;border-radius:9px;min-height:34px;padding:5px 10px;font-size:11px}
-.addrow{display:flex;gap:8px;margin-top:13px}.addrow input{flex:1;min-width:0}.btn{border:0;border-radius:12px;padding:12px 15px;background:var(--sage);color:white;font-weight:750;font-size:13px;min-height:46px}.btn.light{background:var(--sage2);color:var(--sage)}.btn.peach{background:var(--peach);color:#855e48}
-.budget-total{display:flex;justify-content:space-between;align-items:center;background:#f2f5ef;border-radius:13px;padding:13px 14px;margin-top:13px;font-weight:700}.budget-total strong{font-size:21px;color:var(--sage);font-variant-numeric:tabular-nums}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}.actions .wide{grid-column:1/-1}.note{font-size:11px;color:var(--muted);line-height:1.7;margin:9px 3px}
-.bottom{position:fixed;z-index:5;bottom:0;left:0;right:0;background:rgba(246,244,238,.94);backdrop-filter:blur(12px);padding:10px 15px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
-.bottom-inner{max-width:720px;margin:auto;display:flex;gap:9px}.bottom .btn{flex:1}
-.toast{position:fixed;z-index:10;left:50%;bottom:95px;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#293b32;color:white;padding:10px 16px;border-radius:99px;font-size:12px;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
-footer{text-align:center;color:#9aa39c;font-size:10px;padding:15px}
-
-.destination-tools{margin-top:16px;padding:14px;background:#f7f8f3;border:1px solid var(--line);border-radius:15px}
-.destination-label{font-size:13px;font-weight:800;margin-bottom:10px}.destination-label span{font-size:10px;color:var(--muted);font-weight:500;margin-left:5px}
-.chips{display:flex;gap:7px;overflow-x:auto;padding:1px 0 9px}
-.chip{white-space:nowrap;border:1px solid #d7e1d9;background:#fff;border-radius:99px;padding:8px 12px;color:#587568;font-size:11px;font-weight:700;min-height:34px}
-.chip.active{background:var(--sage);border-color:var(--sage);color:#fff}
-.destination-results{display:grid;gap:8px;margin-top:5px}
-.destination-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px;cursor:pointer;-webkit-tap-highlight-color:rgba(93,125,112,.18);touch-action:manipulation}
-.destination-card strong{display:block;font-size:13px;margin-bottom:3px}
-.destination-card p{font-size:11px;color:var(--muted);margin:0 0 8px}
-.destination-actions{display:flex;gap:7px;flex-wrap:wrap}
-.destination-actions button,.destination-actions a{border:0;border-radius:9px;background:var(--sage2);color:var(--sage);padding:8px 10px;font-size:11px;font-weight:750;text-decoration:none}
-.destination-actions a{display:inline-flex;align-items:center}
-.destination-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:11px}
-.destination-links a{font-size:11px;color:var(--sage);font-weight:700}
-.quick-picks{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}.quick-pick{border:1px solid #d7e1d9;background:#fff;color:#557c6d;border-radius:99px;padding:8px 11px;font-size:12px;font-weight:700;min-height:36px}.quick-pick:active{background:var(--sage2)}.field-hint{font-size:10px;color:var(--muted);margin:5px 0 0}
-@media(max-width:480px){.destination-tools{padding:12px}.destination-card{min-width:0}}
-@media(max-width:480px){main{padding-left:12px;padding-right:12px}.hero{padding:23px 18px}.hero h1{font-size:23px}.grid{grid-template-columns:1fr 1fr}.card{padding:16px}.field input{font-size:14px}}
-@media print{body{background:white}main{max-width:none;padding:0}.hero,.progress-card,.card{box-shadow:none;break-inside:avoid}.bottom,.actions,.del,.addrow,.note{display:none!important}.card{border:1px solid #ddd;margin:8px 0;padding:12px}.hero{padding:14px}.hero h1{font-size:20px}.item{min-height:30px;padding:5px}.item input[type=checkbox]{appearance:auto;-webkit-appearance:auto}.progress-card{padding:8px;margin:8px 0}}
-
-/* v4.5 premium visual refresh */
-:root{--ink:#202b35;--muted:#71808a;--paper:#f2f4f5;--white:#ffffff;--sage:#315f63;--sage2:#e4eeee;--peach:#f4eadb;--line:#e1e6e8;--gold:#bd9457;--shadow:0 12px 34px rgba(30,49,57,.09)}
-body{background:radial-gradient(ellipse at 8% 0%,#e8eff0 0,transparent 34%),linear-gradient(180deg,#f3f5f5 0%,#f7f6f2 100%);color:var(--ink)}
-main{max-width:760px;padding-top:20px}
-.hero{min-height:190px;border-radius:28px;padding:30px 25px 28px;background:linear-gradient(118deg,#203b46 0%,#315d60 58%,#718b7b 100%);color:#fff;box-shadow:0 18px 42px rgba(32,59,70,.22);isolation:isolate}
-.hero:before{content:"";position:absolute;width:230px;height:230px;border:1px solid rgba(255,255,255,.18);border-radius:50%;right:-52px;top:-84px;z-index:-1;box-shadow:0 0 0 22px rgba(255,255,255,.035),0 0 0 48px rgba(255,255,255,.025)}
-.hero:after{content:"✦";position:absolute;right:35px;bottom:22px;color:#e6d0a6;font-size:42px;opacity:.85}
-.hero .eyebrow{color:#d9e4df;font-size:10px;letter-spacing:.22em}
-.hero h1{font-size:29px;letter-spacing:.045em;margin:15px 0 9px;text-shadow:0 2px 12px rgba(0,0,0,.12)}
-.hero p{color:#e5eeeb;font-size:13px;max-width:80%}
-.hero .stamp{right:18px;top:18px;border:1px solid rgba(235,218,183,.65);background:rgba(255,255,255,.09);color:#f2dfbb;border-radius:99px;padding:6px 11px;font-size:9px;letter-spacing:.12em;backdrop-filter:blur(8px)}
-.progress-card,.card{border:1px solid rgba(210,220,222,.9);border-radius:21px;background:rgba(255,255,255,.94);box-shadow:0 10px 28px rgba(39,58,64,.065)}
-.progress-card{padding:16px 18px;margin:16px 0}
-.track{height:9px;background:#edf1f0}.bar{background:linear-gradient(90deg,#3d7777,#bda06b)}
-.card{padding:20px;margin:15px 0;position:relative;overflow:hidden}
-.section-title{font-size:16px;letter-spacing:.015em;margin-bottom:17px}
-.num{width:30px;height:30px;border-radius:10px;background:linear-gradient(145deg,#e8f0ee,#f4eadb);color:#315f63;border:1px solid #dce7e3}
-input,textarea,select{border-color:#dce3e5;background:#fbfcfc;border-radius:13px;transition:border-color .18s,box-shadow .18s}
-input:focus,textarea:focus,select:focus{border-color:#6c9691;box-shadow:0 0 0 3px rgba(108,150,145,.15)}
-.destination-tools{background:linear-gradient(135deg,#f1f6f4,#f8f4ec);border-color:#dce7e3;border-radius:17px;padding:15px}
-.destination-card{border-color:#e0e7e6;border-radius:14px;box-shadow:0 4px 12px rgba(39,58,64,.035)}
-.destination-card strong{color:#294d50}
-.destination-actions button,.destination-actions a,.quick-pick{background:#e6efec;color:#315f63;border:1px solid #d6e4df;border-radius:10px}
-.chip{border-color:#d7e3df;color:#426b67}.chip.active{background:#315f63;border-color:#315f63}
-.btn{background:linear-gradient(135deg,#315f63,#244b52);box-shadow:0 5px 13px rgba(49,95,99,.17);border-radius:13px}
-.btn.light{background:#e5efec;color:#315f63;box-shadow:none}.btn.peach{background:linear-gradient(135deg,#f3e8d7,#ead8bd);color:#735638;box-shadow:none}
-.budget-total{background:linear-gradient(110deg,#edf4f1,#f8f2e8);border:1px solid #e2e9e3}.budget-total strong{color:#315f63}
-.bottom{background:rgba(246,248,247,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(215,224,224,.8)}
-.toast{background:#203b46;box-shadow:0 8px 24px rgba(0,0,0,.18)}
-footer{letter-spacing:.13em;color:#9aa9a7}
-@media(max-width:480px){.hero{min-height:180px;padding:27px 19px 25px;border-radius:24px}.hero h1{font-size:26px}.hero:after{right:22px;bottom:17px;font-size:34px}.card{padding:17px}.progress-card{padding:14px 15px}}
-
-
-/* おでかけナビ！ ポップテーマ */
-:root{--ink:#18345c;--muted:#64748b;--paper:#eaf8ff;--white:#ffffff;--sage:#1688e8;--sage2:#e0f2ff;--peach:#fff0d6;--line:#ccecff;--gold:#ff9d22;--shadow:0 7px 0 rgba(34,126,190,.12),0 12px 25px rgba(45,130,190,.12)}
-body{background:linear-gradient(180deg,#74d3ff 0,#eaf9ff 260px,#f7fcff 100%);color:var(--ink)}
-main{padding-top:12px}
-.hero{background:linear-gradient(135deg,#24b8f2 0%,#4fc9f5 48%,#8de7d0 100%);color:#fff;border:3px solid #fff;border-radius:28px;box-shadow:0 7px 0 #b6e9ff,0 12px 25px rgba(18,128,190,.18)}
-.hero:before{border:3px solid rgba(255,255,255,.28);box-shadow:0 0 0 18px rgba(255,255,255,.10),0 0 0 38px rgba(255,255,255,.07)}
-.hero:after{content:"🌈";font-size:48px;right:20px;bottom:15px}
-.hero .eyebrow,.hero p{color:#fff}.hero h1{font-size:30px;text-shadow:0 3px 0 rgba(20,92,160,.18)}
-.hero .stamp{background:#ffdf55;color:#694600;border:2px solid #fff;font-weight:900;box-shadow:0 3px 0 rgba(150,100,0,.12)}
-.progress-card,.card{border:2px solid #d5f0ff;border-radius:23px;box-shadow:var(--shadow)}
-.section-title{color:#183d72}.num{background:linear-gradient(145deg,#ffe17a,#ffb94f);color:#7a4300;border:2px solid #fff;border-radius:11px}
-.track{background:#e5f5ff}.bar{background:linear-gradient(90deg,#ff8cba,#ffca48,#62d5b2)}
-input,textarea,select{border:2px solid #cceaff;background:#fbfeff;border-radius:14px}
-input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4px rgba(53,169,237,.16)}
-.btn{background:linear-gradient(135deg,#ff9d26,#ff6b35);box-shadow:0 4px 0 #d95b25;color:#fff;border-radius:15px}.btn.light{background:linear-gradient(135deg,#e3f5ff,#ccecff);box-shadow:0 4px 0 #a8d8f5;color:#1765a0}.btn.peach{background:linear-gradient(135deg,#ffb9d3,#ff8db5);box-shadow:0 4px 0 #d86b95;color:#6f2344}
-.destination-tools{background:linear-gradient(135deg,#fff5d9,#e8fbff);border:2px solid #ffe2a1;border-radius:18px}
-.destination-card{border:2px solid #d5edff;border-radius:16px;box-shadow:0 4px 0 rgba(56,153,210,.10)}
-.destination-card strong{color:#174b82}.destination-actions button,.destination-actions a{background:#e5f5ff;color:#1268a7;border-radius:11px}
-.chip,.quick-pick{border:2px solid #cceaff;color:#1765a0}.chip.active{background:#ff9d26;border-color:#ff9d26;color:#fff}
-.budget-total{background:linear-gradient(90deg,#fff3cb,#e5faff);border:1px solid #ffe09a}.budget-total strong{color:#f07820}
-.bottom{background:rgba(255,255,255,.94);border-top:2px solid #ccecff}.toast{background:#174b82}
-@media(max-width:480px){.hero{padding:22px 18px}.hero h1{font-size:27px}}
-
-.back-to-search{display:inline-flex;align-items:center;min-height:44px;margin-bottom:8px;padding:0 12px;border:1px solid #c8dff2;border-radius:12px;background:#fff;color:#164776;font-weight:700;text-decoration:none}.back-to-search:focus-visible{outline:2px solid #0754a8;outline-offset:2px}
-#incomingPlace:not([hidden]){display:block;border:2px solid #85baf0}#incomingPlace[hidden]{display:none}</style>
+:root {
+  color-scheme: light;
+  --ink: #142d47;
+  --muted: #495f75;
+  --accent: #065dad;
+  --soft: #edf7ff;
+  --line: #d6e3ee;
+  --surface: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  line-height: 1.55;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: #f3f8fc; color: var(--ink); }
+main { max-width: 760px; margin: auto; padding: 12px 16px calc(24px + env(safe-area-inset-bottom)); }
+a { color: var(--accent); }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid #0879c7; outline-offset: 3px; }
+.back-to-search { display: inline-flex; align-items: center; min-height: 44px; font-size: .875rem; font-weight: 700; text-decoration: none; }
+.hero {
+  background: linear-gradient(124deg, #084e8d, #08759e);
+  color: white;
+  border-radius: 22px;
+  padding: clamp(20px, 5vw, 37px);
+}
+.hero h1 { margin: 0; font-size: clamp(1.7rem, 5vw, 2.3rem); line-height: 1.25; }
+.hero p { margin: 8px 0 0; color: #eefaff; font-size: .9rem; }
+.section-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.section-links a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  font-size: .875rem; font-weight: 700; text-decoration: none;
+}
+.card {
+  margin: 14px 0; padding: clamp(14px, 4vw, 24px); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: 0 3px 12px #153e6010; scroll-margin-block-start: 14px;
+}
+.section-title { margin: 0 0 16px; font-size: 1.15rem; line-height: 1.4; overflow-wrap: anywhere; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px; align-items: start; }
+.field, fieldset { min-width: 0; }
+.field label, legend { display: block; padding: 0; margin: 0 0 5px; font-size: .875rem; font-weight: 700; }
+fieldset { border: 0; margin: 0; padding: 0; }
+.span-all { grid-column: 1 / -1; }
+.people-grid { gap: 8px; }
+input:not([type=checkbox], [type=hidden], [type=file]), select, textarea {
+  display: block; width: 100%; min-width: 0; max-width: 100%; min-height: 46px;
+  margin: 0; padding: 9px 10px; border: 1px solid #b9ccdc; border-radius: 10px;
+  background: #fbfdff; color: var(--ink); font-size: 16px;
+}
+input:is([type=date], [type=time]) { appearance: none; -webkit-appearance: none; }
+input::-webkit-date-and-time-value { min-height: 1.5em; text-align: start; }
+select { text-overflow: ellipsis; }
+textarea { resize: vertical; min-height: 100px; }
+.hint, .field-hint, .note { margin: 6px 0 0; font-size: .8125rem; color: var(--muted); overflow-wrap: anywhere; }
+.field-hint:empty { display: none; }
+#arrivalEstimate { color: var(--accent); font-weight: 700; }
+#incomingPlace { background: var(--soft); border-color: #9bc7ec; }
+#incomingPlace p { margin: 0 0 12px; }
+.destination-tools { margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.destination-tools summary, .extra summary { cursor: pointer; padding: 10px 0; color: var(--accent); font-weight: 700; }
+.destination-tools .grid { margin-bottom: 10px; }
+.quick-picks, .destination-actions, .destination-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.quick-picks, .destination-links { margin-top: 10px; }
+.quick-pick, .destination-actions button, .destination-actions a {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 6px 10px;
+  border: 1px solid var(--line); border-radius: 9px; background: var(--soft); color: var(--accent);
+  font-size: .8125rem; font-weight: 700; text-decoration: none;
+}
+.destination-results { display: grid; gap: 8px; margin-top: 10px; }
+.destination-card { min-width: 0; padding: 12px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; cursor: pointer; }
+.destination-card p { margin: 4px 0 8px; color: var(--muted); font-size: .8125rem; }
+.destination-links a { font-size: .8125rem; font-weight: 700; padding-block: 8px; }
+.budget-total { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 14px; margin-top: 16px; padding: 12px 14px; background: var(--soft); border-radius: 12px; font-weight: 700; }
+.budget-total strong { font-size: 1.3rem; color: var(--accent); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.progress-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 12px; font-size: .875rem; font-weight: 700; }
+.progress-num { color: var(--accent); font-variant-numeric: tabular-nums; }
+.track { height: 8px; background: var(--soft); border-radius: 99px; margin: 8px 0 14px; overflow: hidden; }
+.bar { height: 100%; width: 0; background: #0776bc; border-radius: inherit; }
+.category { margin: 16px 0 4px; color: var(--muted); font-size: .875rem; font-weight: 800; }
+.item { display: flex; align-items: center; gap: 10px; min-height: 50px; border-bottom: 1px solid var(--line); }
+.item input[type=checkbox] { flex: 0 0 22px; width: 22px; height: 22px; margin: 0; accent-color: var(--accent); }
+.item .name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.item.done .name { color: var(--muted); text-decoration: line-through; }
+.del { min-height: 44px; padding: 0 5px; border: 0; background: transparent; color: #8b3b35; font-size: .8125rem; }
+.addrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-top: 14px; }
+.btn { min-height: 44px; border: 1px solid transparent; border-radius: 10px; padding: 8px 12px; background: var(--accent); color: white; font-size: .875rem; font-weight: 700; }
+.btn.light, .btn.peach { background: var(--soft); color: var(--accent); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+.toast {
+  position: fixed; z-index: 2; bottom: calc(14px + env(safe-area-inset-bottom)); left: 50%;
+  width: max-content; max-width: calc(100% - 32px); transform: translateX(-50%);
+  visibility: hidden; pointer-events: none; overflow-wrap: anywhere;
+  background: var(--ink); color: white; padding: 10px 16px; border-radius: 12px;
+}
+.toast.show { visibility: visible; }
+@media (max-width: 359px) {
+  main { padding-inline: 12px; }
+  .grid:not(.people-grid) { grid-template-columns: minmax(0, 1fr); }
+}
+@media print {
+  body { background: white; }
+  main { max-width: none; padding: 0; }
+  .hero { background: white; color: var(--ink); padding: 0; }
+  .hero p { color: var(--ink); }
+  .card { box-shadow: none; }
+  .back-to-search, .section-links, .destination-tools, .quick-picks, .actions, .del, .addrow, .note, .toast { display: none !important; }
+}
+</style>
 </head>
 <body>
 <main>
 <a class="back-to-search" href="./">← スポット検索に戻る</a>
 <section class="hero">
- <div class="stamp">おでかけナビ！ · v5.0</div><div class="eyebrow">🌈 FAMILY FUN NAVIGATION</div>
  <h1>おでかけ準備</h1>
- <p>行く日と出発時間を決めて、持ち物や予算をまとめましょう。</p>
+ <p>予定・予算・持ち物をまとめて確認。</p>
 </section>
+<nav class="section-links" aria-label="おでかけ準備の項目">
+ <a href="#trip">予定</a><a href="#budget">予算</a><a href="#packing">持ち物</a>
+</nav>
 <section class="card" id="incomingPlace" aria-labelledby="incomingPlaceLabel" hidden><h2 class="section-title" id="incomingPlaceLabel"></h2><p>前に保存した行き先があります。今回選んだ施設と、カードで確認した料金・所要時間を反映するには、下のボタンを押してください。</p><button type="button" class="btn" id="useIncomingPlace">この施設で準備する</button></section>
-<section class="progress-card" aria-live="polite">
- <div class="progress-head"><span>持ち物の準備状況</span><span class="progress-num" id="progressText">0 / 0 完了</span></div>
- <div class="track"><div class="bar" id="progressBar"></div></div>
-</section>
 
-<section class="card">
- <h2 class="section-title"><span class="num">01</span>おでかけの予定</h2>
- <div class="grid">
-  <div class="field"><label for="place">行き先</label><input id="place" list="placeSuggestions" placeholder="施設名を入力・候補から選択" autocomplete="off"><datalist id="placeSuggestions"></datalist><p class="field-hint">入力すると施設候補が下に表示されます</p></div>
-  <div class="field"><label for="date">日にち</label><input id="date" type="date"></div>
-  <div class="field"><label for="depart">出発予定</label><input id="depart" type="time"></div>
-  <div class="field"><label for="travelMinutes">片道の所要時間（分）</label><input id="travelMinutes" type="number" min="1" max="1440" inputmode="numeric"><p class="field-hint" id="arrivalEstimate" aria-live="polite"></p></div>
-  <div class="field"><label for="return">帰宅予定</label><input id="return" type="time"></div>
-  <div class="field"><label>参加する人</label><div class="grid" style="gap:8px"><div class="field"><label for="adultCount">大人</label><select id="adultCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div><div class="field"><label for="childCount">子ども</label><select id="childCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div></div><input id="people" type="hidden" value="大人1人・子ども1人"><p class="field-hint">人数を選ぶと自動で保存されます</p></div>
-  <div class="field"><label for="weather">天気・気温メモ</label><input id="weather" list="weatherSuggestions" placeholder="天気を選ぶ・入力する"><datalist id="weatherSuggestions"><option value="晴れ"><option value="くもり"><option value="雨"><option value="晴れ・暑い"><option value="くもり・涼しい"><option value="雨のち晴れ"></datalist><div class="quick-picks"><button type="button" class="quick-pick" data-fill="weather" data-value="晴れ">☀ 晴れ</button><button type="button" class="quick-pick" data-fill="weather" data-value="くもり">☁ くもり</button><button type="button" class="quick-pick" data-fill="weather" data-value="雨">☂ 雨</button></div></div>
- </div>
- <div class="destination-tools">
-  <div class="destination-label">行き先を探す <span>県・ジャンル・施設名から探せます</span></div>
-  <div class="grid" style="margin-bottom:10px">
+
+<section class="card" id="trip">
+ <h2 class="section-title">おでかけの予定</h2>
+ <div class="field"><label for="place">行き先</label><input id="place" list="placeSuggestions" placeholder="施設名を入力" autocomplete="off"><datalist id="placeSuggestions"></datalist></div>
+ <details class="destination-tools" id="destinationTools">
+  <summary>施設候補から選ぶ</summary>
+  <div class="grid">
    <div class="field"><label for="prefectureFilter">都県で絞り込む</label><select id="prefectureFilter"><option value="all">関東7都県すべて</option><option>東京都</option><option>埼玉県</option><option>千葉県</option><option>茨城県</option><option>栃木県</option><option>群馬県</option><option>神奈川県</option></select></div>
    <div class="field"><label for="categoryFilter">ジャンルで絞り込む</label><select id="categoryFilter"><option value="all">すべてのジャンル</option><option>公園</option><option>遊園地</option><option>動物・ふれあい</option><option>水族館</option><option>屋内遊び場</option><option>道の駅・体験</option><option>自然・牧場</option></select></div>
-  </div>
-  <div class="chips" id="destinationChips">
-   <button type="button" class="chip active" data-kind="all">おすすめ</button>
-   <button type="button" class="chip" data-kind="公園">公園</button>
-   <button type="button" class="chip" data-kind="動物・ふれあい">動物・ふれあい</button>
-   <button type="button" class="chip" data-kind="遊園地">遊園地</button>
-   <button type="button" class="chip" data-kind="水族館">水族館</button>
-   <button type="button" class="chip" data-kind="屋内遊び場">屋内</button>
-   <button type="button" class="chip" data-kind="自然・牧場">自然・牧場</button>
   </div>
   <div id="destinationResults" class="destination-results"></div>
   <div class="destination-links">
@@ -162,23 +149,20 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
    <a id="webSearch" href="https://www.google.com/search" target="_blank" rel="noopener">ウェブで詳しく調べる ↗</a>
   </div>
   <p class="hint">収録スポットに一致すれば候補を表示します。未登録の場所も入力語で地図・ウェブ検索できます。最新の営業日・料金・利用条件はリンク先で確認してください。</p>
+ </details>
+ <div class="grid">
+  <div class="field"><label for="date">日にち</label><input id="date" type="date"></div>
+  <div class="field"><label for="depart">出発予定</label><input id="depart" type="time"></div>
+  <div class="field"><label for="travelMinutes">片道の所要時間（分）</label><input id="travelMinutes" type="number" min="1" max="1440" inputmode="numeric"><p class="field-hint" id="arrivalEstimate" aria-live="polite"></p></div>
+  <div class="field"><label for="return">帰宅予定</label><input id="return" type="time"></div>
+  <fieldset class="span-all"><legend>参加する人</legend><div class="grid people-grid"><div class="field"><label for="adultCount">大人</label><select id="adultCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div><div class="field"><label for="childCount">子ども</label><select id="childCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div></div><input id="people" type="hidden" value="大人1人・子ども1人"></fieldset>
+  <div class="field span-all"><label for="weather">天気・気温メモ</label><input id="weather" list="weatherSuggestions" placeholder="天気を選ぶ・入力する"><datalist id="weatherSuggestions"><option value="晴れ"><option value="くもり"><option value="雨"><option value="晴れ・暑い"><option value="くもり・涼しい"><option value="雨のち晴れ"></datalist><div class="quick-picks"><button type="button" class="quick-pick" data-fill="weather" data-value="晴れ">☀ 晴れ</button><button type="button" class="quick-pick" data-fill="weather" data-value="くもり">☁ くもり</button><button type="button" class="quick-pick" data-fill="weather" data-value="雨">☂ 雨</button></div></div>
  </div>
+
 </section>
 
-<section class="card">
- <h2 class="section-title"><span class="num">02</span>持ち物チェック</h2>
- <p class="hint">準備できたらチェック。必要な持ち物は自由に追加できます。</p>
- <div id="items"></div>
- <div class="addrow"><input id="newitem" placeholder="追加したい持ち物"><button class="btn" id="add">追加する</button></div>
-</section>
-
-<section class="card">
- <h2 class="section-title"><span class="num">03</span>当日のスケジュール</h2>
- <textarea id="schedule" placeholder="例：&#10;9:00 出発&#10;10:00 到着・遊ぶ&#10;12:00 お昼ごはん"></textarea>
-</section>
-
-<section class="card">
- <h2 class="section-title"><span class="num">04</span>予算メモ</h2>
+<section class="card" id="budget">
+ <h2 class="section-title">予算メモ</h2>
  <div class="grid">
   <div class="field"><label for="transport">交通費・駐車場（円）</label><input id="transport" type="number" min="0" inputmode="numeric" placeholder="0"></div>
   <div class="field"><label for="food">食事・飲み物（円）</label><input id="food" type="number" min="0" inputmode="numeric" placeholder="0"></div>
@@ -188,12 +172,30 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
  <div class="budget-total"><span>予定予算の合計</span><strong><span id="total">0</span> 円</strong></div>
 </section>
 
+<section class="card" id="packing">
+ <h2 class="section-title">持ち物チェック</h2>
+ <div aria-live="polite">
+ <div class="progress-head"><span>持ち物の準備状況</span><span class="progress-num" id="progressText">0 / 0 完了</span></div>
+ <div class="track"><div class="bar" id="progressBar"></div></div>
+</div>
+ <p class="hint">準備できたらチェック。必要な持ち物は自由に追加できます。</p>
+ <div id="items"></div>
+ <div class="addrow"><input aria-label="追加したい持ち物" id="newitem" placeholder="追加したい持ち物"><button class="btn" id="add">追加する</button></div>
+</section>
+
 <section class="card">
- <h2 class="section-title"><span class="num">05</span>帰宅後のひとことメモ</h2>
+ <h2 class="section-title">当日のスケジュール</h2>
+ <textarea aria-label="当日のスケジュール" id="schedule" placeholder="例：&#10;9:00 出発&#10;10:00 到着・遊ぶ&#10;12:00 お昼ごはん"></textarea>
+</section>
+
+<section class="card">
+ <h2 class="section-title">帰宅後のひとことメモ</h2>
  <div class="field"><label for="good">楽しかったこと・よかったこと</label><textarea id="good" placeholder="子どもが喜んだことなど"></textarea></div>
  <div class="field" style="margin-top:12px"><label for="next">次回に向けて</label><textarea id="next" placeholder="次は持っていきたいもの・改善したいこと"></textarea></div>
 </section>
 
+<details class="card extra">
+<summary>保存・印刷</summary>
 <div class="actions">
  <button class="btn wide" id="save">この端末に保存する</button>
  <button class="btn light" id="export">バックアップ保存</button>
@@ -202,9 +204,8 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
  <input type="file" id="importFile" accept="application/json,.json" hidden>
 </div>
 <p class="note">入力内容は、この端末のブラウザ内に自動保存されます。機種変更やブラウザのデータ削除に備えて、ときどき「バックアップ保存」をしてください。バックアップ読込で保存データを戻せます。</p>
-<footer>🌈 おでかけナビ！ v5.0</footer>
+</details>
 </main>
-<div class="bottom"><div class="bottom-inner"><button class="btn light" id="topBtn">ページ上部へ</button><button class="btn" id="bottomSave">保存する</button></div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -263,7 +264,6 @@ const destinations=[
  {name:"ムーミンバレーパーク",pref:"埼玉県",area:"飯能市",kind:["自然・牧場","屋内遊び場"],desc:"ムーミンの物語の世界観や自然を楽しめるテーマパーク。",official:"https://metsa-hanno.com/",pack:["飲み物","帽子","歩きやすい靴"]},
  {name:"カンドゥー",pref:"千葉県",area:"千葉市",kind:["屋内遊び場"],desc:"子どもが仕事体験を楽しめる屋内型施設。",official:"https://www.kandu.co.jp/",pack:["飲み物","予約情報"]}
 ];
-let activeDestinationKind="all";
 function destinationSearchText(){return ($("place").value||"").trim().toLowerCase().replace(/\s+/g,"")}
 function drawDestinations(){
  const root=$("destinationResults"); if(!root)return;
@@ -279,12 +279,10 @@ function drawDestinations(){
  const cat=$("categoryFilter")?.value||"all";
  const base=destinations.filter(d=>
   (pref==="all"||d.pref===pref) &&
-  (cat==="all"||d.kind.includes(cat)) &&
-  (activeDestinationKind==="all"||d.kind.includes(activeDestinationKind))
+  (cat==="all"||d.kind.includes(cat))
  );
  let list=q ? base.filter(d=>terms.some(term=>(d.name+d.area+d.pref+d.kind.join("")).toLowerCase().replace(/\s+/g,"").includes(term))) : base;
  root.innerHTML="";
- if(!q && activeDestinationKind==="all" && pref==="all" && cat==="all") list=list.slice(0,6);
  if(q && !list.length) list=base.slice(0,4);
  list.slice(0,6).forEach(d=>{
   const card=document.createElement("div");card.className="destination-card";card.setAttribute("role","button");card.setAttribute("tabindex","0");card.setAttribute("aria-label",d.name+"を行き先に選択");
@@ -366,17 +364,17 @@ const n=["transport","food","play","other"].reduce((s,id)=>s+(Number($(id).value
 function load(){try{const d=JSON.parse(localStorage.getItem("oyako-note-data-v2")||"null");if(d){if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]})}}catch(e){}render();calc()}
 function applyData(d){if(!d||typeof d!=="object")throw new Error("invalid");if(Array.isArray(d.items))items=d.items;ids.forEach(id=>{if(d[id]!==undefined)$(id).value=d[id]});render();calc();persist()}
 $("add").addEventListener("click",()=>{const v=$("newitem").value.trim();if(!v)return;items.push({name:v,done:false,group:"追加した持ち物"});const root=$("items");const h=document.createElement("div");h.className="category";h.textContent="追加した持ち物";root.append(h);render();$("newitem").value="";persist();toast("持ち物を追加しました")});
-const originalRender=render;
 render=function(){const root=$("items");root.innerHTML="";const known=groups.map(g=>g.title);[...known,"追加した持ち物"].forEach(title=>{const subset=items.filter(it=>it.group===title);if(!subset.length)return;const h=document.createElement("div");h.className="category";h.textContent=title;root.append(h);subset.forEach(it=>{const idx=items.indexOf(it),row=document.createElement("div");row.className="item"+(it.done?" done":"");const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!it.done;cb.addEventListener("change",()=>{items[idx].done=cb.checked;render();persist()});const name=document.createElement("span");name.className="name";name.textContent=it.name;const del=document.createElement("button");del.className="del";del.textContent="削除";del.addEventListener("click",()=>{items.splice(idx,1);render();persist();toast("持ち物を削除しました")});row.append(cb,name,del);root.append(row)})});updateProgress()};
-$("save").onclick=$("bottomSave").onclick=()=>{persist();toast("この端末に保存しました")};
+$("save").onclick=()=>{persist();toast("この端末に保存しました")};
 $("export").onclick=()=>{persist();const blob=new Blob([JSON.stringify(getData(),null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="親子のおでかけノート_backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("バックアップを保存しました")};
 $("importBtn").onclick=()=>$("importFile").click();
 $("importFile").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{applyData(JSON.parse(await f.text()));toast("バックアップを読み込みました")}catch(err){toast("読み込めないファイルです")}e.target.value=""});
 $("print").onclick=()=>window.print();
-$("topBtn").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
 ids.forEach(id=>$(id).addEventListener("input",()=>{calc();persist()}));
-$("place").addEventListener("input",drawDestinations);
-$("destinationChips").addEventListener("click",e=>{const b=e.target.closest("button[data-kind]");if(!b)return;activeDestinationKind=b.dataset.kind;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===b));drawDestinations()});
+$("place").addEventListener("input",event=>{
+ if(event.isTrusted&&event.currentTarget.value.trim())$("destinationTools").open=true;
+ drawDestinations();
+});
 $("prefectureFilter").addEventListener("change",drawDestinations);
 $("categoryFilter").addEventListener("change",drawDestinations);
 const placeList=$("placeSuggestions");destinations.forEach(d=>{const o=document.createElement("option");o.value=d.name;placeList.append(o)});
