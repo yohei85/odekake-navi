@@ -5,7 +5,8 @@
     "directory": "./",
     "binding": "ASSETS",
     "run_worker_first": [
-      "/api/ticket-click"
+      "/api/ticket-click",
+      "/api/hotel-click"
     ]
   },
   "main": "./ticket-metrics.mjs",
