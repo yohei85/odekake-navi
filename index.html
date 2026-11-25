@@ -578,8 +578,17 @@ function updateEstimate(){
  syncPlanLinks();
 }
 fields.addEventListener('input',updateEstimate);updateEstimate();
+function rememberFacility(){
+ try{
+  sessionStorage.setItem('odekake-facility-handoff',JSON.stringify({
+   name:d.name,area:d.area,pref:d.pref,official:d.official,
+   tickets:ticketUrl||admission?.url||spaFees[d.name]||''
+  }));
+ }catch{}
+}
+planDirect.addEventListener('click',rememberFacility);
 prepare.addEventListener('click',event=>{
- if(plannerLink.searchParams.has('admission')&&savedParty)return;
+ if(plannerLink.searchParams.has('admission')&&savedParty){rememberFacility();return;}
  event.preventDefault();
  planButton.click();
 });
