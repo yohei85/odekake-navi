@@ -528,7 +528,16 @@ feeTitle.textContent='入場料の目安';
 const estimate=document.createElement('output');
 estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
+const revisedOarai=Date.now()>=Date.parse('2027-03-08T00:00:00+09:00');
 const admission={
+ "東武動物公園":{"rates":[["大人",2300],["中・高校生",1800],["3歳〜小学生",1000],["2歳以下",0]],"bands":[[0],[1,2],[3,4,5],[6]],"note":"通常の入園料。乗り物・プール・60歳以上の割引は公式案内をご確認ください。","url":"https://www.tobuzoo.com/ticket/chargelist/"},
+ "新江ノ島水族館":{"rates":[["大人",2800],["高校生",1800],["小・中学生",1300],["3歳以上の未就学児",900],["3歳未満",0]],"bands":[[0],[1],[2,3],[4,5],[6]],"note":"通常の入場料。高校生は入場時に学生証などの提示が必要です。","url":"https://www.enosui.com/basicinfo.php"},
+ 'アクアワールド茨城県大洗水族館':{
+  rates:[['高校生以上',revisedOarai?2500:2300],['小・中学生',revisedOarai?1200:1100],['3歳以上の未就学児',revisedOarai?500:400],['3歳未満',0]],
+  bands:[[0,1],[2,3],[4,5],[6]],
+  note:revisedOarai?'2027年3月8日以降の一般入場料。夜間イベントは別料金。':'現在の一般入場料。2027年3月8日から大人2,500円、小・中学生1,200円、3歳以上の未就学児500円に改定されます。',
+  url:'https://www.aquaworld-oarai.com/guide/admission/'
+ },
  "川口市立科学館":{"rates":[["高校生以上",300],["小・中学生",150],["未就学児",0]],"bands":[[0,1],[2,3],[4,5,6]],"note":"科学展示室の入場料。プラネタリウムは別料金。","url":"https://www.city.kawaguchi.lg.jp/soshiki/04010/060/faq/6385.html"},
  "千葉県立現代産業科学館":{"rates":[["一般",300],["高校生・大学生",150],["中学生以下",0]],"bands":[[0],[1],[2,3,4,5,6]],"note":"通常の入場料。大学生は人数欄を調整してください。企画展の期間は別料金になる場合があります。","url":"https://www2.chiba-muse.or.jp/SCIENCE/visit/"},
  "よこはま動物園ズーラシア":{"rates":[["一般",800],["高校生",300],["小・中学生",200],["未就学児",0]],"bands":[[0],[1],[2,3],[4,5,6]],"note":"通常入園料。土曜日の高校生以下無料などは公式案内をご確認ください。","url":"https://www.hama-midorinokyokai.or.jp/zoo/zoorasia/fee.php"},
