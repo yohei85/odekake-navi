@@ -608,7 +608,21 @@ const planDirect=prepare.cloneNode(true);
 planDirect.textContent='この内容でおでかけ準備';
 planDirect.removeAttribute('aria-label');
 const plannerLink=new URL(prepare.href);
-function syncPlanLinks(){prepare.href=plannerLink.href;planDirect.href=plannerLink.href;}
+const transferPreview=document.createElement('p');
+transferPreview.setAttribute('aria-live','polite');
+const totalField=document.createElement('label');
+totalField.className='plan-travel-field';
+totalField.textContent='公式サイトで確認した全員分の入場料（円）';
+const totalInput=document.createElement('input');
+totalInput.type='number';totalInput.min='0';totalInput.max='999999999';totalInput.step='1';totalInput.inputMode='numeric';
+totalField.append(totalInput);
+function syncPlanLinks(){
+ prepare.href=plannerLink.href;planDirect.href=plannerLink.href;
+ const params=plannerLink.searchParams;
+ const admissionValue=params.get('admission');
+ const travelValue=params.get('travel');
+ transferPreview.textContent='入場料 '+(admissionValue===null?'未入力':Number(admissionValue).toLocaleString('ja-JP')+'円')+' ／ 片道 '+(travelValue===null?'未入力':travelValue+'分');
+}
 function updateEstimate(){
  for(const key of ['admission','adults','children'])plannerLink.searchParams.delete(key);
  planDirect.textContent='料金未入力のまま準備へ';
@@ -625,7 +639,10 @@ function updateEstimate(){
  }
  syncPlanLinks();
  let total=0;
- for(const {count,unit,price} of groups){
+ if(!totalField.hidden&&totalInput.value!==''){
+  if(!totalInput.validity.valid){estimate.textContent='全員分の入場料は0円以上の整数で入力してください';return;}
+  total=Number(totalInput.value);
+ }else for(const {count,unit,price} of groups){
   if(!count.validity.valid||(unit&&!unit.validity.valid)){estimate.textContent='人数・料金は入力欄の範囲内の整数で入力してください';return;}
   if(Number(count.value)===0)continue;
   if(unit&&unit.value===''){estimate.textContent='人数を入れた区分の1人分の料金を入力してください';return;}
@@ -636,12 +653,15 @@ function updateEstimate(){
  planDirect.textContent='この内容でおでかけ準備';
  syncPlanLinks();
 }
+totalField.hidden=Boolean(admission||d.free);
+if(!totalField.hidden)totalInput.addEventListener('input',updateEstimate);
 fields.addEventListener('input',updateEstimate);updateEstimate();
 function rememberFacility(){
  try{
   sessionStorage.setItem('odekake-facility-handoff',JSON.stringify({
    name:d.name,key:spotKey(d),area:d.area,pref:d.pref,official:d.official,
    tickets:ticketUrl||admission?.url||spaFees[d.name]||'',
+   quoteTotal:totalInput.value,
    quote:groups.map(({count,unit},index)=>({label:rates[index][0],count:count.value,unit:unit?.value??''}))
   }));
  }catch{}
@@ -654,7 +674,9 @@ prepare.addEventListener('click',event=>{
 });
 admissionNote.textContent=(admission?.note??(d.free?'入場・基本利用は無料。':'利用日と年齢区分に合う公式料金を入力してください。無料の区分は0円です。'))+' 駐車場・交通費・食事・有料体験は別途。';
 const ratesLink=official.cloneNode(true);ratesLink.href=admission?.url||ticketUrl||spaFees[d.name]||d.official;ratesLink.textContent='公式料金・施設案内';
-plan.append(ratesLink,admissionNote,fields,estimate);
+plan.append(ratesLink,admissionNote);
+if(!totalField.hidden)plan.append(totalField);
+plan.append(fields,estimate);
 const routeTitle=document.createElement('strong');routeTitle.textContent='移動時間';
 const routeHint=document.createElement('p');routeHint.textContent='Googleマップで所要時間を確認し、下に入力すると準備画面に引き継げます。';
 const transit=driving.cloneNode(true);const transitRoute=new URL(route);transitRoute.searchParams.set('travelmode','transit');transit.href=transitRoute.href;transit.textContent='公共交通の所要時間';
@@ -692,6 +714,7 @@ if(reviewDraft?.key===spotKey(d)){
   });
   updateEstimate();
  }
+ if(!totalField.hidden)restore(totalInput,reviewDraft.quoteTotal);
  restore(travelInput,reviewDraft.travel);
  restore(transportInput,reviewDraft.transport);
  const previousPlay=reviewDraft.play;
@@ -701,7 +724,7 @@ if(reviewDraft?.key===spotKey(d)){
   estimate.before(savedBudget);
  }
 }
-plan.append(routeTitle,routeHint,driving,transit,travelField,transportField,hotels,planDirect);
+plan.append(routeTitle,routeHint,driving,transit,travelField,transportField,hotels,transferPreview,planDirect);
 content.append(prepare,planButton,plan,official,maps,favorite,share,shareStatus,shareInput);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
 $('mapSearch').parentElement.hidden=favoritesOnly;
