@@ -357,9 +357,18 @@ function updateFacilityLinks(){
  review.hidden=!spot;
  if(spot)review.href='./?'+new URLSearchParams({spot,review:'admission'});
  else review.removeAttribute('href');
+ review.onclick=()=>{
+  if(!spot)return;
+  try{
+   sessionStorage.setItem('odekake-admission-review',JSON.stringify({
+    key:spot,quote:facility?.quote,travel:$('travelMinutes').value,
+    transport:$('transport').value,play:$('play').value
+   }));
+  }catch{}
+ };
 }
 function selectDestination(d){
- activeFacility={name:d.name,key:d.key,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets};
+ activeFacility={name:d.name,key:d.key,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets,quote:d.quote};
  const placeField=$("place");
  placeField.value=d.name;
  placeField.dispatchEvent(new Event("input",{bubbles:true}));
@@ -460,7 +469,7 @@ if(incomingName&&incomingName.length<=150){
  try{
   const data=JSON.parse(sessionStorage.getItem('odekake-facility-handoff'));
   if(data?.name===incomingName){
-   handoff={key:typeof data.key==='string'?data.key.slice(0,300):'',area:typeof data.area==='string'?data.area.slice(0,150):'',pref:typeof data.pref==='string'?data.pref.slice(0,75):'',official:safeFacilityLink(data.official),tickets:safeFacilityLink(data.tickets)};
+   handoff={key:typeof data.key==='string'?data.key.slice(0,300):'',area:typeof data.area==='string'?data.area.slice(0,150):'',pref:typeof data.pref==='string'?data.pref.slice(0,75):'',official:safeFacilityLink(data.official),tickets:safeFacilityLink(data.tickets),quote:Array.isArray(data.quote)?data.quote.slice(0,10):undefined};
    sessionStorage.removeItem('odekake-facility-handoff');
   }
  }catch{}
