@@ -131,10 +131,10 @@ textarea { resize: vertical; min-height: 100px; }
 <a class="back-to-search" href="./">← スポット検索に戻る</a>
 <section class="hero">
  <h1>おでかけ準備</h1>
- <p>予定・予算・持ち物をまとめて確認。</p>
+ <p>行き先・時間・予算をまとめて確認。</p>
 </section>
 <nav class="section-links" aria-label="おでかけ準備の項目">
- <a href="#trip">予定</a><a href="#budget">予算</a><a href="#packing">持ち物</a>
+ <a href="#trip">予定</a><a href="#budget">予算</a><a href="#daySchedule">当日の流れ</a>
 </nav>
 <section class="card" id="incomingPlace" aria-labelledby="incomingPlaceLabel" hidden><h2 class="section-title" id="incomingPlaceLabel"></h2><p>前に保存した行き先があります。今回選んだ施設と、カードで確認した料金・所要時間を反映するには、下のボタンを押してください。</p><button type="button" class="btn" id="useIncomingPlace">この施設で準備する</button></section>
 
@@ -184,18 +184,7 @@ textarea { resize: vertical; min-height: 100px; }
  <div class="budget-total"><span>予定予算の合計</span><strong><span id="total">0</span> 円</strong></div>
 </section>
 
-<section class="card" id="packing">
- <h2 class="section-title">持ち物チェック</h2>
- <div aria-live="polite">
- <div class="progress-head"><span>持ち物の準備状況</span><span class="progress-num" id="progressText">0 / 0 完了</span></div>
- <div class="track"><div class="bar" id="progressBar"></div></div>
-</div>
- <p class="hint">準備できたらチェック。必要な持ち物は自由に追加できます。</p>
- <div id="items"></div>
- <div class="addrow"><input aria-label="追加したい持ち物" id="newitem" placeholder="追加したい持ち物"><button class="btn" id="add">追加する</button></div>
-</section>
-
-<section class="card">
+<section class="card" id="daySchedule">
  <h2 class="section-title">当日のスケジュール</h2>
  <dl class="schedule-times" id="scheduleTimes" hidden></dl>
  <textarea aria-label="当日のスケジュールのメモ" id="schedule" placeholder="例：&#10;9:00 出発&#10;10:00 到着・遊ぶ&#10;12:00 お昼ごはん"></textarea>
@@ -206,6 +195,16 @@ textarea { resize: vertical; min-height: 100px; }
  <div class="field"><label for="good">楽しかったこと・よかったこと</label><textarea id="good" placeholder="子どもが喜んだことなど"></textarea></div>
  <div class="field" style="margin-top:12px"><label for="next">次回に向けて</label><textarea id="next" placeholder="次は持っていきたいもの・改善したいこと"></textarea></div>
 </section>
+
+<details class="card extra" id="packing">
+ <summary>持ち物を確認する</summary>
+ <div aria-live="polite">
+  <div class="progress-head"><span>準備状況</span><span class="progress-num" id="progressText">0 / 0 完了</span></div>
+  <div class="track"><div class="bar" id="progressBar"></div></div>
+ </div>
+ <div id="items"></div>
+ <div class="addrow"><input aria-label="追加したい持ち物" id="newitem" placeholder="追加したい持ち物"><button class="btn" id="add">追加する</button></div>
+</details>
 
 <details class="card extra">
 <summary>保存・印刷</summary>
@@ -435,6 +434,16 @@ $("export").onclick=()=>{persist();const blob=new Blob([JSON.stringify(getData()
 $("importBtn").onclick=()=>$("importFile").click();
 $("importFile").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{applyData(JSON.parse(await f.text()));toast("バックアップを読み込みました")}catch(err){toast("読み込めないファイルです")}e.target.value=""});
 $("print").onclick=()=>window.print();
+let packingBeforePrint;
+window.addEventListener('beforeprint',()=>{
+ packingBeforePrint??=$('packing').open;
+ $('packing').open=true;
+});
+window.addEventListener('afterprint',()=>{
+ if(packingBeforePrint===undefined)return;
+ $('packing').open=packingBeforePrint;
+ packingBeforePrint=undefined;
+});
 ids.forEach(id=>$(id).addEventListener("input",()=>{calc();persist()}));
 $("place").addEventListener("input",event=>{
  if(event.isTrusted&&event.currentTarget.value.trim())$("destinationTools").open=true;
