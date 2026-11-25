@@ -408,6 +408,7 @@ if(features.length){const label=document.createElement('p');label.className='fea
 const driving=document.createElement('a');
 const route=new URL('https://www.google.com/maps/dir/');
 route.search=new URLSearchParams({api:'1',destination:[d.name,d.area,d.pref].join(' '),travelmode:'driving'}).toString();
+if(coords)route.searchParams.set('origin',coords.join(','));
 driving.href=route.href;
 driving.target='_blank';
 driving.rel='noopener';
@@ -525,10 +526,10 @@ const estimate=document.createElement('output');
 estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
 const admission={
- '埼玉県こども動物自然公園':{rates:[['高校生以上',900],['小・中学生',200]],note:'通常入園料。未就学児は無料。',url:'https://www.parks.or.jp/sczoo/guide/000/000194.html'},
- '市川市動植物園':{rates:[['大人',440],['小・中学生',110]],note:'動物園の通常入園料。未就学児は無料。',url:'https://www.city.ichikawa.lg.jp/site/zoo/7829.html'},
- '鉄道博物館':{rates:[['一般',1600],['小中高生',600],['幼児（3歳以上・未就学）',300]],note:'当日券の目安。3歳未満は無料。',url:'https://www.e-tix.jp/railway-museum/'},
- 'ふなばしアンデルセン公園':{rates:[['一般',900],['高校生（生徒証提示）',600],['小・中学生',200],['幼児（4歳以上）',100]],note:'通常の入園料。駐車場や有料体験は別途。',url:'https://www.park-funabashi.or.jp/and/guide.html'}
+ '埼玉県こども動物自然公園':{rates:[['高校生以上',900],['小・中学生',200],['未就学児',0]],note:'通常入園料。未就学児は無料。',url:'https://www.parks.or.jp/sczoo/guide/000/000194.html'},
+ '市川市動植物園':{rates:[['大人',440],['小・中学生',110],['未就学児',0]],note:'動物園の通常入園料。未就学児は無料。',url:'https://www.city.ichikawa.lg.jp/site/zoo/7829.html'},
+ '鉄道博物館':{rates:[['一般',1600],['小中高生',600],['幼児（3歳以上・未就学）',300],['3歳未満',0]],note:'当日券の目安。3歳未満は無料。',url:'https://www.e-tix.jp/railway-museum/'},
+ 'ふなばしアンデルセン公園':{rates:[['一般',900],['高校生（生徒証提示）',600],['小・中学生',200],['幼児（4歳以上）',100],['4歳未満',0]],note:'通常の入園料。駐車場や有料体験は別途。',url:'https://www.park-funabashi.or.jp/and/guide.html'}
 }[d.name];
 const admissionNote=document.createElement('p');
 const rates=admission?.rates??[['大人',d.free?0:null],['子ども',d.free?0:null],['幼児',d.free?0:null]];
@@ -544,7 +545,18 @@ planDirect.removeAttribute('aria-label');
 const plannerLink=new URL(prepare.href);
 function syncPlanLinks(){prepare.href=plannerLink.href;planDirect.href=plannerLink.href;}
 function updateEstimate(){
- plannerLink.searchParams.delete('admission');syncPlanLinks();
+ for(const key of ['admission','adults','children'])plannerLink.searchParams.delete(key);
+ planDirect.textContent='料金未入力のまま準備へ';
+ let adults=0;
+ let children=0;
+ const countsValid=groups.every(({count})=>count.validity.valid);
+ if(countsValid){
+  adults=Number(groups[0].count.value);
+  children=groups.slice(1).reduce((sum,{count})=>sum+Number(count.value),0);
+  plannerLink.searchParams.set('adults',String(adults));
+  plannerLink.searchParams.set('children',String(children));
+ }
+ syncPlanLinks();
  let total=0;
  for(const {count,unit,price} of groups){
   if(!count.validity.valid||(unit&&!unit.validity.valid)){estimate.textContent='人数・料金は入力欄の範囲内の整数で入力してください';return;}
@@ -553,14 +565,21 @@ function updateEstimate(){
   total+=Number(count.value)*(price??Number(unit.value));
  }
  estimate.textContent='入場料の合計 '+total.toLocaleString('ja-JP')+'円';
- plannerLink.searchParams.set('admission',String(total));syncPlanLinks();
+ plannerLink.searchParams.set('admission',String(total));
+ planDirect.textContent='この内容でおでかけ準備';
+ syncPlanLinks();
 }
 fields.addEventListener('input',updateEstimate);updateEstimate();
+prepare.addEventListener('click',event=>{
+ if(plannerLink.searchParams.has('admission'))return;
+ event.preventDefault();
+ planButton.click();
+});
 admissionNote.textContent=(admission?.note??(d.free?'入場・基本利用は無料。':'利用日と年齢区分に合う公式料金を入力してください。無料の区分は0円です。'))+' 駐車場・交通費・食事・有料体験は別途。';
 const ratesLink=official.cloneNode(true);ratesLink.href=admission?.url||ticketUrl||spaFees[d.name]||d.official;ratesLink.textContent='公式料金・施設案内';
 plan.append(ratesLink,admissionNote,fields,estimate);
 const routeTitle=document.createElement('strong');routeTitle.textContent='移動時間';
-const routeHint=document.createElement('p');routeHint.textContent='Googleマップで出発地を指定すると、ルートと所要時間の目安が表示されます。';
+const routeHint=document.createElement('p');routeHint.textContent='Googleマップで所要時間を確認し、下に入力すると準備画面に引き継げます。';
 const transit=driving.cloneNode(true);const transitRoute=new URL(route);transitRoute.searchParams.set('travelmode','transit');transit.href=transitRoute.href;transit.textContent='公共交通の所要時間';
 const hotels=maps.cloneNode(true);const hotelQuery=new URL('https://www.google.com/maps/search/');hotelQuery.search=new URLSearchParams({api:'1',query:[d.name,d.area,d.pref,'近くのホテル'].join(' ')}).toString();hotels.href=hotelQuery.href;hotels.textContent='近くのホテルを探す';
 const travelField=document.createElement('label');travelField.className='plan-travel-field';travelField.textContent='確認した片道の時間（分・任意）';
@@ -571,7 +590,15 @@ travelInput.addEventListener('input',()=>{
  else plannerLink.searchParams.delete('travel');
  syncPlanLinks();
 });
-plan.append(routeTitle,routeHint,driving,transit,travelField,hotels,planDirect);
+const transportField=document.createElement('label');transportField.className='plan-travel-field';transportField.textContent='交通費・駐車場の合計（円・任意）';
+const transportInput=document.createElement('input');transportInput.type='number';transportInput.min='0';transportInput.max='999999999';transportInput.step='1';transportInput.inputMode='numeric';
+transportField.append(transportInput);
+transportInput.addEventListener('input',()=>{
+ if(transportInput.value!==''&&transportInput.validity.valid)plannerLink.searchParams.set('transport',transportInput.value);
+ else plannerLink.searchParams.delete('transport');
+ syncPlanLinks();
+});
+plan.append(routeTitle,routeHint,driving,transit,travelField,transportField,hotels,planDirect);
 content.append(prepare,planButton,plan,official,maps,favorite,share,shareStatus,shareInput);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
 $('mapSearch').parentElement.hidden=favoritesOnly;

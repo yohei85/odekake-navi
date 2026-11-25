@@ -124,7 +124,7 @@ input:focus,textarea:focus,select:focus{border-color:#35a9ed;box-shadow:0 0 0 4p
  <h1>おでかけ準備</h1>
  <p>行く日と出発時間を決めて、持ち物や予算をまとめましょう。</p>
 </section>
-<section class="card" id="incomingPlace" aria-labelledby="incomingPlaceLabel" hidden><h2 class="section-title" id="incomingPlaceLabel"></h2><p>前に保存した行き先があります。今回選んだ施設に切り替えるには、下のボタンを押してください。</p><button type="button" class="btn" id="useIncomingPlace">この施設で準備する</button></section>
+<section class="card" id="incomingPlace" aria-labelledby="incomingPlaceLabel" hidden><h2 class="section-title" id="incomingPlaceLabel"></h2><p>前に保存した行き先があります。今回選んだ施設と、カードで確認した料金・所要時間を反映するには、下のボタンを押してください。</p><button type="button" class="btn" id="useIncomingPlace">この施設で準備する</button></section>
 <section class="progress-card" aria-live="polite">
  <div class="progress-head"><span>持ち物の準備状況</span><span class="progress-num" id="progressText">0 / 0 完了</span></div>
  <div class="track"><div class="bar" id="progressBar"></div></div>
@@ -383,8 +383,17 @@ const placeList=$("placeSuggestions");destinations.forEach(d=>{const o=document.
 document.querySelectorAll(".quick-pick[data-fill]").forEach(b=>b.addEventListener("click",()=>{const field=$(b.dataset.fill);field.value=b.dataset.value;field.dispatchEvent(new Event("input",{bubbles:true}));persist();toast(field.value+"を選択しました")}));
 function syncPeople(){const a=Number($("adultCount").value),c=Number($("childCount").value);$("people").value=`大人${a}人・子ども${c}人`;persist()}
 $("adultCount").addEventListener("change",syncPeople);$("childCount").addEventListener("change",syncPeople);
+function setPeopleCounts(adults,children){
+ for(const [id,count] of [["adultCount",adults],["childCount",children]]){
+  const field=$(id);
+  if(!Array.from(field.options).some(option=>option.value===count))field.add(new Option(count+"人",count));
+  field.value=count;
+ }
+ syncPeople();
+}
 load();
-{const m=($("people").value||"").match(/大人(\d+)人・子ども(\d+)人/);if(m){$("adultCount").value=m[1];$("childCount").value=m[2]}else syncPeople()}
+const savedPeople=$("people").value.match(/^大人(\d+)人・子ども(\d+)人$/);
+if(savedPeople)setPeopleCounts(savedPeople[1],savedPeople[2]);
 drawDestinations();
 const plannerUrl=new URL(location.href);
 const incomingName=plannerUrl.searchParams.get("place")?.trim();
@@ -392,23 +401,29 @@ if(incomingName&&incomingName.length<=150){
  const found=destinations.find(destination=>destination.name===incomingName);
  const isSpa=plannerUrl.searchParams.get("kind")==="温泉";
  const incoming=found||{name:incomingName,...(isSpa?{pack:["タオル","着替え","替えのおむつ"]}:{})};
- const admissionTotal=plannerUrl.searchParams.get('admission');
- const hasAdmission=admissionTotal!==null&&/^\d{1,9}$/.test(admissionTotal);
- const incomingTravel=plannerUrl.searchParams.get('travel');
+ const params=plannerUrl.searchParams;
+ function incomingNumber(key,min,max){
+  const value=params.get(key);
+  if(value===null||!/^\d{1,9}$/.test(value))return null;
+  const number=Number(value);
+  return number>=min&&number<=max?String(number):null;
+ }
  const applyIncoming=()=>{
-  if(incomingTravel!==null&&/^\d{1,4}$/.test(incomingTravel)&&Number(incomingTravel)>=1&&Number(incomingTravel)<=1440){$('travelMinutes').value=String(Number(incomingTravel));}
-  else if($('place').value.trim()!==incomingName){$('travelMinutes').value='';}
-  calc();
-  if(hasAdmission){
-   $('play').value=String(Number(admissionTotal));
-   calc();
+  const changed=$('place').value.trim()!==incomingName;
+  for(const [id,key,min,max] of [
+   ['play','admission',0,999999999],
+   ['travelMinutes','travel',1,1440],
+   ['transport','transport',0,999999999]
+  ]){
+   const value=incomingNumber(key,min,max);
+   if(value!==null||changed)$(id).value=value??'';
   }
+  const adults=incomingNumber('adults',0,99);
+  const children=incomingNumber('children',0,396);
+  if(adults!==null&&children!==null)setPeopleCounts(adults,children);
   selectDestination(incoming);
   $("incomingPlace").hidden=true;
-  plannerUrl.searchParams.delete("place");
-  plannerUrl.searchParams.delete("kind");
-  plannerUrl.searchParams.delete("admission");
-  plannerUrl.searchParams.delete("travel");
+  for(const key of ['place','kind','admission','travel','transport','adults','children'])params.delete(key);
   history.replaceState(history.state,"",plannerUrl.href);
  };
  const savedPlace=$("place").value.trim();
