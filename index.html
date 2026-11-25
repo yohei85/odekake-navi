@@ -512,7 +512,7 @@ const plan=document.createElement('dialog');
 plan.className='outing-plan';
 plan.setAttribute('aria-label',d.name+'の料金・行き方');
 const planButton=document.createElement('button');
-planButton.type='button';planButton.className='outing-plan-button';
+planButton.type='button';planButton.className='outing-plan-button';planButton.dataset.facility=spotKey(d);
 planButton.textContent='料金・行き方を見る';planButton.setAttribute('aria-haspopup','dialog');
 const planHeader=document.createElement('div');planHeader.className='outing-plan-header';
 const planHeading=document.createElement('h3');planHeading.textContent=d.name;
@@ -581,7 +581,7 @@ fields.addEventListener('input',updateEstimate);updateEstimate();
 function rememberFacility(){
  try{
   sessionStorage.setItem('odekake-facility-handoff',JSON.stringify({
-   name:d.name,area:d.area,pref:d.pref,official:d.official,
+   name:d.name,key:spotKey(d),area:d.area,pref:d.pref,official:d.official,
    tickets:ticketUrl||admission?.url||spaFees[d.name]||''
   }));
  }catch{}
@@ -713,7 +713,8 @@ partyForm.addEventListener('submit',event=>{
  render();
 });
 const sumParty=(counts,indexes)=>indexes.reduce((sum,index)=>sum+counts[index],0);
-const incomingSpot=new URLSearchParams(location.search).get('spot');
+const incomingParams=new URLSearchParams(location.search);
+const incomingSpot=incomingParams.get('spot');
 const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
 if(incomingDestination)$('keyword').value=incomingDestination.name;
 const categoryKinds=new Map([['onsen','温泉'],['indoor','屋内']]);
@@ -723,6 +724,13 @@ if(!incomingDestination && incomingCategory){
  incomingCategory.click();
 }else{
  render();
+}
+if(incomingDestination&&incomingParams.get('review')==='admission'){
+ const button=Array.from($('cards').querySelectorAll('.outing-plan-button')).find(button=>button.dataset.facility===incomingSpot);
+ if(button){
+  button.scrollIntoView({block:'center'});
+  button.click();
+ }
 }
 </script></body></html>
 
