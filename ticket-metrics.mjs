@@ -15,13 +15,19 @@ const surfaces = new Set(['card', 'guide']);
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname !== '/api/ticket-click') return env.ASSETS.fetch(request);
+    const isHotelClick = url.pathname === '/api/hotel-click';
+    if (!isHotelClick && url.pathname !== '/api/ticket-click') return env.ASSETS.fetch(request);
     const headers = { 'Cache-Control': 'no-store' };
     if (request.method !== 'POST') return new Response(null, { status: 405, headers: { ...headers, Allow: 'POST' } });
 
     const origin = request.headers.get('Origin');
     if ((origin && origin !== url.origin) || request.headers.get('Sec-Fetch-Site') === 'cross-site') {
       return new Response(null, { status: 403, headers });
+    }
+    if (isHotelClick) {
+      if (request.body) return new Response(null, { status: 400, headers });
+      console.log({ event: 'hotel_click', surface: 'planner' });
+      return new Response(null, { status: 204, headers });
     }
     if (!(request.headers.get('Content-Type') || '').startsWith('application/x-www-form-urlencoded')) {
       return new Response(null, { status: 415, headers });
