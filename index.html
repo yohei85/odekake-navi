@@ -156,6 +156,7 @@ for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-sc
  }
 }
 const facilityTickets=new Map([
+ ["もりのゆうえんち","https://www.senyo.co.jp/morinoyuenchi/ticket%26coupon.html"],
   [
     "東京ディズニーランド",
     "https://www.tokyodisneyresort.jp/ticket/index.html"
@@ -209,6 +210,10 @@ const spaFees={
   "のだ温泉 ほのか": "https://yudokoro-honoka.jp/noda/fee/"
 };
 const facilityVisitInfo={
+ "もりのゆうえんち":{"料金":"入園無料。乗り物券やフリーパスは有料。","子どもの利用":"年齢や付き添いの条件は乗り物ごとに異なります。","駐車場":"無料。イオンノア店に隣接しています。"},
+ "道の駅べに花の郷おけがわ":{"営業時間":"施設案内は9:00〜17:00。店舗・季節によって異なります。","車でのアクセス":"圏央道の桶川北本ICから約1分。普通車の駐車枠は約280台。"},
+ "横浜アンパンマンこどもミュージアム":{"チケット":"2・3階のミュージアムは日時指定WEBチケットが必要。","料金":"1歳以上2,200〜2,800円。来館日によって変動。1階のショップ・飲食エリアは入場無料。"},
+ "国立科学博物館 上野本館":{"常設展":"一般・大学生は630円。高校生以下と65歳以上は無料。","特別展":"常設展とは別の料金や入場方法が設定される場合があります。"},
  "よこはまコスモワールド":{"料金":"入園無料。乗り物ごとに料金がかかります。","駐車場":"専用駐車場なし。"},
  "野毛山動物園":{"入園料":"無料。"},
  "大宮公園小動物園":{"利用案内":"開園日やイベントは公式案内で確認。"},
@@ -264,6 +269,10 @@ const facilityVisitInfo={
   }
 };
 const facilityImages={
+ "もりのゆうえんち":{"fallbackCategory":0,"file":"Morinoyuuenchi.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Morinoyuuenchi.jpg/330px-Morinoyuuenchi.jpg","author":"Xser21","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
+ "道の駅べに花の郷おけがわ":{"fallbackCategory":5,"file":"Michinoeki_Benibananosato_Okegawa_202509.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Michinoeki_Benibananosato_Okegawa_202509.jpg/330px-Michinoeki_Benibananosato_Okegawa_202509.jpg","author":"Kaze315","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
+ "横浜アンパンマンこどもミュージアム":{"fallbackCategory":5,"file":"Yokohama_Anpanman_Children's_Museum_2019_-_05.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Yokohama_Anpanman_Children%27s_Museum_2019_-_05.jpg/330px-Yokohama_Anpanman_Children%27s_Museum_2019_-_05.jpg","author":"Thirteen-fri","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/"},
+ "国立科学博物館 上野本館":{"fallbackCategory":5,"file":"National_Museum_of_Nature_and_Science.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/National_Museum_of_Nature_and_Science.jpg/330px-National_Museum_of_Nature_and_Science.jpg","author":"Syced","license":"CC0 1.0","terms":"https://creativecommons.org/publicdomain/zero/1.0/"},
  "サンリオピューロランド":{"file":"Sanrio_Puroland.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Sanrio_Puroland.jpg/330px-Sanrio_Puroland.jpg","author":"Kakidai","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/","sceneClass":"indoor-play-scene","cell":0},
  "キッザニア東京":{"file":"KidZania_Tokyo.jpg","photo":"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/KidZania_Tokyo.jpg/330px-KidZania_Tokyo.jpg","author":"しんぎんぐきゃっと","license":"CC BY-SA 4.0","terms":"https://creativecommons.org/licenses/by-sa/4.0/","sceneClass":"indoor-play-scene","cell":1},
  "レゴランド・ディスカバリー・センター東京":{"file":"レゴランド・ディスカバリー・センター東京_(20875685015).jpg","photo":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/%E3%83%AC%E3%82%B4%E3%83%A9%E3%83%B3%E3%83%89%E3%83%BB%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AB%E3%83%90%E3%83%AA%E3%83%BC%E3%83%BB%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%E6%9D%B1%E4%BA%AC_(20875685015).jpg/330px-%E3%83%AC%E3%82%B4%E3%83%A9%E3%83%B3%E3%83%89%E3%83%BB%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AB%E3%83%90%E3%83%AA%E3%83%BC%E3%83%BB%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%E6%9D%B1%E4%BA%AC_(20875685015).jpg","author":"alberth2","license":"CC BY-SA 2.0","terms":"https://creativecommons.org/licenses/by-sa/2.0/","sceneClass":"indoor-play-scene","cell":2},
@@ -539,6 +548,7 @@ estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
 const revisedOarai=Date.now()>=Date.parse('2027-03-08T00:00:00+09:00');
 const admission={
+ "国立科学博物館 上野本館":{"rates":[["一般・大学生",630],["高校生以下",0]],"bands":[[0],[1,2,3,4,5,6]],"note":"上野本館の常設展。65歳以上は無料ですが、この見積もりの大人欄は一般料金です。特別展は公式案内をご確認ください。","url":"https://www.kahaku.go.jp/riyou/nyukan-annai/e-ticket.html"},
  "東武動物公園":{"rates":[["大人",2300],["中・高校生",1800],["3歳〜小学生",1000],["2歳以下",0]],"bands":[[0],[1,2],[3,4,5],[6]],"note":"通常の入園料。乗り物・プール・60歳以上の割引は公式案内をご確認ください。","url":"https://www.tobuzoo.com/ticket/chargelist/"},
  "新江ノ島水族館":{"rates":[["大人",2800],["高校生",1800],["小・中学生",1300],["3歳以上の未就学児",900],["3歳未満",0]],"bands":[[0],[1],[2,3],[4,5],[6]],"note":"通常の入場料。高校生は入場時に学生証などの提示が必要です。","url":"https://www.enosui.com/basicinfo.php"},
  'アクアワールド茨城県大洗水族館':{
