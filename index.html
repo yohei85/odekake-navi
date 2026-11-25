@@ -640,6 +640,9 @@ estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
 const revisedOarai=Date.now()>=Date.parse('2027-03-08T00:00:00+09:00');
 const admission={
+ "地下鉄博物館":{"rates":[["高校生以上",220],["4歳〜中学生",100],["3歳以下",0]],"bands":[[0,1],[2,3,4],[5,6]],"note":"通常入館料。割引は公式案内をご確認ください。","url":"https://chikahaku.jp/about/"},
+ "カップヌードルミュージアム 横浜":{"rates":[["大学生以上",500],["高校生以下",0]],"bands":[[0],[1,2,3,4,5,6]],"note":"入館料の目安。体験や一部のアトラクションは別料金です。","url":"https://www.cupnoodles-museum.jp/ja/yokohama/guide/admission/"},
+ "横浜・八景島シーパラダイス":{"rates":[["大人・高校生",3500],["小・中学生",2200],["4歳以上の未就学児",1200],["3歳以下",0]],"bands":[[0,1],[2,3],[4],[5,6]],"note":"水族館4施設のアクアリゾーツパスの通常料金。65歳以上は3,000円。乗り物付きのワンデーパスは別料金です。","url":"https://www.seaparadise.co.jp/price/"},
  "しながわ水族館":{"rates":[["高校生以上",1350],["小・中学生",600],["4歳以上の未就学児",300],["3歳以下",0]],"bands":[[0,1],[2,3],[4],[5,6]],"note":"一般入館料。65歳以上や品川区在住・在勤・在学の方は公式の料金をご確認ください。","url":"https://www.aquarium.gr.jp/price"},
  "千葉市動物公園":{"rates":[["高校生以上",800],["中学生以下",0]],"bands":[[0,1],[2,3,4,5,6]],"note":"通常入園料。中学生以下は無料です。","url":"https://www.city.chiba.jp/zoo/guide/index.html"},
  "栃木県なかがわ水遊園":{"rates":[["高校生以上",900],["小・中学生",300],["未就学児",0]],"bands":[[0,1],[2,3],[4,5,6]],"note":"おもしろ魚館の入館料。つり池などの体験は公式案内をご確認ください。","url":"https://tnap.jp/subcontents/faq.php"},
