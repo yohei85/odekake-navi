@@ -561,7 +561,7 @@ const planHeading=document.createElement('h3');planHeading.textContent=d.name;
 const planClose=document.createElement('button');planClose.type='button';planClose.textContent='閉じる';planClose.autofocus=true;
 planClose.addEventListener('click',()=>plan.close());
 plan.addEventListener('close',()=>planButton.focus({preventScroll:true}));
-planButton.addEventListener('click',()=>{plan.showModal();plan.scrollTop=0;});
+planButton.addEventListener('click',()=>{refreshSavedTravel();plan.showModal();plan.scrollTop=0;});
 planHeader.append(planHeading,planClose);
 const feeTitle=document.createElement('strong');
 feeTitle.textContent='入場料の目安';
@@ -658,6 +658,11 @@ totalField.hidden=Boolean(admission||d.free);
 if(!totalField.hidden)totalInput.addEventListener('input',updateEstimate);
 fields.addEventListener('input',updateEstimate);updateEstimate();
 function rememberFacility(){
+ if(travelOrigin&&travelOrigin===savedOrigin&&!coords&&plannerLink.searchParams.has('travel')){
+  const entry={origin:travelOrigin,spot:spotKey(d),minutes:Number(plannerLink.searchParams.get('travel'))};
+  const history=readTravelHistory().filter(item=>item?.origin!==entry.origin||item?.spot!==entry.spot);
+  try{localStorage.setItem(travelHistoryKey,JSON.stringify([entry,...history].slice(0,40)));}catch{}
+ }
  try{
   sessionStorage.setItem('odekake-facility-handoff',JSON.stringify({
    name:d.name,key:spotKey(d),area:d.area,pref:d.pref,official:d.official,
@@ -685,11 +690,30 @@ const hotels=maps.cloneNode(true);const hotelQuery=new URL('https://www.google.c
 const travelField=document.createElement('label');travelField.className='plan-travel-field';travelField.textContent='確認した片道の時間（分・任意）';
 const travelInput=document.createElement('input');travelInput.type='number';travelInput.min='1';travelInput.max='1440';travelInput.step='1';travelInput.inputMode='numeric';
 travelField.append(travelInput);
-travelInput.addEventListener('input',()=>{
+let travelOrigin='';
+travelInput.addEventListener('input',event=>{
+ if(event.isTrusted)travelOrigin=coords?'':savedOrigin;
  if(travelInput.value&&travelInput.validity.valid)plannerLink.searchParams.set('travel',travelInput.value);
  else plannerLink.searchParams.delete('travel');
  syncPlanLinks();
 });
+const reuseTravel=document.createElement('button');
+reuseTravel.type='button';
+reuseTravel.className='outing-plan-button';
+reuseTravel.hidden=true;
+function refreshSavedTravel(){
+ const previous=coords||!savedOrigin?null:readTravelHistory().find(item=>
+  item?.origin===savedOrigin&&item?.spot===spotKey(d)&&Number.isInteger(item.minutes)&&item.minutes>=1&&item.minutes<=1440
+ );
+ reuseTravel.hidden=!previous;
+ if(!previous)return;
+ reuseTravel.textContent='前回の片道 '+previous.minutes+'分を使う';
+ reuseTravel.onclick=()=>{
+  travelOrigin=previous.origin;
+  travelInput.value=String(previous.minutes);
+  travelInput.dispatchEvent(new Event('input',{bubbles:true}));
+ };
+}
 const transportField=document.createElement('label');transportField.className='plan-travel-field';transportField.textContent='交通費・駐車場の合計（円・任意）';
 const transportInput=document.createElement('input');transportInput.type='number';transportInput.min='0';transportInput.max='999999999';transportInput.step='1';transportInput.inputMode='numeric';
 transportField.append(transportInput);
@@ -725,7 +749,7 @@ if(reviewDraft?.key===spotKey(d)){
   estimate.before(savedBudget);
  }
 }
-plan.append(routeTitle,routeHint,driving,transit,travelField,transportField,hotels,transferPreview,planDirect);
+plan.append(routeTitle,routeHint,driving,transit,travelField,reuseTravel,transportField,hotels,transferPreview,planDirect);
 content.append(prepare,planButton,plan,official,maps,favorite,share,shareStatus,shareInput);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
 $('mapSearch').parentElement.hidden=favoritesOnly;
@@ -824,6 +848,14 @@ partyForm.addEventListener('submit',event=>{
 });
 const sumParty=(counts,indexes)=>indexes.reduce((sum,index)=>sum+counts[index],0);
 const routeOriginKey='odekake-route-origin';
+const travelHistoryKey='odekake-route-times';
+function readTravelHistory(){
+ try{
+  const entries=JSON.parse(localStorage.getItem(travelHistoryKey));
+  if(Array.isArray(entries))return entries.slice(0,40);
+ }catch{}
+ return [];
+}
 let savedOrigin='';
 try{savedOrigin=(localStorage.getItem(routeOriginKey)||'').trim().slice(0,100);}catch{}
 const originInput=$('routeOrigin');
@@ -834,11 +866,17 @@ function setRouteOrigin(route){
  else route.searchParams.delete('origin');
 }
 function saveRouteOrigin(value){
+ const previousOrigin=savedOrigin;
  savedOrigin=value.trim().slice(0,100);
  originInput.value=savedOrigin;
  try{
   if(savedOrigin)localStorage.setItem(routeOriginKey,savedOrigin);
-  else localStorage.removeItem(routeOriginKey);
+  else{
+   localStorage.removeItem(routeOriginKey);
+   const remaining=readTravelHistory().filter(item=>item?.origin!==previousOrigin);
+   if(remaining.length)localStorage.setItem(travelHistoryKey,JSON.stringify(remaining));
+   else localStorage.removeItem(travelHistoryKey);
+  }
   $('originStatus').textContent=savedOrigin?'出発地を保存しました。'+(coords?'現在地を取得済みの場合、施設カードの地図リンクでは現在地を優先します。':''):'保存した出発地を消しました。';
  }catch{
   $('originStatus').textContent='このページの地図リンクに反映しました。';
