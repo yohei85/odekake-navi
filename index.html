@@ -135,7 +135,14 @@ const destinations=[
  {"name":"すみだ水族館","pref":"東京都","area":"墨田区","kind":["水族館"],"desc":"東京スカイツリータウンにある水族館。","official":"https://www.sumida-aquarium.com/about/price/","aliases":["墨田水族館","スカイツリー水族館","ソラマチ水族館"]},
  {"name":"ファンタジーキッズリゾート イオン海老名店","pref":"神奈川県","area":"海老名市","kind":["屋内遊び場"],"desc":"イオン海老名の屋内遊び場。おむつ替え室があります。","official":"https://fantasyresort.jp/ebina/system/","aliases":["ファンタジーキッズリゾート海老名","海老名ファンタジーキッズ"],"preschool":true},
  {"name":"彩湖・道満グリーンパーク","pref":"埼玉県","area":"戸田市","kind":["公園・自然"],"desc":"彩湖のそばにある公園。利用できる施設や駐車場は公式案内で確認できます。","official":"https://www.toda-kousha.com/park/saikodoman/","aliases":["道満グリーンパーク","彩湖道満","さいこどうまん"]},
- {"name":"さいたま清河寺温泉","pref":"埼玉県","area":"さいたま市西区","kind":["温泉・スーパー銭湯"],"desc":"竹林を眺めながら天然温泉に入れる日帰り施設。","official":"https://www.seiganji-onsen.com/","aliases":["清河寺温泉","せいがんじ温泉"]}
+ {"name":"さいたま清河寺温泉","pref":"埼玉県","area":"さいたま市西区","kind":["温泉・スーパー銭湯"],"desc":"竹林を眺めながら天然温泉に入れる日帰り施設。","official":"https://www.seiganji-onsen.com/","aliases":["清河寺温泉","せいがんじ温泉"]},
+ {"name":"横浜アンパンマンこどもミュージアム","pref":"神奈川県","area":"横浜市西区","kind":["屋内遊び場"],"rain":true,"preschool":true,"desc":"アンパンマンの世界で遊べる屋内ミュージアム。2・3階に入る日のチケットを公式案内で確認できます。","official":"https://www.yokohama-anpanman.jp/guide/"},
+ {"name":"東京おもちゃ美術館","pref":"東京都","area":"新宿区","kind":["屋内遊び場"],"rain":true,"preschool":true,"desc":"木のおもちゃで遊べる美術館。2歳以下向けの赤ちゃん木育ひろばや、3歳以上も遊べる部屋があります。","official":"https://art-play.or.jp/ttm/info/"},
+ {"name":"国立科学博物館 上野本館","pref":"東京都","area":"台東区","kind":["屋内遊び場"],"rain":true,"desc":"上野公園の科学博物館。日本館と地球館で標本や資料を見学できます。","official":"https://www.kahaku.go.jp/riyou/kannai-guide/"},
+ {"name":"あらかわ遊園","pref":"東京都","area":"荒川区","kind":["遊園地","動物・ふれあい"],"preschool":true,"desc":"観覧車や豆汽車、どうぶつ広場がある遊園地。遊具ごとの利用条件や予約の案内を確認できます。","official":"https://www.city.arakawa.tokyo.jp/a038/yuuen/guide/index.html"},
+ {"name":"足立区生物園","pref":"東京都","area":"足立区","kind":["動物・ふれあい"],"preschool":true,"desc":"大温室を飛ぶチョウや、大水槽の金魚などを観察できます。","official":"https://www.city.adachi.tokyo.jp/k-iji/shisetsu/toshokan/2022seibutuen.html"},
+ {"name":"日立市かみね動物園","pref":"茨城県","area":"日立市","kind":["動物・ふれあい"],"preschool":true,"desc":"かみね公園にある動物園。開園時間と入園料は公式案内で確認できます。","official":"https://www.city.hitachi.lg.jp/zoo/annai/1004042.html"},
+ {"name":"かみね遊園地","pref":"茨城県","area":"日立市","kind":["遊園地"],"preschool":true,"free":true,"desc":"かみね動物園の隣にある低年齢向けの遊園地。入園は無料で、観覧車などの乗り物には別料金がかかります。","official":"https://www.city.hitachi.lg.jp/citypromotion/1018000/1018003/1018016/1018026.html"}
 ];
 const categoryScenes=new Map();
 for(const [kind,sceneClass] of [['水族館','aquarium-scene'],['動物','zoo-scene'],['屋内遊び場','indoor-play-scene']]){
