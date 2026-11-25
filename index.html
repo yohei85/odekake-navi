@@ -582,7 +582,8 @@ function rememberFacility(){
  try{
   sessionStorage.setItem('odekake-facility-handoff',JSON.stringify({
    name:d.name,key:spotKey(d),area:d.area,pref:d.pref,official:d.official,
-   tickets:ticketUrl||admission?.url||spaFees[d.name]||''
+   tickets:ticketUrl||admission?.url||spaFees[d.name]||'',
+   quote:groups.map(({count,unit},index)=>({label:rates[index][0],count:count.value,unit:unit?.value??''}))
   }));
  }catch{}
 }
@@ -615,6 +616,32 @@ transportInput.addEventListener('input',()=>{
  else plannerLink.searchParams.delete('transport');
  syncPlanLinks();
 });
+if(reviewDraft?.key===spotKey(d)){
+ const restore=(input,value)=>{
+  if(!input||typeof value!=='string'||!/^\d{0,9}$/.test(value))return;
+  const previous=input.value;
+  input.value=value;
+  if(!input.validity.valid)input.value=previous;
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+ };
+ if(Array.isArray(reviewDraft.quote)){
+  groups.forEach(({count,unit},index)=>{
+   const record=reviewDraft.quote[index];
+   if(record?.label!==rates[index][0])return;
+   restore(count,record.count);
+   restore(unit,record.unit);
+  });
+  updateEstimate();
+ }
+ restore(travelInput,reviewDraft.travel);
+ restore(transportInput,reviewDraft.transport);
+ const previousPlay=reviewDraft.play;
+ if(typeof previousPlay==='string'&&/^\d{1,9}$/.test(previousPlay)){
+  const savedBudget=document.createElement('p');
+  savedBudget.textContent='準備画面の遊び代 '+Number(previousPlay).toLocaleString('ja-JP')+'円';
+  estimate.before(savedBudget);
+ }
+}
 plan.append(routeTitle,routeHint,driving,transit,travelField,transportField,hotels,planDirect);
 content.append(prepare,planButton,plan,official,maps,favorite,share,shareStatus,shareInput);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
@@ -716,6 +743,13 @@ const sumParty=(counts,indexes)=>indexes.reduce((sum,index)=>sum+counts[index],0
 const incomingParams=new URLSearchParams(location.search);
 const incomingSpot=incomingParams.get('spot');
 const incomingDestination=destinations.find(d=>spotKey(d)===incomingSpot);
+let reviewDraft=null;
+if(incomingDestination&&incomingParams.get('review')==='admission'){
+ try{
+  const draft=JSON.parse(sessionStorage.getItem('odekake-admission-review'));
+  if(draft?.key===incomingSpot)reviewDraft=draft;
+ }catch{}
+}
 if(incomingDestination)$('keyword').value=incomingDestination.name;
 const categoryKinds=new Map([['onsen','温泉'],['indoor','屋内']]);
 const incomingKind=categoryKinds.get(new URLSearchParams(location.search).get('category'));
