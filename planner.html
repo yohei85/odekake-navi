@@ -363,7 +363,12 @@ function updateFacilityLinks(){
  }
  const query=[name,facility?.area,facility?.pref].filter(Boolean).join(' ');
  $('facilityMap').href='https://www.google.com/maps/search/?'+new URLSearchParams({api:'1',query});
- $('facilityRoute').href='https://www.google.com/maps/dir/?'+new URLSearchParams({api:'1',destination:query});
+ const routeParams=new URLSearchParams({api:'1',destination:query});
+ try{
+  const origin=(localStorage.getItem('odekake-route-origin')||'').trim().slice(0,100);
+  if(origin)routeParams.set('origin',origin);
+ }catch{}
+ $('facilityRoute').href='https://www.google.com/maps/dir/?'+routeParams;
  $('facilityHotels').href='https://www.google.com/maps/search/?'+new URLSearchParams({api:'1',query:query+' 周辺のホテル・旅館'});
  const spot=facility?.key||(facility?.pref&&facility?.area?[facility.pref,facility.area,name].join('|'):'');
  const review=$('reviewAdmission');
@@ -492,6 +497,8 @@ const savedPeople=$("people").value.match(/^大人(\d+)人・子ども(\d+)人$/
 if(savedPeople)setPeopleCounts(savedPeople[1],savedPeople[2]);
 drawDestinations();
 updateFacilityLinks();
+window.addEventListener("pageshow",updateFacilityLinks);
+window.addEventListener("storage",event=>{if(event.key==="odekake-route-origin")updateFacilityLinks();});
 const plannerUrl=new URL(location.href);
 const incomingName=plannerUrl.searchParams.get("place")?.trim();
 if(incomingName&&incomingName.length<=150){
