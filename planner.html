@@ -159,6 +159,7 @@ textarea { resize: vertical; min-height: 100px; }
   <a id="facilityMap" target="_blank" rel="noopener">地図 ↗</a>
   <a id="facilityRoute" target="_blank" rel="noopener">行き方・所要時間 ↗</a>
   <a id="reviewAdmission" hidden>料金を見直す</a>
+  <a id="facilityHotels" target="_blank" rel="noopener">近くの宿を探す ↗</a>
  </div>
  <details class="destination-tools" id="destinationTools">
   <summary>施設候補から選ぶ</summary>
@@ -362,6 +363,7 @@ function updateFacilityLinks(){
  const query=[name,facility?.area,facility?.pref].filter(Boolean).join(' ');
  $('facilityMap').href='https://www.google.com/maps/search/?'+new URLSearchParams({api:'1',query});
  $('facilityRoute').href='https://www.google.com/maps/dir/?'+new URLSearchParams({api:'1',destination:query});
+ $('facilityHotels').href='https://www.google.com/maps/search/?'+new URLSearchParams({api:'1',query:query+' 周辺のホテル・旅館'});
  const spot=facility?.key||(facility?.pref&&facility?.area?[facility.pref,facility.area,name].join('|'):'');
  const review=$('reviewAdmission');
  review.hidden=!spot;
@@ -377,6 +379,11 @@ function updateFacilityLinks(){
   }catch{}
  };
 }
+$('facilityHotels').addEventListener('click',event=>{
+ if(event.defaultPrevented)return;
+ if(navigator.sendBeacon?.('/api/hotel-click'))return;
+ fetch('/api/hotel-click',{method:'POST',keepalive:true}).catch(()=>{});
+});
 function selectDestination(d){
  activeFacility={name:d.name,key:d.key,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets,quote:d.quote};
  const placeField=$("place");
