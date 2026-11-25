@@ -34,7 +34,7 @@ body{background:#f4f7ff;color:#172b53}.hero{background-image:linear-gradient(105
 .nav-icon{display:grid;place-items:center;width:35px;height:35px;border-radius:12px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:20px;line-height:1}
 .nav-home{background:#e1efff}.nav-spots{background:#ffe8ef}.nav-map{background:#def6ed}.nav-plan{background:#fff1d1}
 .wrap{padding-bottom:calc(95px + env(safe-area-inset-bottom))}
-</style><script src="./ticket-clicks.js" defer></script></head><body><header class="hero"><small>子どもと行ける遊び場・お出かけ先</small><h1>関東お出かけナビ</h1><p>遊園地・水族館・室内遊び・日帰り温泉</p></header><main class="wrap"><div class="search"><input id="keyword" placeholder="施設名・エリアをサクッと検索" aria-label="施設名・エリアを検索"></div><section class="trip-picker" aria-labelledby="trip-heading">
+.spot-more-actions{margin-top:7px;border-top:1px solid #e3edf6}.spot-more-actions summary{padding:9px 0;color:#194e80;font-size:13px;font-weight:750;cursor:pointer;overflow-wrap:anywhere}.spot-more-body{display:flex;flex-wrap:wrap;align-items:center;gap:7px}.spot-more-body a{display:inline-flex;align-items:center;min-height:38px}.spot-more-body button{min-height:40px}.spot-more-body [role="status"]:empty{display:none}.spot-more-body [role="status"],.spot-more-body .share-url{width:100%}</style><script src="./ticket-clicks.js" defer></script></head><body><header class="hero"><small>子どもと行ける遊び場・お出かけ先</small><h1>関東お出かけナビ</h1><p>遊園地・水族館・室内遊び・日帰り温泉</p></header><main class="wrap"><div class="search"><input id="keyword" placeholder="施設名・エリアをサクッと検索" aria-label="施設名・エリアを検索"></div><section class="trip-picker" aria-labelledby="trip-heading">
  <h2 id="trip-heading">今日のおでかけ候補を探そう</h2>
  <form id="trip-picker-form">
   <label>何して遊ぶ？<select name="activity"><option value="all">おまかせ</option><option value="公園">公園・外遊び</option><option value="屋内">室内あそび</option><option value="水族館">水族館</option><option value="動物">動物園</option><option value="遊園地">遊園地</option><option value="温泉">日帰り温泉</option></select></label>
@@ -792,7 +792,15 @@ if(reviewDraft?.key===spotKey(d)){
  }
 }
 plan.append(routeTitle,routeHint,driving,transit,modeField,travelField,reuseTravel,transportField,hotels,transferPreview,planDirect);
-content.append(prepare,planButton,plan,official,maps,favorite,share,shareStatus,shareInput);
+const moreActions=document.createElement('details');
+moreActions.className='spot-more-actions';
+const moreSummary=document.createElement('summary');
+moreSummary.textContent='公式・地図・保存・共有';
+const moreBody=document.createElement('div');
+moreBody.className='spot-more-body';
+moreBody.append(official,maps,favorite,share,shareStatus,shareInput);
+moreActions.append(moreSummary,moreBody);
+content.append(prepare,planButton,plan,moreActions);
 if(photoCredit)content.append(photoCredit);el.append(art,content);$('cards').append(el)});$('favoritesToggle').setAttribute('aria-pressed',String(favoritesOnly));
 $('mapSearch').parentElement.hidden=favoritesOnly;
 $('mapSearch').parentElement.style.display=favoritesOnly?'none':'';
