@@ -725,6 +725,8 @@ let selectedTravelMode=travelMode.value;
 travelMode.addEventListener('change',()=>{
  timesByMode.set(selectedTravelMode,{value:travelInput.value,origin:travelOrigin});
  selectedTravelMode=travelMode.value;
+ if(selectedTravelMode)plannerLink.searchParams.set('travelmode',selectedTravelMode);
+ else plannerLink.searchParams.delete('travelmode');
  const previous=timesByMode.get(selectedTravelMode);
  travelInput.value=previous?.value??'';
  travelOrigin=previous?.origin??'';
@@ -764,6 +766,10 @@ if(reviewDraft?.key===spotKey(d)){
   updateEstimate();
  }
  if(!totalField.hidden)restore(totalInput,reviewDraft.quoteTotal);
+ if(['driving','transit'].includes(reviewDraft.travelMode)){
+  travelMode.value=reviewDraft.travelMode;
+  travelMode.dispatchEvent(new Event('change'));
+ }
  restore(travelInput,reviewDraft.travel);
  restore(transportInput,reviewDraft.transport);
  const previousPlay=reviewDraft.play;
