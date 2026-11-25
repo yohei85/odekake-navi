@@ -139,6 +139,7 @@ textarea { resize: vertical; min-height: 100px; }
  <h1>おでかけ準備</h1>
  <p>行き先・時間・予算をまとめて確認。</p>
 </section>
+<section class="card" id="incomingPlace" aria-labelledby="incomingPlaceLabel" hidden><h2 class="section-title" id="incomingPlaceLabel"></h2><p>前に保存した行き先があります。今回選んだ施設と、カードで確認した料金・所要時間を反映するには、下のボタンを押してください。</p><p id="incomingValues"></p><button type="button" class="btn" id="useIncomingPlace">この施設で準備する</button></section>
 <div class="trip-summary" aria-label="お出かけの概要">
  <a href="#trip"><span>行き先</span><strong id="summaryPlace">未設定</strong></a>
  <a href="#daySchedule"><span>到着の目安</span><strong id="summaryArrival">未設定</strong></a>
@@ -147,7 +148,7 @@ textarea { resize: vertical; min-height: 100px; }
 <nav class="section-links" aria-label="おでかけ準備の項目">
  <a href="#trip">予定</a><a href="#budget">予算</a><a href="#daySchedule">当日の流れ</a>
 </nav>
-<section class="card" id="incomingPlace" aria-labelledby="incomingPlaceLabel" hidden><h2 class="section-title" id="incomingPlaceLabel"></h2><p>前に保存した行き先があります。今回選んだ施設と、カードで確認した料金・所要時間を反映するには、下のボタンを押してください。</p><button type="button" class="btn" id="useIncomingPlace">この施設で準備する</button></section>
+
 
 
 <section class="card" id="trip">
@@ -190,7 +191,7 @@ textarea { resize: vertical; min-height: 100px; }
  <div class="grid">
   <div class="field"><label for="transport">交通費・駐車場（円）</label><input id="transport" type="number" min="0" inputmode="numeric" placeholder="0"></div>
   <div class="field"><label for="food">食事・飲み物（円）</label><input id="food" type="number" min="0" inputmode="numeric" placeholder="0"></div>
-  <div class="field"><label for="play">入場料・遊び代（円）</label><input id="play" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+  <div class="field"><label for="play">入場料・遊び代（円）</label><input id="play" type="number" min="0" inputmode="numeric" placeholder="未入力"></div>
   <div class="field"><label for="other">その他（円）</label><input id="other" type="number" min="0" inputmode="numeric" placeholder="0"></div>
  </div>
  <div class="budget-total"><span>予定予算の合計</span><strong><span id="total">0</span> 円</strong></div>
@@ -373,7 +374,7 @@ function updateFacilityLinks(){
   if(!spot)return;
   try{
    sessionStorage.setItem('odekake-admission-review',JSON.stringify({
-    key:spot,quote:facility?.quote,travel:$('travelMinutes').value,
+    key:spot,quote:facility?.quote,quoteTotal:facility?.quoteTotal,travel:$('travelMinutes').value,
     transport:$('transport').value,play:$('play').value
    }));
   }catch{}
@@ -385,7 +386,7 @@ $('facilityHotels').addEventListener('click',event=>{
  fetch('/api/hotel-click',{method:'POST',keepalive:true}).catch(()=>{});
 });
 function selectDestination(d){
- activeFacility={name:d.name,key:d.key,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets,quote:d.quote};
+ activeFacility={name:d.name,key:d.key,area:d.area,pref:d.pref,official:d.official,tickets:d.tickets,quote:d.quote,quoteTotal:d.quoteTotal};
  const placeField=$("place");
  placeField.value=d.name;
  placeField.dispatchEvent(new Event("input",{bubbles:true}));
@@ -500,7 +501,7 @@ if(incomingName&&incomingName.length<=150){
  try{
   const data=JSON.parse(sessionStorage.getItem('odekake-facility-handoff'));
   if(data?.name===incomingName){
-   handoff={key:typeof data.key==='string'?data.key.slice(0,300):'',area:typeof data.area==='string'?data.area.slice(0,150):'',pref:typeof data.pref==='string'?data.pref.slice(0,75):'',official:safeFacilityLink(data.official),tickets:safeFacilityLink(data.tickets),quote:Array.isArray(data.quote)?data.quote.slice(0,10):undefined};
+   handoff={key:typeof data.key==='string'?data.key.slice(0,300):'',area:typeof data.area==='string'?data.area.slice(0,150):'',pref:typeof data.pref==='string'?data.pref.slice(0,75):'',official:safeFacilityLink(data.official),tickets:safeFacilityLink(data.tickets),quote:Array.isArray(data.quote)?data.quote.slice(0,10):undefined,quoteTotal:typeof data.quoteTotal==='string'&&/^\d{1,9}$/.test(data.quoteTotal)?data.quoteTotal:undefined};
    sessionStorage.removeItem('odekake-facility-handoff');
   }
  }catch{}
@@ -533,6 +534,9 @@ if(incomingName&&incomingName.length<=150){
  const savedPlace=$("place").value.trim();
  if(savedPlace&&savedPlace!==incomingName){
   $("incomingPlaceLabel").textContent="選んだ施設： "+incomingName;
+  const fee=incomingNumber('admission',0,999999999);
+  const minutes=incomingNumber('travel',1,1440);
+  $('incomingValues').textContent='入場料 '+(fee===null?'未入力':Number(fee).toLocaleString('ja-JP')+'円')+' ／ 片道 '+(minutes===null?'未入力':minutes+'分');
   $("incomingPlace").hidden=false;
   $("useIncomingPlace").onclick=applyIncoming;
  }else{
