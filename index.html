@@ -640,6 +640,9 @@ estimate.className='admission-estimate';
 plan.append(planHeader,feeTitle);
 const revisedOarai=Date.now()>=Date.parse('2027-03-08T00:00:00+09:00');
 const admission={
+ "しながわ水族館":{"rates":[["高校生以上",1350],["小・中学生",600],["4歳以上の未就学児",300],["3歳以下",0]],"bands":[[0,1],[2,3],[4],[5,6]],"note":"一般入館料。65歳以上や品川区在住・在勤・在学の方は公式の料金をご確認ください。","url":"https://www.aquarium.gr.jp/price"},
+ "千葉市動物公園":{"rates":[["高校生以上",800],["中学生以下",0]],"bands":[[0,1],[2,3,4,5,6]],"note":"通常入園料。中学生以下は無料です。","url":"https://www.city.chiba.jp/zoo/guide/index.html"},
+ "栃木県なかがわ水遊園":{"rates":[["高校生以上",900],["小・中学生",300],["未就学児",0]],"bands":[[0,1],[2,3],[4,5,6]],"note":"おもしろ魚館の入館料。つり池などの体験は公式案内をご確認ください。","url":"https://tnap.jp/subcontents/faq.php"},
  "すみだ水族館":{"rates":[["大人",2700],["高校生",2000],["小・中学生",1400],["3歳以上の未就学児",900],["3歳未満",0]],"bands":[[0],[1],[2,3],[4,5],[6]],"note":"一般入場料。中学生・高校生の方は生徒手帳をご用意ください。","url":"https://www.sumida-aquarium.com/about/price/"},
  "むさしの村":{"rates":[["中学生以上",1200],["3歳〜小学生",650],["2歳以下",0]],"bands":[[0,1,2],[3,4,5],[6]],"note":"通常入園料。乗り物は別料金。65歳以上の入園料は年齢確認で650円です。","url":"https://www.musashinomura.co.jp/charge/"},
  "マザー牧場":{"rates":[["中学生以上",1800],["4歳〜小学生",900],["3歳以下",0]],"bands":[[0,1,2],[3,4],[5,6]],"note":"一般入場料。ツアー・乗り物・同伴犬は別料金です。","url":"https://www.motherfarm.co.jp/ticket/index.php"},
