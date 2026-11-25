@@ -40,9 +40,9 @@ body { background:var(--shell); color:var(--ink-main); }
 .hero { display:block; min-height:0; padding:0; background:#fff5fa; }
 .hero-inner { position:relative; max-width:980px; margin:auto; overflow:hidden; border-radius:0 0 28px 28px; background:#bde8ff; }
 .hero-inner img { display:block; width:100%; height:clamp(280px,84vw,440px); object-fit:cover; object-position:center 54%; }
-.hero .hero-copy { position:absolute; inset:0 0 auto; display:flex; justify-content:center; padding:clamp(32px,9vw,58px) 8px 28px; background:linear-gradient(#ffffff10,#ffffff50 55%,transparent); }
-.hero h1 { position:relative; width:auto; height:auto; margin:0; padding:0 0 12px; overflow:visible; clip:auto; white-space:nowrap; color:#073765; background:none; text-shadow:0 0 8px white,0 2px 2px white; filter:none; -webkit-text-stroke:0; font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif; font-size:clamp(28px,10.1vw,76px); font-weight:900; letter-spacing:-.04em; line-height:1.2; transform:rotate(-3deg); }
-.hero h1::after { content:''; position:absolute; inset:auto 14% 0 21%; height:12px; border-bottom:5px solid #ee4983; border-radius:0 0 50% 50%; }
+.hero .hero-copy { position:absolute; inset:clamp(12px,4vw,32px) 0 auto; display:flex; justify-content:center; padding-inline:12px; }
+.hero .hero-copy h1 { position:static; width:min(100%,760px); max-width:100%; height:auto; margin:0; padding:0; overflow:visible; clip:auto; background:none; text-shadow:none; filter:none; }
+.hero .hero-copy .hero-wordmark { display:block; width:100%; height:auto; max-height:clamp(110px,32vw,200px); object-fit:contain; }
 .wrap { max-width:1008px; }
 .wrap>.search { position:relative; margin:-18px 0 14px; padding:4px 4px 4px 13px; min-height:54px; border:1px solid #f4cedd; border-radius:999px; box-shadow:0 5px 16px #81234d24; }
 .wrap>.search svg { flex:none; color:#52324d; }
@@ -78,7 +78,7 @@ body { background:var(--shell); color:var(--ink-main); }
 </style><script src="./ticket-clicks.js" defer></script></head><body><header class="hero">
  <div class="hero-inner">
   <img src="./assets/spring-family-hero.webp" width="1320" height="880" alt="" fetchpriority="high">
-  <div class="hero-copy"><h1>関東おでかけナビ</h1></div>
+  <div class="hero-copy"><h1><img class="hero-wordmark" src="./assets/83597C09-FD32-40FC-8E0B-4F497827C8AC.png" alt="関東おでかけナビ" fetchpriority="high"></h1></div>
  </div>
 </header><main class="wrap"><form class="search" id="keywordSearch" role="search">
  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
