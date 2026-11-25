@@ -178,6 +178,7 @@ textarea { resize: vertical; min-height: 100px; }
  <div class="grid">
   <div class="field"><label for="date">日にち</label><input id="date" type="date"></div>
   <div class="field"><label for="depart">出発予定</label><input id="depart" type="time"></div>
+  <div class="field"><label for="travelMode">移動手段</label><select id="travelMode"><option value="">指定なし</option><option value="driving">車</option><option value="transit">公共交通</option></select></div>
   <div class="field"><label for="travelMinutes">片道の所要時間（分）</label><input id="travelMinutes" type="number" min="1" max="1440" inputmode="numeric"><p class="field-hint" id="arrivalEstimate" aria-live="polite"></p></div>
   <div class="field"><label for="return">帰宅予定</label><input id="return" type="time"></div>
   <fieldset class="span-all"><legend>参加する人</legend><div class="grid people-grid"><div class="field"><label for="adultCount">大人</label><select id="adultCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div><div class="field"><label for="childCount">子ども</label><select id="childCount"><option value="0">0人</option><option value="1" selected>1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option><option value="6">6人</option></select></div></div><input id="people" type="hidden" value="大人1人・子ども1人"></fieldset>
@@ -240,7 +241,7 @@ const groups=[
  {title:"移動・天候",items:["チケット・予約情報","ベビーカー・抱っこひも","雨具","防寒具・暑さ対策","虫よけ・日焼け止め","充電器・モバイルバッテリー"]}
 ];
 let items=groups.flatMap(g=>g.items.map(name=>({name,done:false,group:g.title})));
-const ids=["place","date","depart","travelMinutes","return","people","weather","schedule","transport","food","play","other","good","next"];
+const ids=["place","date","depart","travelMinutes","travelMode","return","people","weather","schedule","transport","food","play","other","good","next"];
 const $=id=>document.getElementById(id);
 const destinations=[
  {name:"東武動物公園",pref:"埼玉県",area:"宮代町",kind:["動物・ふれあい","遊園地"],desc:"動物園と遊園地が一体になったレジャー施設。",official:"https://www.tobuzoo.com/",pack:["飲み物","帽子","歩きやすい靴","ウェットティッシュ","着替え"]},
@@ -364,6 +365,8 @@ function updateFacilityLinks(){
  const query=[name,facility?.area,facility?.pref].filter(Boolean).join(' ');
  $('facilityMap').href='https://www.google.com/maps/search/?'+new URLSearchParams({api:'1',query});
  const routeParams=new URLSearchParams({api:'1',destination:query});
+ const mode=$('travelMode').value;
+ if(mode)routeParams.set('travelmode',mode);
  try{
   const origin=(localStorage.getItem('odekake-route-origin')||'').trim().slice(0,100);
   if(origin)routeParams.set('origin',origin);
@@ -379,7 +382,7 @@ function updateFacilityLinks(){
   if(!spot)return;
   try{
    sessionStorage.setItem('odekake-admission-review',JSON.stringify({
-    key:spot,quote:facility?.quote,quoteTotal:facility?.quoteTotal,travel:$('travelMinutes').value,
+    key:spot,quote:facility?.quote,quoteTotal:facility?.quoteTotal,travel:$('travelMinutes').value,travelMode:$('travelMode').value,
     transport:$('transport').value,play:$('play').value
    }));
   }catch{}
@@ -497,6 +500,12 @@ const savedPeople=$("people").value.match(/^大人(\d+)人・子ども(\d+)人$/
 if(savedPeople)setPeopleCounts(savedPeople[1],savedPeople[2]);
 drawDestinations();
 updateFacilityLinks();
+$('travelMode').addEventListener('change',()=>{
+ $('travelMinutes').value='';
+ updateFacilityLinks();
+ calc();
+ persist();
+});
 window.addEventListener("pageshow",updateFacilityLinks);
 window.addEventListener("storage",event=>{if(event.key==="odekake-route-origin")updateFacilityLinks();});
 const plannerUrl=new URL(location.href);
@@ -522,20 +531,24 @@ if(incomingName&&incomingName.length<=150){
  }
  const applyIncoming=()=>{
   const changed=$('place').value.trim()!==incomingName;
+  const mode=params.get('travelmode');
+  const selectedMode=['driving','transit'].includes(mode)?mode:'';
+  const modeChanged=Boolean(selectedMode&&selectedMode!==$('travelMode').value);
+  if(selectedMode||changed)$('travelMode').value=selectedMode;
   for(const [id,key,min,max] of [
    ['play','admission',0,999999999],
    ['travelMinutes','travel',1,1440],
    ['transport','transport',0,999999999]
   ]){
    const value=incomingNumber(key,min,max);
-   if(value!==null||changed)$(id).value=value??'';
+   if(value!==null||changed||(id==='travelMinutes'&&modeChanged))$(id).value=value??'';
   }
   const adults=incomingNumber('adults',0,99);
   const children=incomingNumber('children',0,396);
   if(adults!==null&&children!==null)setPeopleCounts(adults,children);
   selectDestination(incoming);
   $("incomingPlace").hidden=true;
-  for(const key of ['place','kind','admission','travel','transport','adults','children'])params.delete(key);
+  for(const key of ['place','kind','admission','travel','transport','adults','children','travelmode'])params.delete(key);
   history.replaceState(history.state,"",plannerUrl.href);
  };
  const savedPlace=$("place").value.trim();
